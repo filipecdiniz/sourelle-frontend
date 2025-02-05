@@ -18,7 +18,7 @@ export default function CartOpen() {
                         {/* ITEM */}
                         <div className="flex gap-4">
                             <Image
-                                src=''
+                                src='/product.png'
                                 alt=""
                                 width={72}
                                 height={96}

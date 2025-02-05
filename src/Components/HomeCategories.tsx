@@ -42,7 +42,7 @@ export default function HomeCategories() {
     return (
         <div className="mt-4 gap-2">
             {/* TEXT */}
-            <div className="font-bold text-lg">Categorias:</div>
+            <div className="font-bold text-lg ">Categorias:</div>
             {/* IMAGES */}
             <div className="grid grid-cols-2 gap-4 p-4">
                 {categories.map((category) => (

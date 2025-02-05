@@ -9,7 +9,7 @@ export default function Home() {
       </div>
 
       {/* PRODUCTS BOTTOM */}
-      <div className="products">
+      <div className="">
 
       </div>
     </div>
