@@ -11,6 +11,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        sourelle_main_color: '#CFB0AE',
+        light_red: '#F35C7A',
       },
     },
   },
