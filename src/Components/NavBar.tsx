@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function NavBar() {
 
     return (
-        <div className="border-b-2 p-2">
+        <div className="border-b-2 shadow-[0_3px_10px_rgb(0,0,0,0.4)] p-2 sticky top-0 z-50 bg-white">
             <div className="flex p-5 items-center justify-between">
                 {/* LEFT */}
                 <div className="">

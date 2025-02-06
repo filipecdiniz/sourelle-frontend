@@ -9,9 +9,14 @@ export default function Home() {
         <HomeCategories />
       </div>
 
-      {/* PRODUCTS BOTTOM */}
+      {/* MOST SOLD PRODUCTS MIDDLE */}
       <div className="justify-center items-center text-center">
         <div className="font-serif text-2xl">Mais Vendidos</div>
+        <ListProducts />
+      </div>
+      {/* BOTTOM */}
+      <div className="justify-center items-center text-center mt-6">
+        <div className="font-serif text-2xl">Produtos</div>
         <ListProducts />
       </div>
     </div>
