@@ -1,5 +1,6 @@
 import HomeCategories from "@/Components/HomeCategories";
 import ListProducts from "@/Components/ListProducts";
+import ListProductsDrag from "@/Components/ListProductsDrag";
 
 export default function Home() {
   return (
@@ -16,8 +17,8 @@ export default function Home() {
       </div>
       {/* BOTTOM */}
       <div className="justify-center items-center text-center mt-6">
-        <div className="font-serif text-2xl">Produtos</div>
-        <ListProducts />
+        <div className="font-serif text-2xl">Todos os Produtos</div>
+        <ListProductsDrag />
       </div>
     </div>
   );

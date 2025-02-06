@@ -1,6 +1,6 @@
 export default function Footer(){
     return (
-        <div className="bg-black h-[20%]">
+        <div className="h-[80px]">
             <div className="" id='footer'>Footer</div>
         </div>
     )
