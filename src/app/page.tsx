@@ -1,4 +1,5 @@
 import HomeCategories from "@/Components/HomeCategories";
+import ListProducts from "@/Components/ListProducts";
 
 export default function Home() {
   return (
@@ -9,8 +10,9 @@ export default function Home() {
       </div>
 
       {/* PRODUCTS BOTTOM */}
-      <div className="">
-
+      <div className="justify-center items-center text-center">
+        <div className="font-serif text-2xl">Mais Vendidos</div>
+        <ListProducts />
       </div>
     </div>
   );

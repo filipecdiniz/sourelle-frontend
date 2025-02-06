@@ -30,19 +30,20 @@ const categories = [
         id: 6,
         name: 'Brincos',
         src: '/categories/category-6-brinco.webp'
-    },
-    {
-        id: 7,
-        name: 'Conjuntos',
-        src: '/categories/category-7-conjuntos.webp'
-    },
+    }
+    // ,
+    // {
+    //     id: 7,
+    //     name: 'Conjuntos',
+    //     src: '/categories/category-7-conjuntos.webp'
+    // },
 ];
 
 export default function HomeCategories() {
     return (
-        <div className="mt-4 gap-2">
+        <div className="mt-4 justify-center items-center text-center">
             {/* TEXT */}
-            <div className="font-bold text-lg ">Categorias:</div>
+            <div className="font-serif text-2xl">Categorias</div>
             {/* IMAGES */}
             <div className="grid grid-cols-2 gap-4 p-4">
                 {categories.map((category) => (

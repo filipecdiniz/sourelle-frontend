@@ -1,5 +1,5 @@
 import Add from "@/Components/Product/Add";
-import LowerProductImage from "@/Components/Product/LowerProductImage";
+import ProductImageSection from "@/Components/Product/ProductImageSection";
 import Image from "next/image";
 
 export default function ProductPage() {
@@ -17,16 +17,16 @@ export default function ProductPage() {
                 />
             </div>
             <div className="imageslist grid grid-cols-4 gap-2 mt-5">
-                <LowerProductImage
+                <ProductImageSection
                     imageId={1}
                 />
-                <LowerProductImage
+                <ProductImageSection
                     imageId={2}
                 />
-                <LowerProductImage
+                <ProductImageSection
                     imageId={3}
                 />
-                <LowerProductImage
+                <ProductImageSection
                     imageId={4}
                 />
             </div>

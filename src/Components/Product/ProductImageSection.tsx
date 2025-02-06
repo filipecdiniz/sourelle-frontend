@@ -1,11 +1,11 @@
 import Image from "next/image";
 
-interface LowerProductImageProps {
+interface ProductImageSectionProps {
     imageId: number;
 }
 
 
-export default function LowerProductImage({ imageId }: LowerProductImageProps) {
+export default function ProductImageSection({ imageId }: ProductImageSectionProps) {
     return (
         <div className={`${imageId}`} key={imageId}>
             <Image
