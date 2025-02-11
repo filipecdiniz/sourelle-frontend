@@ -1,4 +1,4 @@
-export const categories = [
+export const categoriesRepository = [
     {
         id: 1,
         name: 'Anéis',

@@ -12,7 +12,7 @@ export default function Home() {
 
       {/* MOST SOLD PRODUCTS MIDDLE */}
       <div className="justify-center items-center text-center">
-        <div className="font-serif text-2xl">Mais Vendidos</div>
+        <div className="font-serif text-2xl">Novidades Sourelle</div>
         <ListProducts />
       </div>
       {/* BOTTOM */}

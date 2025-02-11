@@ -1,4 +1,4 @@
-export const produts = [
+export const produtsRepository = [
     {
         id: 1,
         name: 'Tornozeleira',
@@ -26,5 +26,47 @@ export const produts = [
         category: 6,
         value: 30,
         src: '/categories/category-6-brinco.webp'
-    }
+    },
+    {
+        id: 5,
+        name: 'Aliança de Prata',
+        category: 1,
+        value: 100,
+        src: '/categories/category-1-anel.jpg'
+    },
+    {
+        id: 6,
+        name: 'Aliança de Rubi',
+        category: 1,
+        value: 1000,
+        src: '/categories/category-1-anel.jpg'
+    },
+    {
+        id: 7,
+        name: 'Aliança de Prata',
+        category: 1,
+        value: 100,
+        src: '/categories/category-1-anel.jpg'
+    },
+    {
+        id: 8,
+        name: 'Aliança de Rubi',
+        category: 1,
+        value: 1000,
+        src: '/categories/category-1-anel.jpg'
+    },
+    {
+        id: 9,
+        name: 'Aliança de Prata',
+        category: 1,
+        value: 100,
+        src: '/categories/category-1-anel.jpg'
+    },
+    {
+        id: 10,
+        name: 'Aliança de Rubi',
+        category: 1,
+        value: 1000,
+        src: '/categories/category-1-anel.jpg'
+    },
 ]

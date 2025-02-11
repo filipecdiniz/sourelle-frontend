@@ -94,8 +94,8 @@ export default function ListProducts() {
                             />
                         </div>
                         <div className="flex flex-col gap-1 mt-1">
-                            <div className="justify-center text-start">{product.name}</div>
-                            <div className="justify-center text-start">R${product.value}</div>
+                            <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
+                            <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value}</div>
                             <AddCartButton />
                         </div>
                     </div>

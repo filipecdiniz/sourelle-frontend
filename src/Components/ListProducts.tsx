@@ -22,7 +22,6 @@ export default function ListProducts() {
         );
     };
 
-    // Define os produtos a serem exibidos
     const visibleProducts = mostSoldProducts.slice(currentIndex, currentIndex + itemsPerPage);
 
     return (

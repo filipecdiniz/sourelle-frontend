@@ -1,8 +1,20 @@
+"use client"
+
 import Add from "@/Components/Product/Add";
 import ProductImageSection from "@/Components/Product/ProductImageSection";
+import { produtsRepository } from "@/repository/products";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 export default function ProductPage() {
+
+    const router = useParams()
+    const url = Number(router.slug)
+
+    const product = produtsRepository.filter((item) => item.id === url)
+
+    console.log(product)
+
     return (
         <div className="grid grid-cols-1 p-4">
             {/* LEFT */}
