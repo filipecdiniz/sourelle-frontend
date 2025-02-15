@@ -10,7 +10,7 @@ interface ProductInterface {
     src: string;
 }
 
-export default function ShowProduct({ id, name, category, value, src }: ProductInterface) {
+export default function ShowProduct({ id, name, /*category,*/ value, src }: ProductInterface) {
     console.log(id)
     return (
         // <div className="" key={id}>{id}</div>

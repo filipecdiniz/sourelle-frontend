@@ -9,7 +9,7 @@ export default function HomeCategories() {
     return (
         <div className="mt-4 justify-center items-center text-center">
             {/* TEXT */}
-            <div className="font-serif text-2xl">Categorias</div>
+            <div className="font-serif text-2xl font-semibold text-gray-900">Categorias</div>
             {/* IMAGES */}
             <div className="grid p-4 grid-cols-2 gap-4 md:grid-cols-3 md:align-middle md:justify-center ">
                 {categoriesRepository.map((category) => (

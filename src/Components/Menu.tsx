@@ -1,51 +1,49 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation"; // Importando usePathname
 
 export default function Menu() {
+    const [menuActive, setMenuActive] = useState(false);
+    const pathname = usePathname(); // Obtém a rota atual
 
-    const [menuActive, setMenuActive] = useState(false)
+    // Fecha o menu ao mudar de rota
+    useEffect(() => {
+        setMenuActive(false);
+    }, [pathname]); // Sempre que `pathname` mudar, fecha o menu
 
     return (
-        <div className="">
-            <Image
-                src='/menu.png'
-                alt=""
-                width={22}
-                height={22}
-                onClick={() => setMenuActive((state) => !state)}
-            /> {
-                menuActive && (
-                    <div className={`absolute bg-sourelle_main_color text-white left-0 top-20 w-full h-[calc(100vh-210px)] flex flex-col items-center gap-8 text-xl z-10 ${menuActive ? "translate-x-0" : "-translate-x-full"}`}>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Inicio</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Mais Vendidos</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Alianças</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Pulseiras</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Brincos</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Pedidos</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Fazer Login</Link>
-                        </div>
-                        <div className="border-b-2 w-[40%] h-10 justify-center items-center text-center">
-                            <Link href='/'>Criar conta</Link>
-                        </div>
-                    </div>
-                )
-            }
+        <div className="relative">
+            <button onClick={() => setMenuActive((state) => !state)}>
+                <Image src="/menu.png" alt="Menu" width={28} height={28} />
+            </button>
+
+            {menuActive && (
+                <div className="absolute left-0 top-full w-[150px] bg-white/95 shadow-md z-50 flex flex-col items-center py-4 transition-all duration-300">
+                    {[
+                        { label: "Início", href: "/" },
+                        { label: "Anéis", href: "/categoria/Anéis" },
+                        { label: "Pulseiras", href: "/categoria/Pulseiras" },
+                        { label: "Brincos", href: "/categoria/Brincos" },
+                        { label: "Pedidos", href: "/pedidos" },
+                        { label: "Fazer Login", href: "/login", highlight: true },
+                        { label: "Criar Conta", href: "/register", highlight: true },
+                    ].map((item, index) => (
+                        <Link
+                            key={index}
+                            href={item.href}
+                            className={`w-full text-center text-gray-800 text-lg py-3 hover:bg-gray-100 transition-colors ${
+                                item.highlight ? "underline decoration-red-500" : ""
+                            }`}
+                            onClick={() => setMenuActive(false)}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </div>
+            )}
         </div>
-    )
+    );
 }

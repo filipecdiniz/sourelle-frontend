@@ -17,14 +17,13 @@ export default function ListProducts() {
     const startX = useRef(0);
     const isDragging = useRef(false);
 
-    // Define os produtos a serem exibidos (não há mais limite de itens por página)
     const visibleProducts = mostSoldProducts;
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {
             isDragging.current = true;
             startX.current = e.clientX;
-            carouselRef.current.style.cursor = 'grabbing'; // Mostrar que está arrastando
+            carouselRef.current.style.cursor = 'grabbing'; 
         }
     };
 
@@ -32,14 +31,14 @@ export default function ListProducts() {
         if (!isDragging.current || !carouselRef.current) return;
 
         const moveX = e.clientX - startX.current;
-        carouselRef.current.scrollLeft -= moveX; // Ajuste a rolagem à medida que o usuário arrasta
-        startX.current = e.clientX; // Atualize a posição de arraste
+        carouselRef.current.scrollLeft -= moveX; 
+        startX.current = e.clientX; 
     };
 
     const handleMouseUp = () => {
         isDragging.current = false;
         if (carouselRef.current) {
-            carouselRef.current.style.cursor = 'grab'; // Retorna o cursor ao estado normal
+            carouselRef.current.style.cursor = 'grab'; 
         }
     };
 
@@ -68,7 +67,7 @@ export default function ListProducts() {
 
     return (
         <div className="relative flex justify-center items-center w-full mt-2 min-h-[230px]">
-            {/* Produtos */}
+            {/* PRODUCTS */}
             <div
                 ref={carouselRef}
                 className="relative flex justify-start gap-3 p-4 overflow-x-auto cursor-grab transition-all duration-500 ease-in-out min-h-[200px]"

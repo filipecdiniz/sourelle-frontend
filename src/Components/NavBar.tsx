@@ -2,31 +2,43 @@ import SearchBar from "./SearchBar";
 import Menu from "./Menu";
 import CartMenu from "./CartMenu";
 import Link from "next/link";
+import PromoBanner from "./PromoBanner";
 
 export default function NavBar() {
-
     return (
-        <div className="border-b-2 shadow-[0_3px_10px_rgb(0,0,0,0.4)] p-2 sticky top-0 z-50 bg-white">
-            <div className="flex p-5 items-center justify-between">
-                {/* LEFT */}
-                <div className="">
-                    <Menu />
-                </div>
-                {/* LOGO MIDDLE */}
-                <Link href='/'>
-                    <div className="justify-center items-center text-center">
-                        <div className="font-mono text-3xl">SOURELLE</div>
-                        <div className="text-sm font-serif">pratas</div>
+        <div className="sticky top-0 z-50 w-full">
+            <div className="border-b-2 shadow-lg p-4 bg-gradient-to-r from-[#F8D7DA] to-[#FCE4EC]">
+                <div className="flex p-4 items-center justify-between">
+                    {/* LEFT */}
+                    <div className="flex items-center gap-6">
+                        <Menu />
                     </div>
-                </Link>
 
-                {/* RIGHT */}
-                <CartMenu />
+                    {/* LOGO MIDDLE */}
+                    <Link href='/'>
+                        <div className="text-center">
+                            <div className="font-playfair text-5xl font-bold text-[#3F2A47] tracking-wide">
+                                SOURELLE
+                            </div>
+                            <div className="text-base font-light text-[#915F78] uppercase tracking-widest">
+                                pratas
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* RIGHT */}
+                    <div className="flex items-center gap-6">
+                        <CartMenu />
+                    </div>
+                </div>
+
+                {/* Search Bar */}
+                <div className="flex justify-center">
+                    <SearchBar />
+                </div>
             </div>
-            <div className="flex justify-center">
-                <SearchBar />
-            </div>
+            {/* Promo Banner */}
+            <PromoBanner />
         </div>
-    )
-
+    );
 }

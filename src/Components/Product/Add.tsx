@@ -9,7 +9,7 @@ interface addProductProps {
     stockNumber: number
 }
 
-export default function Add({ productId, variantId, stockNumber, }: addProductProps) {
+export default function Add({ stockNumber, }: addProductProps) {
     const [quantity, setQuantity] = useState(1);
 
     const handleQuantity = (type: "i" | "d") => {
