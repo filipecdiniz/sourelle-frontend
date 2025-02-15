@@ -4,7 +4,7 @@ import ListProductsDrag from "@/Components/ListProductsDrag";
 
 export default function Home() {
   return (
-    <div className="screen bg-gray-100 ">
+    <div className="min-h-screen bg-gray-100 ">
       {/* WELCOME SECTION */}
       <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
         <p className="text-xl font-serif text-gray-800">

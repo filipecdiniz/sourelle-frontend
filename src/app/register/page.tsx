@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
+import { ConsumeUsersAPI } from "@/backEndRoutes";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Importar o hook de roteamento
 
 interface UserDTO {
     name: string;
@@ -17,27 +19,71 @@ export default function RegisterPage() {
         password: "",
     });
 
+    const [errors, setErrors] = useState<Partial<UserDTO>>({});
+    const router = useRouter(); // Inicializar o roteador
+
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+
+        if (name === "phone") {
+            const numericValue = value.replace(/\D/g, "").slice(0, 11);
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: numericValue,
+            }));
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
     }
-    
+
+    function validateForm() {
+        const newErrors: Partial<UserDTO> = {};
+
+        if (!formData.name.trim()) newErrors.name = "O nome é obrigatório.";
+        if (!formData.email.trim()) newErrors.email = "O e-mail é obrigatório.";
+        if (!formData.phone.trim()) newErrors.phone = "O celular é obrigatório.";
+        if (formData.phone.length < 11) newErrors.phone = "O celular deve ter 11 dígitos.";
+        if (!formData.password.trim()) newErrors.password = "A senha é obrigatória.";
+        if (formData.password.length < 6)
+            newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    }
+
     async function registerUser(event: React.FormEvent) {
-        event.preventDefault(); 
+        event.preventDefault();
 
-        const response = await fetch(`http://localhost:3000/user/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
+        if (!validateForm()) return;
 
-        const data = await response.json();
-        console.log("Resposta do servidor:", data);
+        try {
+            const response = await fetch(`${ConsumeUsersAPI}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+            console.log(data)
+            
+            if (response.ok) {
+                alert("Conta criada com sucesso!");
+                router.push("/login"); // Redirecionar para a página de login
+            }
+            if (data.statusCode === 400) {
+                alert('Email ja cadastrado.')
+            }
+            else {
+                alert(data.message || "Erro ao criar conta.");
+            }
+        } catch (error) {
+            alert("Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.");
+        }
     }
 
     return (
@@ -58,9 +104,13 @@ export default function RegisterPage() {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none"
+                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.name ? "border-red-500" : ""
+                                }`}
                             placeholder="Ex: João Silva"
                         />
+                        {errors.name && (
+                            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                        )}
                     </div>
 
                     <div>
@@ -70,9 +120,13 @@ export default function RegisterPage() {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none"
+                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.email ? "border-red-500" : ""
+                                }`}
                             placeholder="Ex: joao@gmail.com"
                         />
+                        {errors.email && (
+                            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                        )}
                     </div>
 
                     <div>
@@ -82,9 +136,13 @@ export default function RegisterPage() {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
-                            className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none"
+                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.phone ? "border-red-500" : ""
+                                }`}
                             placeholder="Ex: 62984689961"
                         />
+                        {errors.phone && (
+                            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                        )}
                     </div>
 
                     <div>
@@ -94,19 +152,13 @@ export default function RegisterPage() {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none"
+                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.password ? "border-red-500" : ""
+                                }`}
                             placeholder="Digite sua senha"
                         />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 font-medium">Confirmar Senha</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none"
-                            placeholder="Confirme sua senha"
-                        />
+                        {errors.password && (
+                            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                        )}
                     </div>
 
                     <button
