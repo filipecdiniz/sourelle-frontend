@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 export default function CartMenu() {
 
     const [isCartOpen, setCartOpen] = useState(false)
-    const [itemsCart, setItemsCart] = useState(0)
+    const [itemsCart] = useState(0)
     const authToken = Cookies.get("authToken");
 
     useEffect(() => {

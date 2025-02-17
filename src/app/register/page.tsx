@@ -89,6 +89,7 @@ export default function RegisterPage() {
                 alert(data.message || "Erro ao criar conta.");
             }
         } catch (error) {
+            console.log(error)
             alert("Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.");
         }
     }

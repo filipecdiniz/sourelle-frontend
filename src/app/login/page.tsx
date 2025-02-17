@@ -78,6 +78,7 @@ export default function LoginPage() {
                 alert("Email ou senha incorretos!");
             }
         } catch (error) {
+            console.log(error)
             alert("Ocorreu um erro ao tentar fazer login. Tente novamente mais tarde.");
         }
     }
