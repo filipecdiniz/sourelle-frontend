@@ -9,20 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)", // Certifique-se que essas variáveis estão configuradas
+        background: "var(--background)", // Certifique-se de configurar essas variáveis no CSS global
         foreground: "var(--foreground)",
-        sourelle_main_color: "#CFB0AE", // Cor principal personalizada
-        light_red: "#F35C7A", // Vermelho personalizado
+        sourelle_main_color: "#CFB0AE",
+        light_red: "#F35C7A",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"], // Exemplo: ajuste conforme necessário
+        sans: ["Inter", "sans-serif"], // Fontes personalizadas
       },
     },
-  },
-  plugins: [
-    require("@tailwindcss/forms"), // Para estilização de formulários
-    require("@tailwindcss/typography"), // Para textos ricos
-  ],
+  }
 };
 
 export default config;
