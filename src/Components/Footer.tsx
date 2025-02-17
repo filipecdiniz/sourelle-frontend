@@ -11,7 +11,7 @@ export default function Footer() {
     const [paymentOpen, setPaymentOpen] = useState(false)
 
     return (
-        <div className="h-[100px] border-t-2">
+        <div className="mt-auto">
             {/* CONTACT */}
             {!contactOpen ? (
                 <div className="contact flex justify-between p-2 border-b-2">

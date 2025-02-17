@@ -2,7 +2,7 @@
 
 import { ConsumeUsersAPI } from "@/backEndRoutes";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Importar o hook de roteamento
+import { useRouter } from "next/navigation";
 
 interface UserDTO {
     name: string;
@@ -20,23 +20,30 @@ export default function RegisterPage() {
     });
 
     const [errors, setErrors] = useState<Partial<UserDTO>>({});
-    const router = useRouter(); // Inicializar o roteador
+    const router = useRouter();
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
 
-        if (name === "phone") {
+        const fieldName = name as keyof UserDTO;
+
+        if (fieldName === "phone") {
             const numericValue = value.replace(/\D/g, "").slice(0, 11);
             setFormData((prevData) => ({
                 ...prevData,
-                [name]: numericValue,
+                [fieldName]: numericValue,
             }));
         } else {
             setFormData((prevData) => ({
                 ...prevData,
-                [name]: value,
+                [fieldName]: value,
             }));
         }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldName]: undefined,
+        }));
     }
 
     function validateForm() {
@@ -69,16 +76,16 @@ export default function RegisterPage() {
             });
 
             const data = await response.json();
-            console.log(data)
-            
+
             if (response.ok) {
                 alert("Conta criada com sucesso!");
-                router.push("/login"); // Redirecionar para a página de login
-            }
-            if (data.statusCode === 400) {
-                alert('Email ja cadastrado.')
-            }
-            else {
+                router.push("/login");
+            } else if (data.statusCode === 400 && data.message.includes("email")) {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    email: "Este e-mail já está cadastrado.",
+                }));
+            } else {
                 alert(data.message || "Erro ao criar conta.");
             }
         } catch (error) {
@@ -97,69 +104,40 @@ export default function RegisterPage() {
                 </p>
 
                 <form className="flex flex-col mt-4 space-y-4" onSubmit={registerUser}>
-                    <div>
-                        <label className="block text-gray-700 font-medium">Nome completo</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.name ? "border-red-500" : ""
+                    {(["name", "email", "phone", "password"] as Array<keyof UserDTO>).map((field) => (
+                        <div key={field}>
+                            <label className="block text-gray-700 font-medium">
+                                {field === "name"
+                                    ? "Nome completo"
+                                    : field === "email"
+                                    ? "E-mail"
+                                    : field === "phone"
+                                    ? "Celular"
+                                    : "Senha"}
+                            </label>
+                            <input
+                                type={field === "password" ? "password" : "text"}
+                                name={field}
+                                value={formData[field]}
+                                onChange={handleChange}
+                                className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${
+                                    errors[field] ? "border-red-500" : ""
                                 }`}
-                            placeholder="Ex: João Silva"
-                        />
-                        {errors.name && (
-                            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 font-medium">E-mail</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.email ? "border-red-500" : ""
-                                }`}
-                            placeholder="Ex: joao@gmail.com"
-                        />
-                        {errors.email && (
-                            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 font-medium">Celular</label>
-                        <input
-                            type="text"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.phone ? "border-red-500" : ""
-                                }`}
-                            placeholder="Ex: 62984689961"
-                        />
-                        {errors.phone && (
-                            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700 font-medium">Senha</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors.password ? "border-red-500" : ""
-                                }`}
-                            placeholder="Digite sua senha"
-                        />
-                        {errors.password && (
-                            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-                        )}
-                    </div>
+                                placeholder={
+                                    field === "name"
+                                        ? "Ex: João Silva"
+                                        : field === "email"
+                                        ? "Ex: joao@gmail.com"
+                                        : field === "phone"
+                                        ? "Ex: 62984689961"
+                                        : "Digite sua senha"
+                                }
+                            />
+                            {errors[field] && (
+                                <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
+                            )}
+                        </div>
+                    ))}
 
                     <button
                         type="submit"

@@ -3,7 +3,11 @@
 import Image from "next/image";
 import AddCartButton from "./AddCartButton";
 import { useRef } from "react";
-import { mostSoldProducts } from "@/repository/mostSoldProducts";
+import { productsRepository } from "@/repository/products";
+
+interface categoryProps {
+    categoryId: number
+}
 
 interface Product {
     id: number;
@@ -12,18 +16,19 @@ interface Product {
     value: number;
 }
 
-export default function ListProducts() {
+export default function ListProducts({ categoryId }: categoryProps) {
     const carouselRef = useRef<HTMLDivElement | null>(null);
     const startX = useRef(0);
     const isDragging = useRef(false);
 
-    const visibleProducts = mostSoldProducts;
+    const visibleProducts = productsRepository.filter((product) => product.category === Number(categoryId));
+    console.log(visibleProducts)
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {
             isDragging.current = true;
             startX.current = e.clientX;
-            carouselRef.current.style.cursor = 'grabbing'; 
+            carouselRef.current.style.cursor = 'grabbing';
         }
     };
 
@@ -31,14 +36,14 @@ export default function ListProducts() {
         if (!isDragging.current || !carouselRef.current) return;
 
         const moveX = e.clientX - startX.current;
-        carouselRef.current.scrollLeft -= moveX; 
-        startX.current = e.clientX; 
+        carouselRef.current.scrollLeft -= moveX;
+        startX.current = e.clientX;
     };
 
     const handleMouseUp = () => {
         isDragging.current = false;
         if (carouselRef.current) {
-            carouselRef.current.style.cursor = 'grab'; 
+            carouselRef.current.style.cursor = 'grab';
         }
     };
 
@@ -94,7 +99,7 @@ export default function ListProducts() {
                         </div>
                         <div className="flex flex-col gap-1 mt-1">
                             <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
-                            <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value}</div>
+                            <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toString().replace('.', ',')}</div>
                             <AddCartButton />
                         </div>
                     </div>

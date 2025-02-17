@@ -1,9 +1,8 @@
 "use client"
 
-import HomeCategories from "@/Components/HomeCategories"
 import ShowProduct from "@/Components/Product/ShowProduct"
 import { categoriesRepository } from "@/repository/categories"
-import { produtsRepository } from "@/repository/products"
+import { productsRepository } from "@/repository/products"
 import { useParams } from "next/navigation"
 
 export default function CategoryPage() {
@@ -11,7 +10,7 @@ export default function CategoryPage() {
     const category = decodeURIComponent(String(router.slug))
 
     const categoryRepository = categoriesRepository.filter((item) => item.name === category)
-    const products = produtsRepository.filter((product) => product.category === categoryRepository[0]?.id)
+    const products = productsRepository.filter((product) => product.category === categoryRepository[0]?.id)
 
     return (
         <div className="flex flex-col p-4 gap-4">

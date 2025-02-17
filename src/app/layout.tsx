@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="pt" className="h-full">
       <body className="flex flex-col h-full">
         <NavBar />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow overflow-x-hidden">{children}</main>
         <Footer />
       </body>
     </html>

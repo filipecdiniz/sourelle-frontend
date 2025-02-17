@@ -1,60 +1,50 @@
 "use client"
 
 import Add from "@/Components/Product/Add";
-import ProductImageSection from "@/Components/Product/ProductImageSection";
-import { produtsRepository } from "@/repository/products";
+import { productsRepository } from "@/repository/products";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
 export default function ProductPage() {
-
     const router = useParams()
     const url = Number(router.slug)
-
-    const product = produtsRepository.filter((item) => item.id === url)
-
-    console.log(product)
+    const product = productsRepository.find((item) => item.id === url)
 
     return (
-        <div className="grid grid-cols-1 p-4">
-            {/* LEFT */}
-            <div className="left">
-                <Image
-                    src='/product.png'
-                    alt='Product Image'
-                    layout="responsive"
-                    width={100}
-                    height={100}
-                    className="rounded-lg"
-                />
-            </div>
-            <div className="imageslist grid grid-cols-4 gap-2 mt-5">
-                <ProductImageSection
-                    imageId={1}
-                />
-                <ProductImageSection
-                    imageId={2}
-                />
-                <ProductImageSection
-                    imageId={3}
-                />
-                <ProductImageSection
-                    imageId={4}
-                />
-            </div>
-
-            {/* RIGHT */}
-            <div className="left mt-4">
-                <div className="font-serif text-3xl">Product 1</div>
-                <div className="font-sans text-lg">Descrição do produto: Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto vero consequuntur </div>
-                <div className="">
-                    <div className="font-serif text-2xl">Tamanho: </div>
-                    <Add
-                        productId="1"
-                        stockNumber={4}
-                        variantId="1"
-                        key={1}
+        <div className="container mx-auto p-6">
+            <div className="grid md:grid-cols-2 gap-8">
+                {/* LEFT: Product Image */}
+                <div className="flex justify-center items-center">
+                    <Image
+                        src={`${product?.src}`}
+                        alt='Product Image'
+                        layout="intrinsic"
+                        width={400}
+                        height={400}
+                        className="rounded-lg shadow-lg"
                     />
+                </div>
+
+                {/* RIGHT: Product Details */}
+                <div className="flex flex-col justify-start">
+                    <div className="text-4xl font-semibold text-[#3F2A47]">{product?.name}</div>
+                    <p className="mt-4 text-lg text-gray-700">
+                        Descrição do produto: Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto vero consequuntur.
+                    </p>
+
+                    <div className="mt-6">
+                        <div className="font-semibold text-xl text-[#915F78]">Tamanho:</div>
+                        <Add
+                            productId={`${product?.id}`}
+                            stockNumber={4}
+                            key={1}
+                        />
+                    </div>
+
+                    {/* Price Section */}
+                    <div className="mt-8 text-3xl font-bold text-[#915F78]">
+                        R$ {product?.value.toFixed(2)}
+                    </div>
                 </div>
             </div>
         </div>

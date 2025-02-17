@@ -5,7 +5,6 @@ import AddCartButton from "../AddCartButton";
 
 interface addProductProps {
     productId: string;
-    variantId: string;
     stockNumber: number
 }
 

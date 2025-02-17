@@ -2,31 +2,31 @@ export const categoriesRepository = [
     {
         id: 1,
         name: 'Anéis',
-        src: '/categories/category-1-anel.jpg'
+        src: '/categories/category-anel.jpg'
     },
     {
         id: 2,
         name: 'Brincos',
-        src: '/categories/category-2-colar.webp'
+        src: '/categories/category-brinco.png'
     },
     {
         id: 3,
         name: 'Argolas',
-        src: '/categories/category-3-pulseira.webp'
+        src: '/categories/category-argola.png'
     },
     {
         id: 4,
         name: 'Pulseiras',
-        src: '/categories/category-4-braceletes.webp'
+        src: '/categories/category-braceletes.png'
     },
     {
         id: 5,
         name: 'Colares',
-        src: '/categories/category-5-tornozeleira.webp'
+        src: '/categories/category-colar.png'
     },
     {
         id: 6,
         name: 'Conjuntos',
-        src: '/categories/category-6-brinco.webp'
+        src: '/categories/category-conjuntos.png'
     }
 ];

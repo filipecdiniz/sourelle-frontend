@@ -27,6 +27,7 @@ export default function Menu() {
                         { label: "Anéis", href: "/categoria/Anéis" },
                         { label: "Pulseiras", href: "/categoria/Pulseiras" },
                         { label: "Brincos", href: "/categoria/Brincos" },
+                        { label: "Perfil", href: "/perfil" },
                         { label: "Pedidos", href: "/pedidos" },
                         { label: "Fazer Login", href: "/login", highlight: true },
                         { label: "Criar Conta", href: "/register", highlight: true },

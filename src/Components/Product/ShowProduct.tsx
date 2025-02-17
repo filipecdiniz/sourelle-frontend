@@ -34,7 +34,7 @@ export default function ShowProduct({ id, name, /*category,*/ value, src }: Prod
             </div>
             <div className="flex flex-col gap-1 mt-1">
                 <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[170px]">{name}</div>
-                <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[170px]">R${value}</div>
+                <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[170px]">R${value.toString().replace('.', ',')}</div>
                 <AddCartButton />
             </div>
 
