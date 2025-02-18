@@ -9,13 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)", // Certifique-se de configurar essas variáveis no CSS global
+        background: "var(--background)",
         foreground: "var(--foreground)",
         sourelle_main_color: "#CFB0AE",
         light_red: "#F35C7A",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"], // Fontes personalizadas
+        sans: ["Inter", "sans-serif"],
       },
     },
   }

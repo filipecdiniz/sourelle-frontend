@@ -7,8 +7,8 @@ import PromoBanner from "./PromoBanner";
 export default function NavBar() {
     return (
         <div className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#FCE4EC] to-[#F8D7DA]">
-            <div className="border-b-2 shadow-lg p-4">
-                <div className="flex items-center justify-between">
+            <div className="border-b-2 shadow-lg p-4 mt-2">
+                <div className="flex items-center text-center justify-between">
                     {/* LEFT */}
                     <div className="flex items-center gap-6">
                         <Menu />

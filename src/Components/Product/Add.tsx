@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 import AddCartButton from "../AddCartButton";
+import { AddProductInCartAPI } from "@/backEndRoutes";
 
 interface addProductProps {
-    productId: string;
+    productId: number;
     stockNumber: number
 }
 
-export default function Add({ stockNumber, }: addProductProps) {
+export default function Add({ stockNumber, productId }: addProductProps) {
+
     const [quantity, setQuantity] = useState(1);
 
     const handleQuantity = (type: "i" | "d") => {
         if (type === "d" && quantity > 1) {
             setQuantity((prev) => prev - 1);
         }
+
         if (type === "i" && quantity < stockNumber) {
             setQuantity((prev) => prev + 1);
         }
@@ -50,7 +53,10 @@ export default function Add({ stockNumber, }: addProductProps) {
                         </div>
                     )}
                 </div>
-                <AddCartButton />
+                <AddCartButton
+                    productId={productId}
+                    amount={quantity}
+                />
             </div>
         </div>
     );

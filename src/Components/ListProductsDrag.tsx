@@ -4,6 +4,7 @@ import Image from "next/image";
 import AddCartButton from "./AddCartButton";
 import { useRef } from "react";
 import { productsRepository } from "@/repository/products";
+import Link from "next/link";
 
 interface categoryProps {
     categoryId: number
@@ -22,7 +23,6 @@ export default function ListProducts({ categoryId }: categoryProps) {
     const isDragging = useRef(false);
 
     const visibleProducts = productsRepository.filter((product) => product.category === Number(categoryId));
-    console.log(visibleProducts)
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {
@@ -89,18 +89,24 @@ export default function ListProducts({ categoryId }: categoryProps) {
                         key={product.id}
                     >
                         <div className="relative w-[150px] h-[150px]">
-                            <Image
-                                src={product.src}
-                                alt={product.name}
-                                layout="fill"
-                                objectFit="cover"
-                                className="rounded-lg"
-                            />
+                            <Link
+                                href={`/produto/${product.id}`}>
+                                <Image
+                                    src={product.src}
+                                    alt={product.name}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="rounded-lg"
+                                />
+                            </Link>
                         </div>
                         <div className="flex flex-col gap-1 mt-1">
                             <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
                             <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toString().replace('.', ',')}</div>
-                            <AddCartButton />
+                            <AddCartButton
+                                amount={1}
+                                productId={product.id}
+                            />
                         </div>
                     </div>
                 ))}

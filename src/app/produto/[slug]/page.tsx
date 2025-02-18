@@ -1,6 +1,7 @@
 "use client"
 
 import Add from "@/Components/Product/Add";
+import ProductSizes from "@/Components/Product/ProductSizes";
 import { productsRepository } from "@/repository/products";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -29,15 +30,18 @@ export default function ProductPage() {
                 <div className="flex flex-col justify-start">
                     <div className="text-4xl font-semibold text-[#3F2A47]">{product?.name}</div>
                     <p className="mt-4 text-lg text-gray-700">
-                        Descrição do produto: Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto vero consequuntur.
+                        Descrição do produto: Anel de prata belíssimo, 2mm 2cm - Prata 925...
                     </p>
 
-                    <div className="mt-6">
-                        <div className="font-semibold text-xl text-[#915F78]">Tamanho:</div>
+                    <ProductSizes />
+
+                    <div className="mt-2">
+
+
                         <Add
-                            productId={`${product?.id}`}
+                            productId={Number(product?.id)}
                             stockNumber={4}
-                            key={1}
+                            key={product?.id}
                         />
                     </div>
 

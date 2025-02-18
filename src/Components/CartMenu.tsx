@@ -2,42 +2,32 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ConsumeCartAPI } from "@/backEndRoutes";
+import { AddProductInCartAPI } from "@/backEndRoutes";
 import CartOpen from "./CartOpen";
 import Cookies from "js-cookie";
 
 export default function CartMenu() {
 
     const [isCartOpen, setCartOpen] = useState(false)
-    const [itemsCart] = useState(0)
-    const authToken = Cookies.get("authToken");
+    const [itemsCart, setItemsCart] = useState(0)
+    // const authToken = Cookies.get("authToken");
 
     useEffect(() => {
-        getCartOptionsFromUser()
-    })
-
-    async function getCartOptionsFromUser() {
-        try {
-            const response = await fetch(`${ConsumeCartAPI}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Baerer ${authToken}`,
-                }
-            })
-            if(response.status === 404) return 
-            if(response) {
-                
+        const updateCartItems = () => {
+            const cart = Cookies.get("cart");
+            if (cart) {
+                const cartProducts = JSON.parse(cart);
+                setItemsCart(cartProducts.cartProduct.length);
             }
-            return
-        } catch (error) {
-            console.log(error)
-            return
-        }
-    }
+        };
+        updateCartItems();
+    }, []);
 
     return (
         <div className="">
-            <div className="w-4 h-4 left-10 bg-light_red rounded-full text-white text-sm flex items-center justify-center">{itemsCart}</div>
+            <div className="w-5 h-5 left-10 rounded-full bg-red-500 text-white text-sm font-semibold flex items-center justify-center">
+                {itemsCart}
+            </div>
             <Image
                 src='/cart.png'
                 alt="Cart"
@@ -45,9 +35,7 @@ export default function CartMenu() {
                 height={25}
                 onClick={() => setCartOpen((prev) => !prev)}
             />
-            {
-                isCartOpen && <CartOpen />
-            }
+            {isCartOpen && <CartOpen />}
         </div>
     )
 }

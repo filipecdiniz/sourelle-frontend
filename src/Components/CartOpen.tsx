@@ -1,56 +1,79 @@
-"use client"
+"use client";
 
-import Image from "next/image"
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import ProductInCartOpen from "./Product/ProductInCartOpen";
+
+interface ProductInCart {
+    id: number;
+    productID: number;
+    amount: number;
+    product: {
+        id: number;
+        name: string;
+        price: number;
+        url: string;
+    };
+}
 
 export default function CartOpen() {
 
-    const cartItems = true
+    const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
+    const [visibleItems, setVisibleItems] = useState<number>(4);
+
+    useEffect(() => {
+        const updateCartItems = () => {
+            const cart = Cookies.get("cart");
+            if (cart) {
+                const cartProducts = JSON.parse(cart);
+                console.log(cartProducts.cartProduct)
+                setProductsCart(cartProducts.cartProduct);
+            }
+        };
+        updateCartItems();
+    }, []);
+
+    const cartItems = productsCart.length > 0;
+
+    const handleLoadMore = () => {
+        setVisibleItems(productsCart.length);
+    };
 
     return (
-        <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white right-4 flex flex-col gap-6 z-20">
+        <div className="w-[350px] max-w-full absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white right-4 flex flex-col gap-6 z-20 overflow-x-hidden">
             {!cartItems ? (
-                <div className="">Cart is Empty</div>
+                <div className="">Carrinho está vazio</div>
             ) : (
                 <>
                     <h2 className="text-xl">Carrinho</h2>
-                    {/* LIST */}
-                    <div className="flex flex-col gap-8">
-                        {/* ITEM */}
-                        <div className="flex gap-4">
-                            <Image
-                                src='/product.png'
-                                alt=""
-                                width={72}
-                                height={96}
-                                className="object-cover rounded-md"
+                    {/* ITEMS LIST */}
+                    <div className="flex flex-col gap-8 max-h-96 overflow-y-auto">
+                        {productsCart.slice(0, visibleItems).map((product) => (
+                            <ProductInCartOpen
+                                key={product.id}
+                                name={product.product.name}
+                                value={product.product.price}
+                                amount={product.amount}
+                                src={product.product.url}
                             />
-                            <div className="flex flex-col justify-between w-full">
-                                {/* TOP */}
-                                <div className="">
-                                    {/* TITLE */}
-                                    <div className="flex items-center justify-between gap-8">
-                                        <h3 className="font-semibold">Product Name</h3>
-                                        <div className="p-1 bg-gray-50 rounded-sm">$59</div>
-                                    </div>
-                                    {/* DESC*/}
-                                    <div className="text-sm text-gray-500 ">
-                                        avaiable
-                                    </div>
-                                </div>
-                                {/* BOTTOM */}
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-gray-500">Quantidade: 2</span>
-                                    <span className="text-blue-500">Remover</span>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                    {/* BOTTOM */}
 
+                    {visibleItems < productsCart.length && (
+                        <button
+                            onClick={handleLoadMore}
+                            className="mt-4 py-2 px-4 rounded-md bg-gray-200 text-gray-700 text-sm"
+                        >
+                            Ver mais
+                        </button>
+                    )}
+
+                    {/* BOTTOM */}
                     <div className="">
                         <div className="flex items-center justify-between font-semibold">
                             <span className="">Subtotal</span>
-                            <span className="">$58</span>
+                            {/* Calcule o valor total conforme o valor de cada item */}
+                            <span className="">R$ {productsCart.reduce((total, product) => total + product.product.price * product.amount, 0).toFixed(2)}</span>
                         </div>
                         <p className="text-gray-500 text-sm mt-2 mb-4">Taxas de entrega calculadas no final.</p>
 
@@ -62,5 +85,5 @@ export default function CartOpen() {
                 </>
             )}
         </div>
-    )
+    );
 }
