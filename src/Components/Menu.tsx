@@ -3,16 +3,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation"; // Importando usePathname
+import { usePathname } from "next/navigation";
+import Cookies from "js-cookie";
+import { useAppContext } from "@/context/AppContext";
 
 export default function Menu() {
     const [menuActive, setMenuActive] = useState(false);
-    const pathname = usePathname(); // Obtém a rota atual
+    const pathname = usePathname();
+    const { setItemsInCart, syncCart } = useAppContext();
 
-    // Fecha o menu ao mudar de rota
     useEffect(() => {
         setMenuActive(false);
-    }, [pathname]); // Sempre que `pathname` mudar, fecha o menu
+    }, [pathname]);
+
+    async function handleLogout() {
+        Cookies.remove("authToken");
+        Cookies.remove("cart");
+        setItemsInCart(0);
+        await syncCart();
+    }
 
     return (
         <div className="relative">
@@ -31,14 +40,14 @@ export default function Menu() {
                         { label: "Pedidos", href: "/pedidos" },
                         { label: "Fazer Login", href: "/login", highlight: true },
                         { label: "Criar Conta", href: "/register", highlight: true },
+                        { label: "Sair", href: "/login", onClick: handleLogout },
                     ].map((item, index) => (
                         <Link
                             key={index}
                             href={item.href}
-                            className={`w-full text-center text-gray-800 text-lg py-3 hover:bg-gray-100 transition-colors ${
-                                item.highlight ? "underline decoration-red-500" : ""
-                            }`}
-                            onClick={() => setMenuActive(false)}
+                            className={`w-full text-center text-gray-800 text-lg py-3 hover:bg-gray-100 transition-colors ${item.highlight ? "underline decoration-red-500" : ""
+                                }`}
+                            onClick={item.onClick ? () => { item.onClick(); setMenuActive(false); } : () => setMenuActive(false)}
                         >
                             {item.label}
                         </Link>

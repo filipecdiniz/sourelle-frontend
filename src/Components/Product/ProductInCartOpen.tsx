@@ -9,7 +9,8 @@ interface productProps {
 
 export default function ProductInCartOpen({ name, value, amount, src }: productProps) {
     // console.log(value)
-    const formatCurrency = (value: number) => {
+    const formatCurrency = (name: string, value: number) => {
+        console.log(`${name}, ${value}`)
         return new Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
@@ -31,7 +32,7 @@ export default function ProductInCartOpen({ name, value, amount, src }: productP
                     {/* TITLE */}
                     <div className="flex items-center justify-between gap-8">
                         <h3 className="font-semibold">{name}</h3>
-                        <div className="p-1 bg-gray-50 rounded-sm">{formatCurrency(value)}</div>
+                        <div className="p-1 bg-gray-50 rounded-sm">{formatCurrency(name, value * amount)}</div>
                     </div>
                     {/* DESC*/}
                 </div>

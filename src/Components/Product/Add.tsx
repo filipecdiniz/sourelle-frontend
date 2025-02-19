@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import AddCartButton from "../AddCartButton";
-import { AddProductInCartAPI } from "@/backEndRoutes";
 
 interface addProductProps {
     productId: number;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import NavBar from "@/Components/NavBar";
 import Footer from "@/Components/Footer";
 import "./globals.css";
+import { AppProvider } from "@/context/AppContext";
 
 export const metadata: Metadata = {
   title: "Sourelle",
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="pt" className="h-full">
       <body className="flex flex-col h-full">
-        <NavBar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <AppProvider>
+          <NavBar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </AppProvider>
       </body>
     </html>
   );

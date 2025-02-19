@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ProductInCartOpen from "./Product/ProductInCartOpen";
+import { useAppContext } from "@/context/AppContext";
 
 interface ProductInCart {
     id: number;
@@ -20,20 +21,26 @@ export default function CartOpen() {
 
     const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
     const [visibleItems, setVisibleItems] = useState<number>(4);
+    const cart = Cookies.get("cart");
+    const cartItems = productsCart.length > 0;
 
     useEffect(() => {
-        const updateCartItems = () => {
-            const cart = Cookies.get("cart");
-            if (cart) {
-                const cartProducts = JSON.parse(cart);
-                console.log(cartProducts.cartProduct)
-                setProductsCart(cartProducts.cartProduct);
-            }
-        };
+        console.log(cart)
         updateCartItems();
-    }, []);
+    }, [cart]);
 
-    const cartItems = productsCart.length > 0;
+    function updateCartItems() {
+
+        if (cart) {
+            const cartProducts = JSON.parse(cart);
+            console.log(cartProducts)
+            setProductsCart(cartProducts);
+            console.log(`intern: ${productsCart}`)
+        }
+        console.log(`fora: ${productsCart}`)
+
+    };
+
 
     const handleLoadMore = () => {
         setVisibleItems(productsCart.length);
@@ -72,7 +79,6 @@ export default function CartOpen() {
                     <div className="">
                         <div className="flex items-center justify-between font-semibold">
                             <span className="">Subtotal</span>
-                            {/* Calcule o valor total conforme o valor de cada item */}
                             <span className="">R$ {productsCart.reduce((total, product) => total + product.product.price * product.amount, 0).toFixed(2)}</span>
                         </div>
                         <p className="text-gray-500 text-sm mt-2 mb-4">Taxas de entrega calculadas no final.</p>
