@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ProductInCartOpen from "./Product/ProductInCartOpen";
-import { useAppContext } from "@/context/AppContext";
 
 interface ProductInCart {
     id: number;
