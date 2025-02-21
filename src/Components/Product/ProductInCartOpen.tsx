@@ -1,19 +1,20 @@
 import Image from "next/image";
 
-interface productProps {
+interface ProductProps {
     name: string;
     value: number;
     amount: number;
-    src: string
+    src: string;
+    onRemove: () => void;
 }
 
-export default function ProductInCartOpen({ name, value, amount, src }: productProps) {
+export default function ProductInCartOpen({ name, value, amount, src, onRemove }: ProductProps) {
     function formatCurrency(value: number) {
         return new Intl.NumberFormat("pt-BR", {
             style: "currency",
             currency: "BRL",
         }).format(value);
-    };
+    }
 
     return (
         <div className="flex gap-4">
@@ -32,14 +33,18 @@ export default function ProductInCartOpen({ name, value, amount, src }: productP
                         <h3 className="font-semibold">{name}</h3>
                         <div className="p-1 bg-gray-50 rounded-sm">{formatCurrency(value * amount)}</div>
                     </div>
-                    {/* DESC*/}
                 </div>
                 {/* BOTTOM */}
                 <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Quantidade: {amount}</span>
-                    <span className="text-red-500">Remover</span>
+                    <button
+                        onClick={onRemove}
+                        className="text-red-500 hover:underline"
+                    >
+                        Remover
+                    </button>
                 </div>
             </div>
         </div>
-    )
+    );
 }

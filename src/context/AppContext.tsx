@@ -8,6 +8,16 @@ interface AppContextType {
     itemsInCart: number;
     setItemsInCart: (count: number) => void;
     syncCart: () => Promise<void>;
+    searchResults: Product[];
+    setSearchResults: (results: Product[]) => void;
+}
+
+interface Product {
+    id: number;
+    name: string;
+    category: number;
+    price: number;
+    url: string;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -21,8 +31,8 @@ export const useAppContext = () => {
 };
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-    // just the number of items in cart.
     const [itemsInCart, setItemsInCart] = useState<number>(0);
+    const [searchResults, setSearchResults] = useState<Product[]>([]);
 
     useEffect(() => {
         initializeCart();
@@ -50,11 +60,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                     const cart = await response.json();
                     Cookies.set("cart", JSON.stringify(cart.cartProduct));
                     setItemsInCart(cart.countProducts);
-                    return
+                    return;
                 }
                 Cookies.remove("cart");
-                return
-
             } catch (error) {
                 console.error("Erro ao sincronizar carrinho:", error);
             }
@@ -62,7 +70,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
 
     return (
-        <AppContext.Provider value={{ itemsInCart, setItemsInCart, syncCart }}>
+        <AppContext.Provider value={{ itemsInCart, setItemsInCart, syncCart, searchResults, setSearchResults }}>
             {children}
         </AppContext.Provider>
     );

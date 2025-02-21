@@ -6,10 +6,12 @@ import ListProductsDrag from "@/Components/ListProductsDrag";
 import { ConsumeUsersAPI } from "@/backEndRoutes";
 import Cookies from "js-cookie";
 import { useAppContext } from "@/context/AppContext";
+// import SearchResults from "@/Components/SearchResults";
 
 export default function Home() {
   const [userName, setUserName] = useState<string | null>(null);
-  const { syncCart } = useAppContext();
+  const { syncCart} = useAppContext();
+  
   const authToken = Cookies.get("authToken");
 
   useEffect(() => {
@@ -30,12 +32,14 @@ export default function Home() {
       } else {
         console.log("Não foi possível acessar o servidor!");
       }
-      syncCart()
+      syncCart();
     }
   }
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* SEARCH RESULTS */}
+      {/* <SearchResults/> */}
       {/* WELCOME SECTION */}
       <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
         <p className="text-xl font-serif text-gray-800">
@@ -63,7 +67,6 @@ export default function Home() {
         <h2 className="font-serif text-2xl font-semibold text-gray-900">Anéis</h2>
         <ListProductsDrag categoryId={1} />
       </div>
-
       {/* BOTTOM */}
       <div className="justify-center items-center text-center mt-6">
         <h2 className="font-serif text-2xl font-semibold text-gray-900">Brincos</h2>
@@ -72,6 +75,10 @@ export default function Home() {
       <div className="justify-center items-center text-center mt-6">
         <h2 className="font-serif text-2xl font-semibold text-gray-900">Conjuntos</h2>
         <ListProductsDrag categoryId={6} />
+      </div>
+      <div className="justify-center items-center text-center mt-6">
+        <h2 className="font-serif text-2xl font-semibold text-gray-900">Argolas</h2>
+        <ListProductsDrag categoryId={3} />
       </div>
     </div>
   );

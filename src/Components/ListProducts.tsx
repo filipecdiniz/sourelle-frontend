@@ -37,9 +37,8 @@ export default function ListProducts() {
             {/* Produtos */}
             <div className="relative w-full flex justify-center">
                 <div
-                    className={`grid ${
-                        visibleProducts.length === 1 ? "grid-cols-1" : "grid-cols-2"
-                    } p-4 gap-3 transition-opacity duration-500 ease-in-out min-h-[200px]`}
+                    className={`grid ${visibleProducts.length === 1 ? "grid-cols-1" : "grid-cols-2"
+                        } p-4 gap-3 transition-opacity duration-500 ease-in-out min-h-[200px]`}
                 >
                     {visibleProducts.map((product) => (
                         <div
@@ -58,7 +57,10 @@ export default function ListProducts() {
                             <div className="flex flex-col gap-1 mt-1">
                                 <div className="justify-center text-start">{product.name}</div>
                                 <div className="justify-center text-start">R${product.value}</div>
-                                <AddCartButton />
+                                <AddCartButton
+                                    amount={1}
+                                    productId={product.id}
+                                />
                             </div>
                         </div>
                     ))}

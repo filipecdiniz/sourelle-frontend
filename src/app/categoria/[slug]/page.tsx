@@ -25,7 +25,6 @@ export default function CategoryPage() {
                     {products.map((item) => (
                         <ShowProduct
                             id={item.id}
-                            category={item.category}
                             name={item.name}
                             src={item.src}
                             value={item.value}

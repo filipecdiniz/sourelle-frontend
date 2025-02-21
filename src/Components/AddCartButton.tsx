@@ -1,5 +1,5 @@
 import { ConsumeCartAPI } from "@/backEndRoutes";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Cookies from "js-cookie";
 import Notification from "./Notification";
 import { useRouter } from "next/navigation";
@@ -58,6 +58,7 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
                 }
 
                 const cart = await response.json();
+                // To change the value above the cart
                 setItemsInCart(cart.cartProduct.length)
                 Cookies.set("cart", JSON.stringify(cart.cartProduct));
 
@@ -76,47 +77,6 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
                 setIsLoading(false);
             }
         }
-        // const currentCart = Cookies.get('cart_products_no_user')
-        // if (!currentCart) {
-        //     const cartProducts = { cart: 'user_offline', cartProducts: [{ productId, amount }] }
-        //     Cookies.set("cart_products_no_user", JSON.stringify(cartProducts));
-        //     setShowNotification({
-        //         color: "bg-blue-500",
-        //         message: "Faça login para adicionar o produto ao carrinho.",
-        //         show: true
-        //     });
-        //     setIsLoading(false)
-        //     return
-        // } if (currentCart) {
-        //     const cartProducts = JSON.parse(currentCart);
-
-        //     const productExists = cartProducts.cartProducts.find(
-        //         (product: any) => product.productId === productId
-        //     );
-
-        //     if (productExists) {
-        //         productExists.amount += 1;
-        //         console.log(cartProducts)
-        //         Cookies.set('cart_products_no_user', JSON.stringify(cartProducts));
-        //         setShowNotification({
-        //             color: "bg-blue-500",
-        //             message: "Faça login para adicionar o produto ao carrinho.",
-        //             show: true
-        //         });;
-        //         setIsLoading(false);
-        //         return;
-        //     } else {
-        //         cartProducts.cartProducts.push({ productId, amount: 1 });
-        //         Cookies.set('cart_products_no_user', JSON.stringify(cartProducts));
-        //         setShowNotification({
-        //             color: "bg-blue-500",
-        //             message: "Faça login para adicionar o produto ao carrinho.",
-        //             show: true
-        //         });
-        //         setIsLoading(false);
-        //         return;
-        //     }
-        // }
         setIsLoading(false);
     }
 

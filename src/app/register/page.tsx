@@ -3,6 +3,8 @@
 import { ConsumeUsersAPI } from "@/backEndRoutes";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Notification from "@/Components/Notification";
 
 interface UserDTO {
     name: string;
@@ -17,6 +19,12 @@ export default function RegisterPage() {
         email: "",
         phone: "",
         password: "",
+    });
+
+    const [notification, setNotification] = useState({
+        message: "",
+        color: "",
+        show: false,
     });
 
     const [errors, setErrors] = useState<Partial<UserDTO>>({});
@@ -78,18 +86,25 @@ export default function RegisterPage() {
             const data = await response.json();
 
             if (response.ok) {
-                alert("Conta criada com sucesso!");
-                router.push("/login");
-            } else if (data.statusCode === 400 && data.message.includes("email")) {
+                setNotification({
+                    message: "Conta criada 💖! ",
+                    color: "bg-green-500",
+                    show: true,
+                });
+
+                setTimeout(() => {
+                    router.push("/login");
+                }, 1000);
+            }
+            if (data.statusCode === 400 && data.message.includes("Email")) {
                 setErrors((prevErrors) => ({
                     ...prevErrors,
                     email: "Este e-mail já está cadastrado.",
                 }));
-            } else {
-                alert(data.message || "Erro ao criar conta.");
             }
+
         } catch (error) {
-            console.log(error)
+            console.log(error);
             alert("Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.");
         }
     }
@@ -105,40 +120,41 @@ export default function RegisterPage() {
                 </p>
 
                 <form className="flex flex-col mt-4 space-y-4" onSubmit={registerUser}>
-                    {(["name", "email", "phone", "password"] as Array<keyof UserDTO>).map((field) => (
-                        <div key={field}>
-                            <label className="block text-gray-700 font-medium">
-                                {field === "name"
-                                    ? "Nome completo"
-                                    : field === "email"
-                                    ? "E-mail"
-                                    : field === "phone"
-                                    ? "Celular"
-                                    : "Senha"}
-                            </label>
-                            <input
-                                type={field === "password" ? "password" : "text"}
-                                name={field}
-                                value={formData[field]}
-                                onChange={handleChange}
-                                className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${
-                                    errors[field] ? "border-red-500" : ""
-                                }`}
-                                placeholder={
-                                    field === "name"
-                                        ? "Ex: João Silva"
+                    {(["name", "email", "phone", "password"] as Array<keyof UserDTO>).map(
+                        (field) => (
+                            <div key={field}>
+                                <label className="block text-gray-700 font-medium">
+                                    {field === "name"
+                                        ? "Nome completo"
                                         : field === "email"
-                                        ? "Ex: joao@gmail.com"
-                                        : field === "phone"
-                                        ? "Ex: 62984689961"
-                                        : "Digite sua senha"
-                                }
-                            />
-                            {errors[field] && (
-                                <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
-                            )}
-                        </div>
-                    ))}
+                                            ? "E-mail"
+                                            : field === "phone"
+                                                ? "Celular"
+                                                : "Senha"}
+                                </label>
+                                <input
+                                    type={field === "password" ? "password" : "text"}
+                                    name={field}
+                                    value={formData[field]}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-gray-500 outline-none ${errors[field] ? "border-red-500" : ""
+                                        }`}
+                                    placeholder={
+                                        field === "name"
+                                            ? "Ex: João Silva"
+                                            : field === "email"
+                                                ? "Ex: joao@gmail.com"
+                                                : field === "phone"
+                                                    ? "Ex: 62984689961"
+                                                    : "Digite sua senha"
+                                    }
+                                />
+                                {errors[field] && (
+                                    <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
+                                )}
+                            </div>
+                        )
+                    )}
 
                     <button
                         type="submit"
@@ -147,7 +163,22 @@ export default function RegisterPage() {
                         Criar Conta
                     </button>
                 </form>
+
+                {/* Aviso "Já possui conta? Faça login aqui." */}
+                <div className="mt-4 text-center">
+                    <p className="text-gray-600">
+                        Já possui conta?{" "}
+                        <Link href="/login" className="text-blue-600 hover:text-blue-800">
+                            Faça login</Link> aqui!
+                    </p>
+                </div>
             </div>
+            <Notification
+                color={notification.color}
+                message={notification.message}
+                show={notification.show}
+                onClose={() => setNotification((prev) => ({ ...prev, show: false }))}
+            />
         </div>
     );
 }

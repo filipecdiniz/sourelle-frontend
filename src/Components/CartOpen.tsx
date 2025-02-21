@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import ProductInCartOpen from "./Product/ProductInCartOpen";
+import { useRouter } from "next/navigation";
+import Notification from "./Notification";
+import { ConsumeCartAPI } from "@/backEndRoutes";
+import { useAppContext } from "@/context/AppContext";
 
 interface ProductInCart {
     id: number;
@@ -17,29 +21,74 @@ interface ProductInCart {
 }
 
 export default function CartOpen() {
-
+    const { syncCart } = useAppContext();
     const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
     const [visibleItems, setVisibleItems] = useState<number>(4);
-    const cart = Cookies.get("cart");
+    const [showNotification, setShowNotification] = useState({
+        color: "",
+        message: "",
+        show: false,
+    });
+    const router = useRouter()
     const cartItems = productsCart.length > 0;
+    const cart = Cookies.get("cart");
+    const authToken = Cookies.get("authToken");
 
     useEffect(() => {
-        console.log(cart)
         updateCartItems();
     }, [cart]);
 
     function updateCartItems() {
-
         if (cart) {
             const cartProducts = JSON.parse(cart);
-            console.log(cartProducts)
             setProductsCart(cartProducts);
-            console.log(`intern: ${productsCart}`)
         }
-        console.log(`fora: ${productsCart}`)
+    }
 
-    };
+    function handeCheckout() {
+        router.push('carrinho/endereco')
+    }
 
+    function handeCart() {
+        router.push('carrinho')
+    }
+
+    async function handleRemoveQuantity(productId: number, amount: number) {
+        try {
+            const response = await fetch(ConsumeCartAPI, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    amount: amount - 1,
+                }),
+            });
+            if (response.ok) {
+                const updatedCart = await response.json();
+
+                console.log(updatedCart);
+                setProductsCart(updatedCart.cartProduct);
+                await syncCart()
+                Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
+            } else {
+                console.log('Erro no servidor ao atualizar o carrinho.');
+                setShowNotification({
+                    color: 'bg-red-500',
+                    message: 'Erro no servidor ao atualizar o carrinho.',
+                    show: true,
+                });
+            }
+        } catch (error) {
+            setShowNotification({
+                color: 'bg-red-500',
+                message: `${error}`,
+                show: true,
+            });
+        }
+    }
 
     const handleLoadMore = () => {
         setVisibleItems(productsCart.length);
@@ -61,6 +110,7 @@ export default function CartOpen() {
                                 value={product.product.price}
                                 amount={product.amount}
                                 src={product.product.url}
+                                onRemove={() => handleRemoveQuantity(product.productID, product.amount)}
                             />
                         ))}
                     </div>
@@ -83,12 +133,20 @@ export default function CartOpen() {
                         <p className="text-gray-500 text-sm mt-2 mb-4">Taxas de entrega calculadas no final.</p>
 
                         <div className="flex justify-between text-sm">
-                            <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">Ver Carrinho</button>
-                            <button className="rounded-md py-3 px-4 bg-black text-white">Fechar Pedido</button>
+                            <button className="rounded-md py-3 px-4 ring-1 ring-gray-300" onClick={handeCart}>Ver Carrinho</button>
+                            <button className="rounded-md py-3 px-4 bg-black text-white" onClick={handeCheckout}>Fechar Pedido</button>
                         </div>
                     </div>
                 </>
             )}
+            <Notification
+                color={showNotification.color}
+                message={showNotification.message}
+                show={showNotification.show}
+                onClose={() =>
+                    setShowNotification((prev) => ({ ...prev, show: false }))
+                }
+            />
         </div>
     );
 }
