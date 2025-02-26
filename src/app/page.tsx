@@ -43,11 +43,11 @@ export default function Home() {
       {/* WELCOME SECTION */}
       <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
         <p className="text-xl font-serif text-gray-800">
-          <span className="font-bold text-gray-900 text-2xl">
+          {/* <span className="font-bold text-gray-900 text-2xl">
             Bem-vindo(a) {userName ? `, ${userName}` : ""}!
           </span>
-          <br />
-          Obrigada por dividir esse momento com a gente.
+          <br /> */}
+          Bem-vindo(a)! Obrigada por dividir esse momento com a gente.
         </p>
         <p className="text-gray-700 mt-2">
           Cada peça foi escolhida com muito carinho e tem um significado especial.

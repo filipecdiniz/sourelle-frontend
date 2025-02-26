@@ -7,18 +7,20 @@ import { useRouter } from "next/navigation";
 import Notification from "./Notification";
 import { ConsumeCartAPI } from "@/backEndRoutes";
 import { useAppContext } from "@/context/AppContext";
+import { productsRepository } from "@/repository/products";
+
+interface CartProduct {
+    productId: number;
+    amount: number;
+};
 
 interface ProductInCart {
     id: number;
-    productID: number;
+    name: string;
+    price: number;
     amount: number;
-    product: {
-        id: number;
-        name: string;
-        price: number;
-        url: string;
-    };
-}
+    url: string;
+};
 
 export default function CartOpen() {
     const { syncCart } = useAppContext();
@@ -32,7 +34,7 @@ export default function CartOpen() {
     const router = useRouter()
     const cartItems = productsCart.length > 0;
     const cart = Cookies.get("cart");
-    const authToken = Cookies.get("authToken");
+    // const authToken = Cookies.get("authToken");
 
     useEffect(() => {
         updateCartItems();
@@ -40,7 +42,21 @@ export default function CartOpen() {
 
     function updateCartItems() {
         if (cart) {
-            const cartProducts = JSON.parse(cart);
+            const cartItems: CartProduct[] = JSON.parse(cart);
+            let cartProducts: ProductInCart[] = [];
+            console.log(cartItems)
+            cartItems.forEach((item) => {
+                const product = productsRepository.find((product) => product.id === item.productId);
+                if (product) {
+                    cartProducts.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.value,
+                        url: product.src,
+                        amount: item.amount,
+                    });
+                }
+            });
             setProductsCart(cartProducts);
         }
     }
@@ -59,7 +75,7 @@ export default function CartOpen() {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${authToken}`,
+                    // Authorization: `Bearer ${authToken}`,
                 },
                 body: JSON.stringify({
                     productId: productId,
@@ -90,7 +106,24 @@ export default function CartOpen() {
         }
     }
 
-    const handleLoadMore = () => {
+    async function handleRemoveQuantityCookies(productId: number) {
+        const newCart = productsCart.map((product: ProductInCart) => {
+            if (product.id === productId) {
+                return { productId: product.id, amount: product.amount - 1 };
+            }
+            return { productId: product.id, amount: product.amount };
+        });
+        const newProductsCart = productsCart.map((product: ProductInCart) => {
+            if (product.id === productId) {
+                return { ...product, amount: product.amount - 1 };
+            }
+            return product;
+        });
+        setProductsCart(newProductsCart);
+        Cookies.set("cart", JSON.stringify(newCart));
+    }
+
+    function handleLoadMore() {
         setVisibleItems(productsCart.length);
     };
 
@@ -106,11 +139,11 @@ export default function CartOpen() {
                         {productsCart.slice(0, visibleItems).map((product) => (
                             <ProductInCartOpen
                                 key={product.id}
-                                name={product.product.name}
-                                value={product.product.price}
+                                name={product.name}
+                                value={product.price}
                                 amount={product.amount}
-                                src={product.product.url}
-                                onRemove={() => handleRemoveQuantity(product.productID, product.amount)}
+                                src={product.url}
+                                onRemove={() => handleRemoveQuantityCookies(product.id)}
                             />
                         ))}
                     </div>
@@ -128,7 +161,7 @@ export default function CartOpen() {
                     <div className="">
                         <div className="flex items-center justify-between font-semibold">
                             <span className="">Subtotal</span>
-                            <span className="">R$ {productsCart.reduce((total, product) => total + product.product.price * product.amount, 0).toFixed(2)}</span>
+                            {/* <span className="">R$ {productsCart.reduce((total, product) => total + product.product.price * product.amount, 0).toFixed(2)}</span> */}
                         </div>
                         <p className="text-gray-500 text-sm mt-2 mb-4">Taxas de entrega calculadas no final.</p>
 

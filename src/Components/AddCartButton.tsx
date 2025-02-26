@@ -1,8 +1,6 @@
-import { ConsumeCartAPI } from "@/backEndRoutes";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import Notification from "./Notification";
-import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 
 interface AddProductToCart {
@@ -19,65 +17,36 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
         message: '',
         show: false
     });
-    const router = useRouter()
-    const authToken = Cookies.get('authToken')
+    // const authToken = Cookies.get('authToken')
 
     async function addItemCart(productId: number, amount: number) {
-
-        if (!authToken) {
-            setShowNotification({
-                color: "bg-blue-500",
-                message: "Faça login para adicionar o produto ao carrinho.",
-                show: true
-            })
-            setTimeout(() => {
-                router.push('/login')
-            }, 2000);
-        }
-
         setIsLoading(true);
 
-        if (authToken) {
-            try {
-                const response = await fetch(`${ConsumeCartAPI}`, {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("authToken")}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        productId,
-                        amount,
-                    }),
-                });
+        const currentCart = Cookies.get('cart')
 
-                if (!response.ok) {
-                    console.error("Erro ao adicionar produto ao carrinho.");
-                    setIsLoading(false);
-                    return;
-                }
-
-                const cart = await response.json();
-                // To change the value above the cart
-                setItemsInCart(cart.cartProduct.length)
-                Cookies.set("cart", JSON.stringify(cart.cartProduct));
-
-                setShowNotification({
-                    color: "bg-green-500",
-                    message: "Item adicionado ao carrinho.",
-                    show: true
-                });
-            } catch (error) {
-                setShowNotification({
-                    color: "bg-blue-500",
-                    message: `${error}`,
-                    show: true
-                });
-            } finally {
-                setIsLoading(false);
+        if (!currentCart) {
+            // console.log(`carrinho doesn't exist`)
+            Cookies.set('cart', JSON.stringify([{ productId, amount }]))
+            setItemsInCart(1)
+        }
+        if (currentCart) {
+            const cart = JSON.parse(currentCart);
+            const product: AddProductToCart | undefined = cart.find((product: AddProductToCart) => product.productId === productId)
+            if (product) {
+                product.amount += amount
+                setItemsInCart(cart.length)
+                Cookies.set('cart', JSON.stringify(cart))
+            }
+            if (!product) {
+                cart.push({ productId, amount })
+                setItemsInCart(cart.length)
+                Cookies.set('cart', JSON.stringify(cart))
             }
         }
-        setIsLoading(false);
+
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
     }
 
     return (
@@ -109,3 +78,63 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
         </>
     );
 }
+
+
+
+// async function addItemCart(productId: number, amount: number) {
+
+//     if (!authToken) {
+//         setShowNotification({
+//             color: "bg-blue-500",
+//             message: "Faça login para adicionar o produto ao carrinho.",
+//             show: true
+//         })
+//         setTimeout(() => {
+//             router.push('/login')
+//         }, 2000);
+//     }
+
+//     setIsLoading(true);
+
+//     if (authToken) {
+//         try {
+//             const response = await fetch(`${ConsumeCartAPI}`, {
+//                 method: "POST",
+//                 headers: {
+//                     Authorization: `Bearer ${Cookies.get("authToken")}`,
+//                     "Content-Type": "application/json",
+//                 },
+//                 body: JSON.stringify({
+//                     productId,
+//                     amount,
+//                 }),
+//             });
+
+//             if (!response.ok) {
+//                 console.error("Erro ao adicionar produto ao carrinho.");
+//                 setIsLoading(false);
+//                 return;
+//             }
+
+//             const cart = await response.json();
+//             // To change the value above the cart
+//             setItemsInCart(cart.cartProduct.length)
+//             Cookies.set("cart", JSON.stringify(cart.cartProduct));
+
+//             setShowNotification({
+//                 color: "bg-green-500",
+//                 message: "Item adicionado ao carrinho.",
+//                 show: true
+//             });
+//         } catch (error) {
+//             setShowNotification({
+//                 color: "bg-blue-500",
+//                 message: `${error}`,
+//                 show: true
+//             });
+//         } finally {
+//             setIsLoading(false);
+//         }
+//     }
+//     setIsLoading(false);
+// }
