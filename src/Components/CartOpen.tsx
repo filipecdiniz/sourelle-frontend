@@ -8,19 +8,8 @@ import Notification from "./Notification";
 import { ConsumeCartAPI } from "@/backEndRoutes";
 import { useAppContext } from "@/context/AppContext";
 import { productsRepository } from "@/repository/products";
-
-interface CartProduct {
-    productId: number;
-    amount: number;
-};
-
-interface ProductInCart {
-    id: number;
-    name: string;
-    price: number;
-    amount: number;
-    url: string;
-};
+import { ProductInCart } from "@/interfaces/ProductInCart";
+import { CartProduct } from "@/interfaces/CartProduct";
 
 export default function CartOpen() {
     const { syncCart } = useAppContext();
@@ -62,11 +51,11 @@ export default function CartOpen() {
     }
 
     function handeCheckout() {
-        router.push('carrinho/endereco')
+        router.push('/checkout/profile')
     }
 
     function handeCart() {
-        router.push('carrinho')
+        router.push('/checkout/cart')
     }
 
     async function handleRemoveQuantity(productId: number, amount: number) {

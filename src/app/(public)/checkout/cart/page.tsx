@@ -3,22 +3,13 @@
 import { ConsumeCartAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import { useAppContext } from "@/context/AppContext";
+import { CartProduct } from "@/interfaces/CartProduct";
+import { ProductInCart } from "@/interfaces/ProductInCart";
+import { productsRepository } from "@/repository/products";
 import Cookies from "js-cookie";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface ProductInCart {
-    id: number;
-    productId: number;
-    amount: number;
-    product: {
-        id: number;
-        name: string;
-        price: number;
-        url: string;
-    };
-}
 
 export default function CartPage() {
     const { syncCart } = useAppContext();
@@ -33,24 +24,52 @@ export default function CartPage() {
     const cart = Cookies.get("cart");
 
     useEffect(() => {
-        updateCartItems();
-    }, [cart]);
-
-    function updateCartItems() {
-        if (cart) {
-            const cartProducts = JSON.parse(cart);
-            setProductsCart(cartProducts);
-            return;
+            updateCartItems();
+        }, [cart]);
+    
+        function updateCartItems() {
+            if (cart) {
+                const cartItems: CartProduct[] = JSON.parse(cart);
+                let cartProducts: ProductInCart[] = [];
+                console.log(cartItems)
+                cartItems.forEach((item) => {
+                    const product = productsRepository.find((product) => product.id === item.productId);
+                    if (product) {
+                        cartProducts.push({
+                            id: product.id,
+                            name: product.name,
+                            price: product.value,
+                            url: product.src,
+                            amount: item.amount,
+                        });
+                    }
+                });
+                setProductsCart(cartProducts);
+            }
         }
-        return;
-    }
 
     function handeCheckout() {
-        router.push("carrinho/endereco");
+        router.push("/checkout/profile");
+    }
+
+    async function handleRemoveQuantityCookies(productId: number) {
+        const newCart = productsCart.map((product: ProductInCart) => {
+            if (product.id === productId) {
+                return { productId: product.id, amount: product.amount - 1 };
+            }
+            return { productId: product.id, amount: product.amount };
+        });
+        const newProductsCart = productsCart.map((product: ProductInCart) => {
+            if (product.id === productId) {
+                return { ...product, amount: product.amount - 1 };
+            }
+            return product;
+        });
+        setProductsCart(newProductsCart);
+        Cookies.set("cart", JSON.stringify(newCart));
     }
 
     async function handleRemoveQuantity(productId: number, amount: number) {
-        console.log(productId)
         try {
             const response = await fetch(ConsumeCartAPI, {
                 method: 'PATCH',
@@ -104,24 +123,24 @@ export default function CartPage() {
                             >
                                 <div className="flex items-center gap-4">
                                     <img
-                                        src={product.product.url}
-                                        alt={product.product.name}
+                                        src={product.url}
+                                        alt={product.name}
                                         className="w-16 h-16 object-cover rounded-md"
                                     />
                                     <div>
                                         <h3 className="font-semibold text-base truncate max-w-[150px]">
-                                            {product.product.name}
+                                            {product.name}
                                         </h3>
                                         <p className="text-gray-500 text-sm">Qtd: {product.amount}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="font-semibold text-base">
-                                        <span className="text-sm">R$</span> {product.product.price.toFixed(2)}
+                                        <span className="text-sm">R$</span> {product.price.toFixed(2)}
                                     </p>
                                     <button
                                         className="text-red-500 text-sm mt-2"
-                                        onClick={() => handleRemoveQuantity(product.productId, product.amount)}
+                                        onClick={() => handleRemoveQuantityCookies(product.id)}
                                     >
                                         Remover
                                     </button>
@@ -138,7 +157,7 @@ export default function CartPage() {
                                 R$ {productsCart
                                     .reduce(
                                         (total, product) =>
-                                            total + product.product.price * product.amount,
+                                            total + product.price * product.amount,
                                         0
                                     )
                                     .toFixed(2)}
