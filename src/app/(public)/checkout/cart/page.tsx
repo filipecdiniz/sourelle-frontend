@@ -24,29 +24,29 @@ export default function CartPage() {
     const cart = Cookies.get("cart");
 
     useEffect(() => {
-            updateCartItems();
-        }, [cart]);
-    
-        function updateCartItems() {
-            if (cart) {
-                const cartItems: CartProduct[] = JSON.parse(cart);
-                let cartProducts: ProductInCart[] = [];
-                console.log(cartItems)
-                cartItems.forEach((item) => {
-                    const product = productsRepository.find((product) => product.id === item.productId);
-                    if (product) {
-                        cartProducts.push({
-                            id: product.id,
-                            name: product.name,
-                            price: product.value,
-                            url: product.src,
-                            amount: item.amount,
-                        });
-                    }
-                });
-                setProductsCart(cartProducts);
-            }
+        updateCartItems();
+    }, [cart]);
+
+    function updateCartItems() {
+        if (cart) {
+            const cartItems: CartProduct[] = JSON.parse(cart);
+            let cartProducts: ProductInCart[] = [];
+            console.log(cartItems)
+            cartItems.forEach((item) => {
+                const product = productsRepository.find((product) => product.id === item.productId);
+                if (product) {
+                    cartProducts.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.value,
+                        url: product.src,
+                        amount: item.amount,
+                    });
+                }
+            });
+            setProductsCart(cartProducts);
         }
+    }
 
     function handeCheckout() {
         router.push("/checkout/profile");
@@ -54,17 +54,19 @@ export default function CartPage() {
 
     async function handleRemoveQuantityCookies(productId: number) {
         const newCart = productsCart.map((product: ProductInCart) => {
-            if (product.id === productId) {
-                return { productId: product.id, amount: product.amount - 1 };
-            }
-            return { productId: product.id, amount: product.amount };
-        });
+                if (product.id === productId) {
+                    return { productId: product.id, amount: product.amount - 1 };
+                }
+                return { productId: product.id, amount: product.amount };
+            }).filter((product) => product.amount > 0);
+
         const newProductsCart = productsCart.map((product: ProductInCart) => {
             if (product.id === productId) {
                 return { ...product, amount: product.amount - 1 };
             }
             return product;
-        });
+        }).filter((product) => product.amount > 0);
+
         setProductsCart(newProductsCart);
         Cookies.set("cart", JSON.stringify(newCart));
     }

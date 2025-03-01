@@ -101,13 +101,15 @@ export default function CartOpen() {
                 return { productId: product.id, amount: product.amount - 1 };
             }
             return { productId: product.id, amount: product.amount };
-        });
+        }).filter((product) => product.amount > 0);
+
         const newProductsCart = productsCart.map((product: ProductInCart) => {
             if (product.id === productId) {
                 return { ...product, amount: product.amount - 1 };
             }
             return product;
-        });
+        }).filter((product) => product.amount > 0);
+
         setProductsCart(newProductsCart);
         Cookies.set("cart", JSON.stringify(newCart));
     }
