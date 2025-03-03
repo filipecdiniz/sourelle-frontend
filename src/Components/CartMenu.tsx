@@ -35,11 +35,19 @@ export default function CartMenu() {
       <div className="w-5 h-5 left-10 rounded-full bg-red-500 text-white text-sm font-semibold flex items-center justify-center">
         {itemsInCart}
       </div>
-      <Image
-        src="/cart.png"
+      {/* <Image
+        src="/cart_power.svg"
         alt="Cart"
         width={25}
         height={25}
+        onClick={() => setCartOpen((prev) => !prev)}
+        className="cursor-pointer"
+      /> */}
+      <Image
+        src="/Imagem1.svg"
+        alt="Cart"
+        width={38}
+        height={35}
         onClick={() => setCartOpen((prev) => !prev)}
         className="cursor-pointer"
       />

@@ -50,6 +50,6 @@ export const config: MiddlewareConfig = {
          * - favicon.ico, sitemap.xml, robots.txt (metadata files)
          * - .png (image files)
          */
-        '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.png$).*)',
+        '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.png$ |.*\\.svg$).*)',
     ],
 }

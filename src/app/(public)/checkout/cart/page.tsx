@@ -1,20 +1,22 @@
 "use client";
 
-import { ConsumeCartAPI } from "@/backEndRoutes";
+import { ConsumeCartAPI, ConsumeCupomAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import { useAppContext } from "@/context/AppContext";
 import { CartProduct } from "@/interfaces/CartProduct";
 import { ProductInCart } from "@/interfaces/ProductInCart";
 import { productsRepository } from "@/repository/products";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
 
 export default function CartPage() {
     const { syncCart } = useAppContext();
     const router = useRouter();
     const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
+    const [cupom, setCupom] = useState("");
+    const [cupomPercentage, setCupomPercentage] = useState(0);
     const [showNotification, setShowNotification] = useState({
         color: "",
         message: "",
@@ -22,6 +24,7 @@ export default function CartPage() {
     });
     const authToken = Cookies.get("authToken");
     const cart = Cookies.get("cart");
+    const cupomCookies = Cookies.get('cupom');
 
     useEffect(() => {
         updateCartItems();
@@ -31,7 +34,6 @@ export default function CartPage() {
         if (cart) {
             const cartItems: CartProduct[] = JSON.parse(cart);
             let cartProducts: ProductInCart[] = [];
-            console.log(cartItems)
             cartItems.forEach((item) => {
                 const product = productsRepository.find((product) => product.id === item.productId);
                 if (product) {
@@ -45,7 +47,59 @@ export default function CartPage() {
                 }
             });
             setProductsCart(cartProducts);
+            if (cupomCookies) {
+                const cupom = JSON.parse(cupomCookies);
+                setCupom(cupom.cupom);
+                setCupomPercentage(parseInt(cupom.percentage));
+            }
         }
+
+    }
+
+    async function handleApplyCupom() {
+        console.log(cupom);
+        console.log(cupomPercentage);
+        try {
+            const response = await fetch(`${ConsumeCupomAPI}/try`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cupom: cupom,
+                }),
+            });
+            const responseJson = await response.json();
+            if (response.ok) {
+                setCupomPercentage(responseJson.percentage);
+                console.log(responseJson)
+                Cookies.set('cupom', JSON.stringify({ cupom: cupom, percentage: responseJson.percentage }));
+                setShowNotification({
+                    color: 'bg-green-500',
+                    message: 'Cupom aplicado com sucesso!',
+                    show: true,
+                });
+                return;
+            }
+            setCupomPercentage(0);
+            Cookies.set('cupom', cupomPercentage.toString());
+            setShowNotification({
+                color: 'bg-red-500',
+                message: 'Cupom inválido ou expirado!',
+                show: true,
+            });
+            return;
+
+        } catch (error) {
+            console.log(error);
+            setShowNotification({
+                color: 'bg-red-500',
+                message: `${error}`,
+                show: true,
+            });
+            return;
+        }
+
     }
 
     function handeCheckout() {
@@ -54,11 +108,11 @@ export default function CartPage() {
 
     async function handleRemoveQuantityCookies(productId: number) {
         const newCart = productsCart.map((product: ProductInCart) => {
-                if (product.id === productId) {
-                    return { productId: product.id, amount: product.amount - 1 };
-                }
-                return { productId: product.id, amount: product.amount };
-            }).filter((product) => product.amount > 0);
+            if (product.id === productId) {
+                return { productId: product.id, amount: product.amount - 1 };
+            }
+            return { productId: product.id, amount: product.amount };
+        }).filter((product) => product.amount > 0);
 
         const newProductsCart = productsCart.map((product: ProductInCart) => {
             if (product.id === productId) {
@@ -69,6 +123,7 @@ export default function CartPage() {
 
         setProductsCart(newProductsCart);
         Cookies.set("cart", JSON.stringify(newCart));
+        await syncCart();
     }
 
     async function handleRemoveQuantity(productId: number, amount: number) {
@@ -124,9 +179,11 @@ export default function CartPage() {
                                 className="flex items-center justify-between p-4 border rounded-md shadow-sm"
                             >
                                 <div className="flex items-center gap-4">
-                                    <img
+                                    <Image
                                         src={product.url}
                                         alt={product.name}
+                                        width={64}
+                                        height={64}
                                         className="w-16 h-16 object-cover rounded-md"
                                     />
                                     <div>
@@ -154,6 +211,7 @@ export default function CartPage() {
                     {/* BOTTOM */}
                     <div className="mt-8 border-t pt-6">
                         <div className="flex items-center justify-between text-lg font-semibold">
+
                             <span>Subtotal</span>
                             <span>
                                 R$ {productsCart
@@ -165,10 +223,49 @@ export default function CartPage() {
                                     .toFixed(2)}
                             </span>
                         </div>
+                        {cupomPercentage > 0 && (
+                            <>
+                                <div className="flex items-center justify-between text-lg font-semibold">
+                                    <span className="text-gray-500 text-sm">Desconto</span>
+                                    <span className="text-gray-500 text-sm">- R$ {(productsCart
+                                        .reduce(
+                                            (total, product) =>
+                                                total + product.price * product.amount,
+                                            0
+                                        ) * cupomPercentage / 100).toFixed(2)}</span>
+                                </div>
+                                <div className="flex items-center justify-between text-lg font-semibold">
+                                    <span>Total</span>
+                                    <span>
+                                        R$ {(productsCart
+                                            .reduce(
+                                                (total, product) =>
+                                                    total + product.price * product.amount,
+                                                0
+                                            ) * (1 - cupomPercentage / 100)).toFixed(2)}
+                                    </span>
+                                </div>
+                            </>
+                        )}
                         <p className="text-gray-500 text-sm mt-2">
                             Taxas de entrega calculadas no final.
                         </p>
-
+                        <div className="cupom relative mt-4">
+                            <input
+                                type="text"
+                                placeholder="Cupom de desconto"
+                                className="w-full p-3 pr-20 border rounded-md"
+                                value={cupom}
+                                onChange={(e) => setCupom(e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                className="absolute top-0 right-0 h-full px-4 bg-black text-white rounded-r-md text-lg hover:bg-gray-800 transition"
+                                onClick={handleApplyCupom}
+                            >
+                                Aplicar
+                            </button>
+                        </div>
                         <button
                             className="w-full mt-6 py-3 bg-black text-white rounded-md text-lg hover:bg-gray-800 transition"
                             onClick={handeCheckout}

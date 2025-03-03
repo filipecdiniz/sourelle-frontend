@@ -6,35 +6,41 @@ import ListProductsDrag from "@/Components/ListProductsDrag";
 import { ConsumeUsersAPI } from "@/backEndRoutes";
 import Cookies from "js-cookie";
 import { useAppContext } from "@/context/AppContext";
+import Image from "next/image";
 // import SearchResults from "@/Components/SearchResults";
 
 export default function Home() {
   const [userName, setUserName] = useState<string | null>(null);
-  const { syncCart} = useAppContext();
-  
+  const { syncCart } = useAppContext();
+
   const authToken = Cookies.get("authToken");
 
-  useEffect(() => {
-    getUserInformations(authToken);
-  }, [authToken]);
+  // useEffect(() => {
+  //   getUserInformations(authToken);
+  // }, [authToken]);
 
-  async function getUserInformations(authToken: string | undefined) {
-    if (authToken) {
-      const response = await fetch(`${ConsumeUsersAPI}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+  // async function getUserInformations(authToken: string | undefined) {
+  //   if (!authToken) {
+  //     return;
+  //   }
+  //   if (authToken) {
+  //     const response = await fetch(`${ConsumeUsersAPI}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${authToken}`,
+  //       },
+  //     });
 
-      if (response.ok) {
-        const user = await response.json();
-        setUserName(user.name.split(" ")[0]);
-      } else {
-        console.log("Não foi possível acessar o servidor!");
-      }
-      syncCart();
-    }
-  }
+  //     if (response.ok) {
+  //       const user = await response.json();
+  //       setUserName(user.name.split(" ")[0]);
+  //       return;
+  //     } else {
+  //       Cookies.remove("authToken");
+  //       return;
+  //     }
+  //     syncCart();
+  //   }
+  // }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -47,7 +53,10 @@ export default function Home() {
             Bem-vindo(a) {userName ? `, ${userName}` : ""}!
           </span>
           <br /> */}
-          Bem-vindo(a)! Obrigada por dividir esse momento com a gente.
+          <span className="font-bold text-gray-900 text-3xl">
+            Bem-vindo(a)!
+          </span><br />
+          Obrigada por dividir esse momento com a gente.
         </p>
         <p className="text-gray-700 mt-2">
           Cada peça foi escolhida com muito carinho e tem um significado especial.
@@ -56,7 +65,6 @@ export default function Home() {
           <span className="italic">Esperamos que goste!</span>
         </p>
       </div>
-
       {/* CATEGORIES TOP */}
       <div className="mt-6">
         <HomeCategories />
@@ -73,12 +81,21 @@ export default function Home() {
         <ListProductsDrag categoryId={2} />
       </div>
       <div className="justify-center items-center text-center mt-6">
-        <h2 className="font-serif text-2xl font-semibold text-gray-900">Conjuntos</h2>
-        <ListProductsDrag categoryId={6} />
-      </div>
-      <div className="justify-center items-center text-center mt-6">
         <h2 className="font-serif text-2xl font-semibold text-gray-900">Argolas</h2>
         <ListProductsDrag categoryId={3} />
+      </div>
+      <div className="justify-center items-center text-center mt-6">
+        <h2 className="font-serif text-2xl font-semibold text-gray-900">Pulseiras</h2>
+        <ListProductsDrag categoryId={4} />
+      </div>
+      <div className="justify-center items-center text-center mt-6">
+        <h2 className="font-serif text-2xl font-semibold text-gray-900">Colares</h2>
+        <ListProductsDrag categoryId={5} />
+      </div>
+      {/* BOTTOM */}
+      <div className="justify-center items-center text-center mt-6">
+        <h2 className="font-serif text-2xl font-semibold text-gray-900">Conjuntos</h2>
+        <ListProductsDrag categoryId={6} />
       </div>
     </div>
   );

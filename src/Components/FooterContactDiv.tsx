@@ -5,16 +5,16 @@ export default function FooterContactDiv() {
     return (
         <div className="flex flex-row mt-2 justify-between px-2">
             <div className="texts">
-                <div className="text-base font-semibold text-blue-500">
-                    <Link href="tel:+5562984689961">(62) 98468-9961</Link>
+                <div className="text-base text-blue-500">
+                    <Link href="tel:+556292910770">(62) 9291-0770</Link>
                 </div>
-                <div className="text-base text-gray-600">sourellepratas@gmail.com</div>
+                <div className="text-base text-blue-500"><Link href={'https://www.instagram.com/sourelle.pratas/'}>@sourelle.pratas</Link></div>
             </div>
             <div className="flex flex-col gap-2 justify-center">
                 {/* INSTAGRAM */}
                 <div className="instagram">
                     <Image
-                        src={`/instagram_icon.png`}
+                        src={`/whatsapp_icon.png`}
                         alt=""
                         width={22}
                         height={22}
@@ -26,7 +26,7 @@ export default function FooterContactDiv() {
                 {/* WHATSAPP */}
                 <div className="whatsapp flex">
                     <Image
-                        src={`/whatsapp_icon.png`}
+                        src={`/instagram_icon.png`}
                         alt=""
                         width={22}
                         height={22}

@@ -54,21 +54,24 @@ export default function Menu() {
         { label: "Brincos", href: "/categoria/Brincos" },
         ...(authToken
             ? [
-                  { label: "Perfil", href: "/perfil" },
-                  { label: "Pedidos", href: "/pedidos" },
-                  ...(userType === 2 ? [{ label: "Admin", href: "/admin" }] : []), // Se for admin, adicionar a opção Admin
-                  { label: "Sair", href: "/login", onClick: handleLogout },
-              ]
+                { label: "Perfil", href: "/perfil" },
+                { label: "Pedidos", href: "/pedidos" },
+                ...(userType === 2 ? [{ label: "Admin", href: "/admin" }] : []), // Se for admin, adicionar a opção Admin
+                { label: "Sair", href: "/login", onClick: handleLogout },
+            ]
             : [
-                  { label: "Fazer Login", href: "/login", highlight: true },
-                  { label: "Criar Conta", href: "/register", highlight: true },
-              ]),
+                { label: "Fazer Login", href: "/login", highlight: true },
+                { label: "Criar Conta", href: "/register", highlight: true },
+            ]),
     ];
 
     return (
         <div className="relative" ref={menuRef}>
-            <button onClick={() => setMenuActive((state) => !state)}>
-                <Image src="/menu.png" alt="Menu" width={28} height={28} />
+            <button
+                className="mt-6"
+                onClick={() => setMenuActive((state) => !state)}>
+                <Image src="/menu_power.svg" alt="Menu" width={38} height={35} />
+                {/* <Image src="/menu.png" alt="Menu" width={28} height={28} /> */}
             </button>
 
             {menuActive && (
@@ -77,15 +80,14 @@ export default function Menu() {
                         <Link
                             key={index}
                             href={item.href}
-                            className={`w-full text-center text-gray-800 text-lg py-3 hover:bg-gray-100 transition-colors ${
-                                item.highlight ? "underline decoration-red-500" : ""
-                            }`}
+                            className={`w-full text-center text-gray-800 text-lg py-3 hover:bg-gray-100 transition-colors ${item.highlight ? "underline decoration-red-500" : ""
+                                }`}
                             onClick={
                                 item.onClick
                                     ? () => {
-                                          item.onClick();
-                                          setMenuActive(false);
-                                      }
+                                        item.onClick();
+                                        setMenuActive(false);
+                                    }
                                     : () => setMenuActive(false)
                             }
                         >

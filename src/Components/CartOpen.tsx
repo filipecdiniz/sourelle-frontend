@@ -112,6 +112,7 @@ export default function CartOpen() {
 
         setProductsCart(newProductsCart);
         Cookies.set("cart", JSON.stringify(newCart));
+        await syncCart();
     }
 
     function handleLoadMore() {

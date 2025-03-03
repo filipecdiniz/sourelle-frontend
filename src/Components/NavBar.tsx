@@ -3,10 +3,16 @@ import Menu from "./Menu";
 import CartMenu from "./CartMenu";
 import Link from "next/link";
 import PromoBanner from "./PromoBanner";
+import { Roboto } from 'next/font/google'
+
+const logoFont = Roboto({
+    weight: '300',
+    subsets: ['latin'],
+})
 
 export default function NavBar() {
     return (
-        <div className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#FCE4EC] to-[#F8D7DA]">
+        <div className="sticky top-0 z-50 w-full bg-sourelle_main_color">
             <div className="border-b-2 shadow-lg p-4 mt-2">
                 <div className="flex items-center text-center justify-between">
                     {/* LEFT */}
@@ -17,10 +23,10 @@ export default function NavBar() {
                     {/* LOGO MIDDLE */}
                     <Link href='/'>
                         <div className="text-center">
-                            <div className="font-playfair text-5xl font-bold text-[#3F2A47] tracking-wide">
-                                SOURELLE
+                            <div className={`${logoFont.className} text-5xl text-white tracking-wide`}>
+                                sourelle.
                             </div>
-                            <div className="text-base font-light text-[#915F78] uppercase tracking-widest">
+                            <div className="text-poppins font-light text-white uppercase tracking-widest">
                                 pratas
                             </div>
                         </div>

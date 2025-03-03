@@ -17,10 +17,10 @@ export default function Footer() {
                 <div className="contact flex justify-between p-2 border-b-2">
                     Entre em contato
                     <Image
-                        src={`/plus2_icon.png`}
+                        src={`/plus_icon.svg`}
                         alt=""
-                        width={20}
-                        height={15}
+                        width={16}
+                        height={16}
                         onClick={() => setContactOpen((prev) => !prev)}
                     ></Image>
                 </div>
@@ -32,7 +32,7 @@ export default function Footer() {
                             src={`/less2_icon.png`}
                             alt=""
                             width={18}
-                            height={10}
+                            height={8}
                             onClick={() => setContactOpen((prev) => !prev)}
                         ></Image>
                     </div>
@@ -45,10 +45,10 @@ export default function Footer() {
                 <div className="contact flex justify-between p-2 border-b-2">
                     Garantia
                     <Image
-                        src={`/plus2_icon.png`}
+                        src={`/plus_icon.svg`}
                         alt=""
-                        width={20}
-                        height={15}
+                        width={16}
+                        height={16}
                         onClick={() => setGuaranteeOpen((prev) => !prev)}
                     ></Image>
                 </div>
@@ -60,11 +60,11 @@ export default function Footer() {
                             src={`/less2_icon.png`}
                             alt=""
                             width={18}
-                            height={10}
+                            height={8}
                             onClick={() => setGuaranteeOpen((prev) => !prev)}
                         ></Image>
                     </div>
-                    <div className="">Nossos produtos possuem garantia de até 3 meses!</div>
+                    <div className="">Garantia vitalícia: todos os produtos fabricados em prata 925.</div>
                 </div>
             )}
 
@@ -73,10 +73,10 @@ export default function Footer() {
                 <div className="contact flex justify-between p-2 border-b-2">
                     Pagamento
                     <Image
-                        src={`/plus2_icon.png`}
+                        src={`/plus_icon.svg`}
                         alt=""
-                        width={20}
-                        height={15}
+                        width={16}
+                        height={16}
                         onClick={() => setPaymentOpen((prev) => !prev)}
                     ></Image>
                 </div>
@@ -88,30 +88,36 @@ export default function Footer() {
                             src={`/less2_icon.png`}
                             alt=""
                             width={18}
-                            height={10}
+                            height={8}
                             onClick={() => setPaymentOpen((prev) => !prev)}
                         ></Image>
                     </div>
-                    <div className="flex p-2 gap-4">
-                        <div className="">Pagamentos rápidos e seguros</div>
-                        <div className="flex flex-row gap-2">
+                    <div className="flex flex-col p-2 gap-4">
+                        <div className="">Pagamentos rápidos e seguros!</div>
+                        <div className="flex flex-row justify-center gap-2">
                             <Image
-                                src={`/mastercard.png`}
+                                src={`/mastercard_icon.svg`}
                                 alt=""
-                                width={30}
-                                height={20}
+                                width={28}
+                                height={16}
                             />
                             <Image
-                                src={`/visa.png`}
+                                src={`/visa_icon.svg`}
                                 alt=""
-                                width={30}
-                                height={20}
+                                width={28}
+                                height={16}
                             />
                             <Image
-                                src={`/elo.png`}
+                                src={`/pix_icon.svg`}
                                 alt=""
-                                width={40}
-                                height={20}
+                                width={30}
+                                height={16}
+                            />
+                            <Image
+                                src={`/mercado_pago_icon.svg`}
+                                alt=""
+                                width={30}
+                                height={16}
                             />
                         </div>
                     </div>

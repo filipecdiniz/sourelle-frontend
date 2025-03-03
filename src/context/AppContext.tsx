@@ -67,6 +67,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 console.error("Erro ao sincronizar carrinho:", error);
             }
         }
+        const cart = Cookies.get("cart");
+        if (cart) {
+            const parsedCart = JSON.parse(cart);
+            console.log('parsedCart', parsedCart);
+            setItemsInCart(parsedCart.length || 0);
+        }
     }
 
     return (

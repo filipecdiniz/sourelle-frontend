@@ -10,6 +10,7 @@ export default function PersonalInfoPage() {
         firstName: "",
         middleName: "",
         email: "",
+        number: "",
         cpf: "",
     });
     const [showNotification, setShowNotification] = useState({
@@ -19,9 +20,17 @@ export default function PersonalInfoPage() {
     });
     const router = useRouter();
 
-    const handleInputChange = (e: any) => {
+    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // Se for o campo CPF, filtra para permitir apenas números.
+        if (name === "cpf" || name === "number") {
+            const onlyDigits = value.replace(/\D/g, '').substring(0, 11);;
+            setFormData((prev) => ({ ...prev, [name]: onlyDigits }));
+        }
+         else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const validateCPF = (cpf: string) => {
@@ -29,10 +38,10 @@ export default function PersonalInfoPage() {
     };
 
 
-    const handleSubmit = () => {
+    function handleSubmit() {
         const { firstName, middleName, email, cpf } = formData;
 
-        if (!firstName || !email || !cpf) {
+        if (!firstName || !email || !cpf || !middleName) {
             setShowNotification({
                 color: "bg-red-500",
                 message: "Por favor, preencha todos os campos.",
@@ -50,14 +59,14 @@ export default function PersonalInfoPage() {
             return;
         }
 
-        Cookies.set("personalInfo", JSON.stringify(formData));
+        Cookies.set("user", JSON.stringify(formData));
         router.push("/checkout/address");
     };
 
     return (
         <div className="flex flex-col items-center justify-center bg-gray-100 p-4">
             <div className="bg-white rounded-lg shadow-md max-w-md w-full p-6">
-                <h1 className="text-center text-2xl font-bold text-blue-600 mb-4">
+                <h1 className="text-center text-2xl font-bold text-sourelle_main_color mb-4">
                     FINALIZAR COMPRA
                 </h1>
                 <p className="text-center text-gray-600 mb-6">
@@ -81,10 +90,18 @@ export default function PersonalInfoPage() {
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 <input
-                    type="text"
-                    name="lastName"
+                    type="email"
+                    name="email"
                     placeholder="Email"
                     value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                />
+                <input
+                    type="text"
+                    name="number"
+                    placeholder="Celular (62984689961)"
+                    value={formData.number}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
@@ -99,7 +116,7 @@ export default function PersonalInfoPage() {
 
                 <button
                     onClick={handleSubmit}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md text-sm font-medium transition duration-200"
+                    className="w-full bg-sourelle_main_color hover:bg-sourelle_main_color text-white py-3 rounded-md text-sm font-medium transition duration-200"
                 >
                     CONTINUAR
                 </button>

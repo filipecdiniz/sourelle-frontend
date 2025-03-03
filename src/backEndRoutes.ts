@@ -2,5 +2,6 @@ const ConsumeUsersAPI = 'http://localhost:3000/user'
 const ConsumeCartAPI = 'http://localhost:3000/cart'
 const ConsumeLoginAPI = 'http://localhost:3000/auth/login'
 const ConsumeProductAPI = 'http://localhost:3000/product'
+const ConsumeCupomAPI = 'http://localhost:3000/cupom'
 
-export { ConsumeUsersAPI, ConsumeLoginAPI, ConsumeCartAPI, ConsumeProductAPI }
+export { ConsumeUsersAPI, ConsumeLoginAPI, ConsumeCartAPI, ConsumeProductAPI, ConsumeCupomAPI }
