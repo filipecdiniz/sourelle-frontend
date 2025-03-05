@@ -1,6 +1,6 @@
 "use client";
 
-import { ConsumeCartAPI, ConsumeCupomAPI } from "@/backEndRoutes";
+import { ConsumeCupomAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import { useAppContext } from "@/context/AppContext";
 import { CartProduct } from "@/interfaces/CartProduct";
@@ -22,18 +22,18 @@ export default function CartPage() {
         message: "",
         show: false,
     });
-    const authToken = Cookies.get("authToken");
-    const cart = Cookies.get("cart");
+    // const authToken = Cookies.get("authToken");
+    const cartCookies = Cookies.get("cart");
     const cupomCookies = Cookies.get('cupom');
 
     useEffect(() => {
         updateCartItems();
-    }, [cart]);
+    }, [cartCookies]);
 
     function updateCartItems() {
-        if (cart) {
-            const cartItems: CartProduct[] = JSON.parse(cart);
-            let cartProducts: ProductInCart[] = [];
+        if (cartCookies) {
+            const cartItems: CartProduct[] = JSON.parse(cartCookies);
+            const cartProducts: ProductInCart[] = [];
             cartItems.forEach((item) => {
                 const product = productsRepository.find((product) => product.id === item.productId);
                 if (product) {
@@ -126,42 +126,42 @@ export default function CartPage() {
         await syncCart();
     }
 
-    async function handleRemoveQuantity(productId: number, amount: number) {
-        try {
-            const response = await fetch(ConsumeCartAPI, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${authToken}`,
-                },
-                body: JSON.stringify({
-                    productId: productId,
-                    amount: amount - 1,
-                }),
-            });
-            if (response.ok) {
-                const updatedCart = await response.json();
+    // async function handleRemoveQuantity(productId: number, amount: number) {
+    //     try {
+    //         const response = await fetch(ConsumeCartAPI, {
+    //             method: 'PATCH',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Bearer ${authToken}`,
+    //             },
+    //             body: JSON.stringify({
+    //                 productId: productId,
+    //                 amount: amount - 1,
+    //             }),
+    //         });
+    //         if (response.ok) {
+    //             const updatedCart = await response.json();
 
-                console.log(updatedCart);
-                setProductsCart(updatedCart.cartProduct);
-                await syncCart()
-                Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
-            } else {
-                console.log('Erro no servidor ao atualizar o carrinho.');
-                setShowNotification({
-                    color: 'bg-red-500',
-                    message: 'Erro no servidor ao atualizar o carrinho.',
-                    show: true,
-                });
-            }
-        } catch (error) {
-            setShowNotification({
-                color: 'bg-red-500',
-                message: `${error}`,
-                show: true,
-            });
-        }
-    }
+    //             console.log(updatedCart);
+    //             setProductsCart(updatedCart.cartProduct);
+    //             await syncCart()
+    //             Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
+    //         } else {
+    //             console.log('Erro no servidor ao atualizar o carrinho.');
+    //             setShowNotification({
+    //                 color: 'bg-red-500',
+    //                 message: 'Erro no servidor ao atualizar o carrinho.',
+    //                 show: true,
+    //             });
+    //         }
+    //     } catch (error) {
+    //         setShowNotification({
+    //             color: 'bg-red-500',
+    //             message: `${error}`,
+    //             show: true,
+    //         });
+    //     }
+    // }
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md mt-5">

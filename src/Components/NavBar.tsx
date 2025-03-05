@@ -1,4 +1,3 @@
-import SearchBar from "./SearchBar";
 import Menu from "./Menu";
 import CartMenu from "./CartMenu";
 import Link from "next/link";

@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 import ProductInCartOpen from "./Product/ProductInCartOpen";
 import { useRouter } from "next/navigation";
 import Notification from "./Notification";
-import { ConsumeCartAPI } from "@/backEndRoutes";
 import { useAppContext } from "@/context/AppContext";
 import { productsRepository } from "@/repository/products";
 import { ProductInCart } from "@/interfaces/ProductInCart";
@@ -22,17 +21,17 @@ export default function CartOpen() {
     });
     const router = useRouter()
     const cartItems = productsCart.length > 0;
-    const cart = Cookies.get("cart");
+    const cartCookies = Cookies.get("cart");
     // const authToken = Cookies.get("authToken");
 
     useEffect(() => {
         updateCartItems();
-    }, [cart]);
+    }, [cartCookies]);
 
     function updateCartItems() {
-        if (cart) {
-            const cartItems: CartProduct[] = JSON.parse(cart);
-            let cartProducts: ProductInCart[] = [];
+        if (cartCookies) {
+            const cartItems: CartProduct[] = JSON.parse(cartCookies);
+            const cartProducts: ProductInCart[] = [];
             cartItems.forEach((item) => {
                 const product = productsRepository.find((product) => product.id === item.productId);
                 if (product) {
@@ -57,42 +56,42 @@ export default function CartOpen() {
         router.push('/checkout/cart')
     }
 
-    async function handleRemoveQuantity(productId: number, amount: number) {
-        try {
-            const response = await fetch(ConsumeCartAPI, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${authToken}`,
-                },
-                body: JSON.stringify({
-                    productId: productId,
-                    amount: amount - 1,
-                }),
-            });
-            if (response.ok) {
-                const updatedCart = await response.json();
+    // async function handleRemoveQuantity(productId: number, amount: number) {
+    //     try {
+    //         const response = await fetch(ConsumeCartAPI, {
+    //             method: 'PATCH',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 // Authorization: `Bearer ${authToken}`,
+    //             },
+    //             body: JSON.stringify({
+    //                 productId: productId,
+    //                 amount: amount - 1,
+    //             }),
+    //         });
+    //         if (response.ok) {
+    //             const updatedCart = await response.json();
 
-                // console.log(updatedCart);
-                setProductsCart(updatedCart.cartProduct);
-                await syncCart()
-                Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
-            } else {
-                console.log('Erro no servidor ao atualizar o carrinho.');
-                setShowNotification({
-                    color: 'bg-red-500',
-                    message: 'Erro no servidor ao atualizar o carrinho.',
-                    show: true,
-                });
-            }
-        } catch (error) {
-            setShowNotification({
-                color: 'bg-red-500',
-                message: `${error}`,
-                show: true,
-            });
-        }
-    }
+    //             // console.log(updatedCart);
+    //             setProductsCart(updatedCart.cartProduct);
+    //             await syncCart()
+    //             Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
+    //         } else {
+    //             console.log('Erro no servidor ao atualizar o carrinho.');
+    //             setShowNotification({
+    //                 color: 'bg-red-500',
+    //                 message: 'Erro no servidor ao atualizar o carrinho.',
+    //                 show: true,
+    //             });
+    //         }
+    //     } catch (error) {
+    //         setShowNotification({
+    //             color: 'bg-red-500',
+    //             message: `${error}`,
+    //             show: true,
+    //         });
+    //     }
+    // }
 
     async function handleRemoveQuantityCookies(productId: number) {
         const newCart = productsCart.map((product: ProductInCart) => {

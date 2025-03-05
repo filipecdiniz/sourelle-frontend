@@ -1,19 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import HomeCategories from "@/Components/HomeCategories";
 import ListProductsDrag from "@/Components/ListProductsDrag";
-import { ConsumeUsersAPI } from "@/backEndRoutes";
-import Cookies from "js-cookie";
-import { useAppContext } from "@/context/AppContext";
-import Image from "next/image";
-// import SearchResults from "@/Components/SearchResults";
 
 export default function Home() {
-  const [userName, setUserName] = useState<string | null>(null);
-  const { syncCart } = useAppContext();
 
-  const authToken = Cookies.get("authToken");
+  // const authToken = Cookies.get("authToken");
 
   // useEffect(() => {
   //   getUserInformations(authToken);

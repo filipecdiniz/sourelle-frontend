@@ -10,6 +10,8 @@ interface AddProductToCart {
 }
 
 export default function AddCartButton({ productId, amount }: AddProductToCart) {
+    const { setItemsInCart } = useAppContext()
+    const [isLoading, setIsLoading] = useState(false);
     const [showNotification, setShowNotification] = useState({
         color: '',
         message: '',
@@ -24,10 +26,6 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
         })
         return;
     }
-    const { setItemsInCart } = useAppContext()
-    const [isLoading, setIsLoading] = useState(false);
-
-    // const authToken = Cookies.get('authToken')
 
     async function addItemCart(productId: number, amount: number) {
         setIsLoading(true);
