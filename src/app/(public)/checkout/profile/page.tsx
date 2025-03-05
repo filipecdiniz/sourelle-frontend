@@ -60,7 +60,7 @@ export default function PersonalInfoPage() {
         }
 
         Cookies.set("user", JSON.stringify(formData));
-        router.push("/checkout/address");
+        router.push("/checkout/address/frete");
     };
 
     return (

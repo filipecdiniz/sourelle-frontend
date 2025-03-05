@@ -169,7 +169,7 @@ export default function CartPage() {
                 <div className="text-center py-10 text-gray-600 text-lg">Carrinho está vazio</div>
             ) : (
                 <>
-                    <h2 className="text-2xl font-bold text-center mb-6">Carrinho de Compras</h2>
+                    <h2 className="text-2xl font-bold text-center mb-6 text-sourelle_main_color">Carrinho de Compras</h2>
 
                     {/* ITEMS LIST */}
                     <div className="flex flex-col gap-6">

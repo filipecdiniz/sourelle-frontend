@@ -5,7 +5,7 @@ export const productsRepository = [
         category: 1,
         value: 35.50,
         src: '/products/anel/anel_wave.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 2,
@@ -13,15 +13,15 @@ export const productsRepository = [
         category: 1,
         value: 35.50,
         src: '/products/anel/anel_triangulos.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 3,
         name: 'Anel line',
         category: 1,
         value: 35.50,
-        src: '/products/anel/anel_lua.png',
-        quantidade: 1
+        src: '/products/anel/anel_line.png',
+        quantity: 1
     },
     {
         id: 4,
@@ -29,7 +29,7 @@ export const productsRepository = [
         category: 1,
         value: 44.90,
         src: '/products/anel/anel_lua.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 5,
@@ -37,7 +37,7 @@ export const productsRepository = [
         category: 1,
         value: 44.90,
         src: '/products/anel/anel_bubble.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 6,
@@ -45,7 +45,7 @@ export const productsRepository = [
         category: 1,
         value: 59.80,
         src: '/products/anel/anel_coracao.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 7,
@@ -53,7 +53,7 @@ export const productsRepository = [
         category: 1,
         value: 59.80,
         src: '/products/anel/anel_infinito.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 8,
@@ -61,7 +61,7 @@ export const productsRepository = [
         category: 1,
         value: 59.80,
         src: '/products/anel/anel_mermaid.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 9,
@@ -69,7 +69,7 @@ export const productsRepository = [
         category: 1,
         value: 39.90,
         src: '/products/anel/solitario_rosa.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 10,
@@ -77,7 +77,7 @@ export const productsRepository = [
         category: 1,
         value: 39.90,
         src: '/products/anel/solitario_azul.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 11,
@@ -85,7 +85,7 @@ export const productsRepository = [
         category: 1,
         value: 59.80,
         src: '/products/anel/anel_messy.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 12,
@@ -93,7 +93,7 @@ export const productsRepository = [
         category: 1,
         value: 74.80,
         src: '/products/anel/anel_prego_cravejado.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 13,
@@ -101,7 +101,7 @@ export const productsRepository = [
         category: 1,
         value: 74.80,
         src: '/products/anel/anel_flor_de_liz.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 14,
@@ -109,7 +109,7 @@ export const productsRepository = [
         category: 1,
         value: 89.90,
         src: '/products/anel/solitario_forever.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 15,
@@ -117,7 +117,7 @@ export const productsRepository = [
         category: 1,
         value: 89.90,
         src: '/products/anel/solitario_princess.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 16,
@@ -125,7 +125,7 @@ export const productsRepository = [
         category: 1,
         value: 89.90,
         src: '/products/anel/solitario_cravejado.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 17,
@@ -133,7 +133,7 @@ export const productsRepository = [
         category: 2,
         value: 49.90,
         src: '/products/brinco/argola_una.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 18,
@@ -141,7 +141,7 @@ export const productsRepository = [
         category: 2,
         value: 48.70,
         src: '/products/brinco/brincos_coracao_de_luz.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 19,
@@ -149,7 +149,7 @@ export const productsRepository = [
         category: 2,
         value: 54.90,
         src: '/products/brinco/brincos_geometric.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 20,
@@ -157,7 +157,7 @@ export const productsRepository = [
         category: 3,
         value: 59.70,
         src: '/products/argola/argolas_lisas.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 21,
@@ -165,7 +165,7 @@ export const productsRepository = [
         category: 3,
         value: 74.70,
         src: '/products/argola/argolas_coracoes.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 22,
@@ -173,7 +173,7 @@ export const productsRepository = [
         category: 3,
         value: 199.80,
         src: '/products/argola/argolas_cravejadas.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 23,
@@ -181,7 +181,7 @@ export const productsRepository = [
         category: 4,
         value: 65.80,
         src: '/products/pulseira/pulseira_tulipe.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 24,
@@ -189,7 +189,7 @@ export const productsRepository = [
         category: 4,
         value: 74.75,
         src: '/products/pulseira/pulseira_lily.png',
-        quantidade: 1
+        quantity: 0
     },
     {
         id: 25,
@@ -197,7 +197,7 @@ export const productsRepository = [
         category: 4,
         value: 119.80,
         src: '/products/pulseira/pulseira_shimmer.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 26,
@@ -205,7 +205,7 @@ export const productsRepository = [
         category: 4,
         value: 87.90,
         src: '/products/pulseira/bracelete_line.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 27,
@@ -213,7 +213,7 @@ export const productsRepository = [
         category: 4,
         value: 87.90,
         src: '/products/pulseira/tornozeleira_almond.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 28,
@@ -221,7 +221,7 @@ export const productsRepository = [
         category: 5,
         value: 120.50,
         src: '/products/colar/colar_delicate.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 29,
@@ -229,7 +229,7 @@ export const productsRepository = [
         category: 5,
         value: 199.80,
         src: '/products/colar/colar_shimmer.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 30,
@@ -237,7 +237,7 @@ export const productsRepository = [
         category: 6,
         value: 89.70,
         src: '/products/conjunto/conjunto_lily.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 31,
@@ -245,7 +245,7 @@ export const productsRepository = [
         category: 6,
         value: 219.80,
         src: '/products/conjunto/conjunto_blur.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 32,
@@ -253,7 +253,7 @@ export const productsRepository = [
         category: 6,
         value: 209.80,
         src: '/products/conjunto/conjunto_pingo_de_luz.png',
-        quantidade: 1
+        quantity: 1
     },
     {
         id: 33,
@@ -261,6 +261,6 @@ export const productsRepository = [
         category: 6,
         value: 209.80,
         src: '/products/conjunto/conjunto_lumi.png',
-        quantidade: 1
+        quantity: 1
     },
 ]

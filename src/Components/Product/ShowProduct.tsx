@@ -1,13 +1,7 @@
 import Image from "next/image";
 import AddCartButton from "../AddCartButton";
 import Link from "next/link";
-
-interface ProductInterface {
-    id: number;
-    name: string;
-    value: number;
-    src: string;
-}
+import { ProductInterface } from "@/interfaces/Product.interface";
 
 export default function ShowProduct({ id, name, value, src }: ProductInterface) {
 

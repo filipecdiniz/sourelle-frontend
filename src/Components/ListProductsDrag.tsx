@@ -5,6 +5,7 @@ import AddCartButton from "./AddCartButton";
 import { useRef } from "react";
 import { productsRepository } from "@/repository/products";
 import Link from "next/link";
+import AddSoonButton from "./AddSoonButton";
 
 interface categoryProps {
     categoryId: number
@@ -15,6 +16,7 @@ interface Product {
     src: string;
     name: string;
     value: number;
+    quantity: number;
 }
 
 export default function ListProducts({ categoryId }: categoryProps) {
@@ -85,29 +87,55 @@ export default function ListProducts({ categoryId }: categoryProps) {
             >
                 {visibleProducts.map((product: Product) => (
                     <div
-                        className="flex flex-col justify-center items-center w-[150px] h-[220px] flex-shrink-0"
+                        className="flex flex-col items-center w-[150px] h-[220px] flex-shrink-0"
                         key={product.id}
                     >
-                        <div className="relative w-[150px] h-[150px]">
-                            <Link
-                                href={`/produto/${product.id}`}>
-                                <Image
-                                    src={product.src}
-                                    alt={product.name}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    className="rounded-lg"
-                                />
-                            </Link>
-                        </div>
-                        <div className="flex flex-col gap-1 mt-1">
-                            <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
-                            <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toFixed(2).replace('.', ',')}</div>
-                            <AddCartButton
-                                amount={1}
-                                productId={product.id}
-                            />
-                        </div>
+                        {product.quantity < 1 ? (
+                            <>
+                                <div className="relative w-[150px] h-[124px]">
+                                    <Image
+                                        src={product.src}
+                                        alt={product.name}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        className="rounded-lg"
+                                    />
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg cursor-pointer
+                                hover:bg-black/30"
+                                    ><p className="text-white">Esgotado</p></div>
+                                </div>
+                                <div className="flex flex-col gap-1 mt-1">
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toFixed(2).replace('.', ',')}</div>
+                                    <AddSoonButton
+                                        
+                                    ></AddSoonButton>
+                                    {/* <div className="justify-center text-start overflow-hidden text-ellipsis w-[150px] ">Esgotado no momento.</div> */}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="relative w-[150px] h-[124px]">
+                                    <Link href={`/produto/${product.id}`}>
+                                        <Image
+                                            src={product.src}
+                                            alt={product.name}
+                                            layout="fill"
+                                            objectFit="cover"
+                                            className="rounded-lg"
+                                        />
+                                    </Link>
+                                </div>
+                                <div className="flex flex-col gap-1 mt-1">
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toFixed(2).replace('.', ',')}</div>
+                                    <AddCartButton
+                                        amount={1}
+                                        productId={product.id}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 ))}
             </div>

@@ -55,7 +55,8 @@ export default function Home() {
           <br /> */}
           <span className="font-bold text-gray-900 text-3xl">
             Bem-vindo(a)!
-          </span><br />
+          </span>
+          <br />
           Obrigada por dividir esse momento com a gente.
         </p>
         <p className="text-gray-700 mt-2">

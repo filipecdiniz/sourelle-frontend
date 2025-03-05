@@ -38,9 +38,9 @@ export default function NavBar() {
                     </div>
                 </div>
                 {/* Search Bar */}
-                <div className="flex justify-center mt-4">
+                {/* <div className="flex justify-center mt-4">
                     <SearchBar />
-                </div>
+                </div> */}
             </div>
             {/* Promo Banner */}
             <PromoBanner />

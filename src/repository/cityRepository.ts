@@ -38956,9 +38956,6 @@ export const cityRepository: CityEntity[] = [
 ] as const
 
 export function getCitiesByState(id: number) {
-    console.log(id)
     const cities = cityRepository.filter((city) => city.stateId === id);
-    console.log('cidades:');
-    console.log(cities);
     return cities;
 }

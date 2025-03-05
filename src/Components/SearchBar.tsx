@@ -2,15 +2,14 @@
 
 import { ConsumeProductAPI } from "@/backEndRoutes";
 import Image from "next/image";
-import { useState, useEffect} from "react";
-import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
 import { useAppContext } from "@/context/AppContext";
 
 export default function SearchBar() {
     const [searchText, setSearchText] = useState("");
     const [debouncedSearchText, setDebouncedSearchText] = useState(searchText);
     const { setSearchResults } = useAppContext();
-    const authToken = Cookies.get("authToken");
+    // const authToken = Cookies.get("authToken");
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -30,9 +29,9 @@ export default function SearchBar() {
                         `${ConsumeProductAPI}?search=${debouncedSearchText}`,
                         {
                             method: "GET",
-                            headers: {
-                                Authorization: `Bearer ${authToken}`,
-                            },
+                            // headers: {
+                            //     Authorization: `Bearer ${authToken}`,
+                            // },
                         }
                     );
                     const data = await response.json();

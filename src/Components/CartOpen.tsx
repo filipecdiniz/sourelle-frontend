@@ -33,7 +33,6 @@ export default function CartOpen() {
         if (cart) {
             const cartItems: CartProduct[] = JSON.parse(cart);
             let cartProducts: ProductInCart[] = [];
-            console.log(cartItems)
             cartItems.forEach((item) => {
                 const product = productsRepository.find((product) => product.id === item.productId);
                 if (product) {
@@ -74,7 +73,7 @@ export default function CartOpen() {
             if (response.ok) {
                 const updatedCart = await response.json();
 
-                console.log(updatedCart);
+                // console.log(updatedCart);
                 setProductsCart(updatedCart.cartProduct);
                 await syncCart()
                 Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
