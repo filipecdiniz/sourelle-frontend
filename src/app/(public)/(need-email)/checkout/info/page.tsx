@@ -31,7 +31,7 @@ export default function CheckoutInfo() {
             console.log(formUser)
         }
 
-    }, [cartCookies]);
+    }, [cartCookies, cupomCookies, formUser, userCookies]);
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md mt-5">

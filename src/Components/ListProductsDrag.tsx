@@ -3,7 +3,6 @@
 import Image from "next/image";
 import AddCartButton from "./AddCartButton";
 import { useEffect, useRef, useState, } from "react";
-import { productsRepository } from "@/repository/products";
 import Link from "next/link";
 import AddSoonButton from "./AddSoonButton";
 import { getBackProducts } from "@/utils/getBackProducts";
@@ -22,7 +21,7 @@ interface Product {
 
 export default function ListProducts({ categoryId }: categoryProps) {
     const carouselRef = useRef<HTMLDivElement | null>(null);
-    const [productsBack, setProductsBack] = useState<any>([])
+    const [productsBack, setProductsBack] = useState<Product[]>([])
     const startX = useRef(0);
     const isDragging = useRef(false);
 
@@ -32,11 +31,10 @@ export default function ListProducts({ categoryId }: categoryProps) {
             setProductsBack(products);
         };
         fetchProducts();
-    }, [])
+    }, [categoryId])
 
     async function awaitGetBack(categoryId: number) {
-        const products = await getBackProducts(categoryId) || []
-        // console.log(products)
+        const products = await getBackProducts(categoryId)
         return products
     }
 

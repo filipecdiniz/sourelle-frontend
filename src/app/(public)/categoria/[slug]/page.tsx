@@ -9,23 +9,23 @@ import { useEffect, useState } from "react"
 
 export default function CategoryPage() {
     const router = useParams()
-    const [category, setCategory] = useState<CategoryInterface>()
+    const [category] = useState<CategoryInterface>()
     const [products, setProducts] = useState<ProductInterface[]>([])
     const categoryId = decodeURIComponent(String(router.slug))
 
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const products = await awaitGetProducts(Number(categoryId)) || [];
-            console.log(products);
+            const products = await awaitGetProducts(Number(categoryId));
+            // console.log(products);
             setProducts(products);
         };
         fetchProducts();
-    }, [])
+    }, [categoryId])
 
     async function awaitGetProducts(categoryId: number) {
         if (categoryId) {
-            const products = await getBackProducts(categoryId) || []
+            const products = await getBackProducts(categoryId)
             console.log(products)
             return products
         }
@@ -42,12 +42,12 @@ export default function CategoryPage() {
 
             {products.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ml-6">
-                    {products.map((item: any) => (
+                    {products.map((item: ProductInterface) => (
                         <ShowProduct
                             id={item.id}
                             name={item.name}
-                            src={item.url}
-                            value={item.price}
+                            src={item.src}
+                            value={item.value}
                             key={item.id}
                             quantity={item.quantity}
                         />

@@ -28,7 +28,7 @@ export default function CartPage() {
 
     useEffect(() => {
         updateCartItems();
-    }, [cartCookies]);
+    }, [cartCookies, cupomCookies]);
 
     function updateCartItems() {
         if (cartCookies) {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { stateRepository } from "@/repository/stateRepository";
 import { CityEntity, getCitiesByState } from "@/repository/cityRepository";
 import { ConsumeDeliveryAPI, ConsumeUsersAPI } from "@/backEndRoutes";
@@ -9,7 +8,7 @@ import Notification from "@/Components/Notification";
 import Cookies from "js-cookie";
 
 export default function AddressPage() {
-    const router = useRouter();
+    // const router = useRouter();
     const [addressInfoOpen, setAddressInfoOpen] = useState(false);
     const [shipmentVaue, setShipmentValue] = useState(0);
     const [addressData, setAddressData] = useState({
@@ -83,9 +82,9 @@ export default function AddressPage() {
     }
 
     async function createOrder() {
-        const cart = JSON.parse(Cookies.get("cart") || "[]");
+        // const cart = JSON.parse(Cookies.get("cart") || "[]");
         const user = JSON.parse(Cookies.get("user") || "{}");
-        const address = JSON.parse(Cookies.get("addressData") || "{}");
+        // const address = JSON.parse(Cookies.get("addressData") || "{}");
         console.log(user)
         try {
             const response = await fetch(`${ConsumeUsersAPI}`, {
