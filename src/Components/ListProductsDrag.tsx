@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import AddCartButton from "./AddCartButton";
-import { useRef } from "react";
+import { useRef,  } from "react";
 import { productsRepository } from "@/repository/products";
 import Link from "next/link";
 import AddSoonButton from "./AddSoonButton";
+import getProducts from "@/utils/getProducts";
 
 interface categoryProps {
     categoryId: number
@@ -21,10 +22,15 @@ interface Product {
 
 export default function ListProducts({ categoryId }: categoryProps) {
     const carouselRef = useRef<HTMLDivElement | null>(null);
+    const [productsBack, setProductsBack] = useState<any>([])
     const startX = useRef(0);
     const isDragging = useRef(false);
-
     const visibleProducts = productsRepository.filter((product) => product.category === Number(categoryId));
+
+    useEffect(() => {
+        const products = getProducts()
+        setProductsBack(products)
+    }, [])
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {
