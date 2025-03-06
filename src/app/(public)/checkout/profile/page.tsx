@@ -4,6 +4,7 @@ import Notification from "@/Components/Notification";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import { cpfValidator } from "@/utils/cpf-validator";
 
 export default function PersonalInfoPage() {
     const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ export default function PersonalInfoPage() {
 
         // Se for o campo CPF, filtra para permitir apenas números.
         if (name === "cpf" || name === "number") {
-            const onlyDigits = value.replace(/\D/g, '').substring(0, 11);;
+            const onlyDigits = value.replace(/\D/g, '').substring(0, 11); 
             setFormData((prev) => ({ ...prev, [name]: onlyDigits }));
         }
          else {
@@ -33,14 +34,10 @@ export default function PersonalInfoPage() {
         }
     };
 
-    const validateCPF = (cpf: string) => {
-        return /^\d{11}$/.test(cpf);
-    };
-
-
     function handleSubmit() {
         const { firstName, middleName, email, cpf } = formData;
 
+        // const validateCPF = cpfValidator(cpf);
         if (!firstName || !email || !cpf || !middleName) {
             setShowNotification({
                 color: "bg-red-500",
@@ -50,7 +47,7 @@ export default function PersonalInfoPage() {
             return;
         }
 
-        if (!validateCPF(cpf)) {
+        if (!cpfValidator(cpf)) {
             setShowNotification({
                 color: "bg-red-500",
                 message: "Por favor, insira um CPF válido.",

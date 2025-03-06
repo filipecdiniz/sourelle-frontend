@@ -1,10 +1,25 @@
+import { CategoryInterface } from "@/interfaces/CategoryInterface";
 import Image from "next/image";
 
 //Repostory while we're testing.
-import { categoriesRepository } from "@/repository/categories";
+// import { categoriesRepository } from "@/repository/categories";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function HomeCategories() {
+    const [categories, setCategories] = useState<CategoryInterface[]>([])
+
+    useEffect(() => {
+        getCategories().then(data => {
+            setCategories(data);
+        });
+    }, [])
+
+    async function getCategories() {
+        const response = await fetch('http://localhost:3000/category');
+        const data = await response.json();
+        return data;
+    }
 
     return (
         <div className="mt-4 justify-center items-center text-center">
@@ -12,13 +27,14 @@ export default function HomeCategories() {
             <div className="font-serif text-2xl font-semibold text-gray-900">Categorias</div>
             {/* IMAGES */}
             <div className="grid p-4 grid-cols-2 gap-4 md:grid-cols-3 md:align-middle md:justify-center ">
-                {categoriesRepository.map((category) => (
+                {categories.map((category) => (
                     <div key={category.id} className="relative w-full aspect-square">
                         <Link
-                            href={`categoria/${category.name}`}
+                            // href={`categoria/${category.name}`} // This is the original code
+                            href={`categoria/${category.id}`}
                         >
                             <Image
-                                src={category.src}
+                                src={`http://localhost:3000${category.url}`}
                                 alt={category.name}
                                 layout="fill"
                                 objectFit="cover"

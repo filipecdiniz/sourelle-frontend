@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import AddCartButton from "./AddCartButton";
-import { useRef,  } from "react";
+import { useEffect, useRef, useState, } from "react";
 import { productsRepository } from "@/repository/products";
 import Link from "next/link";
 import AddSoonButton from "./AddSoonButton";
-import getProducts from "@/utils/getProducts";
+import { getBackProducts } from "@/utils/getBackProducts";
 
 interface categoryProps {
     categoryId: number
@@ -14,9 +14,9 @@ interface categoryProps {
 
 interface Product {
     id: number;
-    src: string;
     name: string;
-    value: number;
+    price: number;
+    url: string;
     quantity: number;
 }
 
@@ -25,12 +25,20 @@ export default function ListProducts({ categoryId }: categoryProps) {
     const [productsBack, setProductsBack] = useState<any>([])
     const startX = useRef(0);
     const isDragging = useRef(false);
-    const visibleProducts = productsRepository.filter((product) => product.category === Number(categoryId));
 
     useEffect(() => {
-        const products = getProducts()
-        setProductsBack(products)
+        const fetchProducts = async () => {
+            const products = await awaitGetBack(categoryId);
+            setProductsBack(products);
+        };
+        fetchProducts();
     }, [])
+
+    async function awaitGetBack(categoryId: number) {
+        const products = await getBackProducts(categoryId) || []
+        // console.log(products)
+        return products
+    }
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {
@@ -91,7 +99,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
             >
-                {visibleProducts.map((product: Product) => (
+                {productsBack.map((product: Product) => (
                     <div
                         className="flex flex-col items-center w-[150px] h-[220px] flex-shrink-0"
                         key={product.id}
@@ -100,7 +108,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                             <>
                                 <div className="relative w-[150px] h-[124px]">
                                     <Image
-                                        src={product.src}
+                                        src={product.url}
                                         alt={product.name}
                                         layout="fill"
                                         objectFit="cover"
@@ -112,8 +120,8 @@ export default function ListProducts({ categoryId }: categoryProps) {
                                 </div>
                                 <div className="flex flex-col gap-1 mt-1">
                                     <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
-                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toFixed(2).replace('.', ',')}</div>
-                                    <AddSoonButton/>
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.price.toFixed(2).replace('.', ',')}</div>
+                                    <AddSoonButton />
                                     {/* <div className="justify-center text-start overflow-hidden text-ellipsis w-[150px] ">Esgotado no momento.</div> */}
                                 </div>
                             </>
@@ -122,7 +130,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                                 <div className="relative w-[150px] h-[124px]">
                                     <Link href={`/produto/${product.id}`}>
                                         <Image
-                                            src={product.src}
+                                            src={product.url}
                                             alt={product.name}
                                             layout="fill"
                                             objectFit="cover"
@@ -132,7 +140,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                                 </div>
                                 <div className="flex flex-col gap-1 mt-1">
                                     <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{product.name}</div>
-                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.value.toFixed(2).replace('.', ',')}</div>
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${product.price.toFixed(2).replace('.', ',')}</div>
                                     <AddCartButton
                                         amount={1}
                                         productId={product.id}

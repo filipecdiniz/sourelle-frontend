@@ -17,7 +17,7 @@ export default function ProductPage() {
                 {/* LEFT: Product Image */}
                 <div className="flex justify-center items-center">
                     <Image
-                        src={`${product?.src}`}
+                        src={`${product?.url}`}
                         alt='Product Image'
                         layout="intrinsic"
                         width={400}
@@ -47,7 +47,7 @@ export default function ProductPage() {
 
                     {/* Price Section */}
                     <div className="mt-8 text-3xl font-bold text-[#915F78]">
-                        R$ {product?.value.toFixed(2)}
+                        R$ {product?.price.toFixed(2)}
                     </div>
                 </div>
             </div>

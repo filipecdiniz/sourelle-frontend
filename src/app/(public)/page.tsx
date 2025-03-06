@@ -58,6 +58,7 @@ export default function Home() {
           <span className="italic">Esperamos que goste!</span>
         </p>
       </div>
+      {/* <ListProductsDragV2></ListProductsDragV2> */}
       {/* CATEGORIES TOP */}
       <div className="mt-6">
         <HomeCategories />

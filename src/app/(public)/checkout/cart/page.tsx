@@ -40,8 +40,8 @@ export default function CartPage() {
                     cartProducts.push({
                         id: product.id,
                         name: product.name,
-                        price: product.value,
-                        url: product.src,
+                        price: product.price,
+                        url: product.url,
                         amount: item.amount,
                     });
                 }

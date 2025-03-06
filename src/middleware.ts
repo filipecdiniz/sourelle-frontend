@@ -10,6 +10,11 @@ export const publicRoutes = [
     { path: "/checkout/cart", whenAuthenticated: 'next' },
 ] as const;
 
+export const adminRoutes = [
+    { path: '/admin/*', whenAuthenticated: 'next' },
+    { path: '/admin', whenAuthenticated: 'next' }
+] as const;
+
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = '/'
 
@@ -19,16 +24,45 @@ export function middleware(request: NextRequest) {
         const regex = new RegExp(`^${route.path.replace('*', '.*')}$`);
         return regex.test(url);
     });
+    const adminRoute = adminRoutes.find(route => {
+        const regex = new RegExp(`^${route.path.replace('*', '.*')}$`);
+        return regex.test(url);
+    });
+    const authToken = request.cookies.get('authToken');
     const user = request.cookies.get('user');
+    let authData = null;
+    let typeUser = 0;
+    if (authToken) {
+        try {
+            const base64Url = authToken.value.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            authData = JSON.parse(jsonPayload);
+            typeUser = authData.typeUser;
+        } catch (error) {
+            console.error('Failed to parse authToken:', error);
+        }
+    }
     if (!user && publicRoute) {
         return NextResponse.next();
     }
     if (!user && !publicRoute) {
+        if (adminRoute && typeUser !== 2) {
+            const redirectUrl = request.nextUrl.clone()
+            redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE
+            return NextResponse.redirect(redirectUrl)
+        }
+        if (!adminRoute && typeUser !== 2) {
+            const redirectUrl = request.nextUrl.clone()
+            redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE
+            return NextResponse.redirect(redirectUrl)
+        }
+        if (adminRoute && typeUser === 2) {
+            return NextResponse.next();
+        }
 
-        const redirectUrl = request.nextUrl.clone()
-        // console.log(redirectUrl.pathname)
-        redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE
-        return NextResponse.redirect(redirectUrl)
     }
     if (user && publicRoute && publicRoute.whenAuthenticated === 'redirect') {
         const redirectUrl = request.nextUrl.clone()

@@ -35,6 +35,11 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
         if (!currentCart) {
             Cookies.set('cart', JSON.stringify([{ productId, amount }]))
             setItemsInCart(1)
+            setShowNotification({
+                color: "bg-green-500",
+                message: "Produto adicionado ao carrinho.",
+                show: true
+            })
         }
         if (currentCart) {
             const cart = JSON.parse(currentCart);
@@ -43,6 +48,7 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
                 product.amount += amount
                 setItemsInCart(cart.length)
                 Cookies.set('cart', JSON.stringify(cart))
+                console.log(`here1`)
                 setShowNotification({
                     color: "bg-green-500",
                     message: "Produto adicionado ao carrinho.",
@@ -53,6 +59,7 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
                 cart.push({ productId, amount })
                 setItemsInCart(cart.length)
                 Cookies.set('cart', JSON.stringify(cart))
+                console.log(`here2`)
                 setShowNotification({
                     color: "bg-green-500",
                     message: "Produto adicionado ao carrinho.",
