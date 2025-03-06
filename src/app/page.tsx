@@ -45,7 +45,7 @@ export default function Home() {
             Bem-vindo(a) {userName ? `, ${userName}` : ""}!
           </span>
           <br /> */}
-          <span className="font-bold text-gray-900 text-3xl">
+          <span className="font-bold text-3xl text-sourelle_main_color">
             Bem-vindo(a)!
           </span>
           <br />

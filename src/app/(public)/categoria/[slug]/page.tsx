@@ -29,6 +29,7 @@ export default function CategoryPage() {
                             src={item.src}
                             value={item.value}
                             key={item.id}
+                            quantity={item.quantity}
                         />
                     ))}
                 </div>
