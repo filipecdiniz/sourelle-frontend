@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { stateRepository } from "@/repository/stateRepository";
 import { CityEntity, getCitiesByState } from "@/repository/cityRepository";
-import { ConsumeDeliveryAPI } from "@/backEndRoutes";
+import { ConsumeDeliveryAPI, ConsumeUsersAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import Cookies from "js-cookie";
 
@@ -35,7 +35,7 @@ export default function AddressPage() {
         if (name === "cep") {
             const onlyDigits = value.replace(/\D/g, '').substring(0, 8);
             setAddressData((prev) => ({ ...prev, [name]: onlyDigits }));
-        } if(name === "number") {
+        } if (name === "numero") {
             const onlyDigits = value.replace(/\D/g, '').substring(0, 4);
             setAddressData((prev) => ({ ...prev, [name]: onlyDigits }));
         }
@@ -66,9 +66,8 @@ export default function AddressPage() {
         setCitiesList(filteredCities);
     }
 
-    function handlePaymentRedirect() {
+    async function handlePaymentRedirect() {
         if (!addressData.cep || !addressData.rua || !addressData.bairro || !addressData.cidade || !addressData.estado || !addressData.numero || !addressData.complemento) {
-            console.log('aqui!');
             setShowNotification({
                 color: "bg-red-500",
                 message: "Preencha todos os campos para continuar.",
@@ -76,11 +75,31 @@ export default function AddressPage() {
             });
             // return;
         }
-        console.log(1);
         Cookies.set('addressData', JSON.stringify(addressData));
-        router.push("/checkout/info");
+        await createOrder();
+        // router.push("/checkout/info");
 
         // router.push("/checkout/payment");
+    }
+
+    async function createOrder() {
+        const cart = JSON.parse(Cookies.get("cart") || "[]");
+        const user = JSON.parse(Cookies.get("user") || "{}");
+        const address = JSON.parse(Cookies.get("addressData") || "{}");
+        console.log(user)
+        try {
+            const response = await fetch(`${ConsumeUsersAPI}`, {
+                method: "POST",
+                headers: {},
+                body: JSON.stringify({ user })
+            });
+            const data = await response.json();
+            console.log(data);
+            return;
+        } catch (error) {
+            console.log(error)
+            return;
+        }
     }
 
     return (
@@ -116,23 +135,7 @@ export default function AddressPage() {
                             <span className="text-sourelle_main_color">Valor do frete: R$ {shipmentVaue.toFixed(2)}</span>
                         </div>
                         <div className="infoAddress mt-2">
-                            <input
-                                type="text"
-                                name="rua"
-                                placeholder="Rua"
-                                onChange={handleInputChange}
-                                value={addressData.rua}
-                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-                            />
-                            <input
-                                type="text"
-                                name="bairro"
-                                placeholder="Bairro"
-                                onChange={handleInputChange}
-                                value={addressData.bairro}
-                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-                            />
-                            <select
+                        <select
                                 name="estado"
                                 value={addressData.estado}
                                 onChange={handleStateChange}
@@ -165,7 +168,24 @@ export default function AddressPage() {
                             </select>
                             <input
                                 type="text"
-                                name="number"
+                                name="rua"
+                                placeholder="Rua"
+                                onChange={handleInputChange}
+                                value={addressData.rua}
+                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                            />
+                            <input
+                                type="text"
+                                name="bairro"
+                                placeholder="Bairro"
+                                onChange={handleInputChange}
+                                value={addressData.bairro}
+                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                            />
+                            
+                            <input
+                                type="text"
+                                name="numero"
                                 placeholder="Número"
                                 value={addressData.numero}
                                 onChange={handleInputChange}
@@ -184,7 +204,7 @@ export default function AddressPage() {
                             onClick={handlePaymentRedirect}
                             className="w-full bg-sourelle_main_color mt-4 hover:bg-sourelle_main_color text-white py-3 rounded-md text-sm font-medium transition duration-200"
                         >
-                            VERIFICAR INFORMAÇÕES
+                            IR PARA PAGAMENTO
                         </button>
                     </>
                 ) : (

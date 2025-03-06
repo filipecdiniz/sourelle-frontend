@@ -3,10 +3,7 @@
 import ShowProduct from "@/Components/Product/ShowProduct"
 import { CategoryInterface } from "@/interfaces/CategoryInterface"
 import { ProductInterface } from "@/interfaces/Product.interface"
-// import { categoriesRepository } from "@/repository/categories"
-// import { productsRepository } from "@/repository/products"
 import { getBackProducts } from "@/utils/getBackProducts"
-// import { getCategoriesInfos } from "@/utils/getCategoriesInfos"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 

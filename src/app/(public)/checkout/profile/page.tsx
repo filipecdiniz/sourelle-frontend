@@ -8,10 +8,10 @@ import { cpfValidator } from "@/utils/cpf-validator";
 
 export default function PersonalInfoPage() {
     const [formData, setFormData] = useState({
-        firstName: "",
-        middleName: "",
+        name: "",
+        lastName: "",
         email: "",
-        number: "",
+        phone: "",
         cpf: "",
     });
     const [showNotification, setShowNotification] = useState({
@@ -20,25 +20,35 @@ export default function PersonalInfoPage() {
         show: false,
     });
     const router = useRouter();
+    // const [showPassword, setShowPassword] = useState(false);
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
 
         // Se for o campo CPF, filtra para permitir apenas números.
-        if (name === "cpf" || name === "number") {
-            const onlyDigits = value.replace(/\D/g, '').substring(0, 11); 
+        if (name === "cpf" || name === "phone") {
+            const onlyDigits = value.replace(/\D/g, '').substring(0, 11);
             setFormData((prev) => ({ ...prev, [name]: onlyDigits }));
+        } 
+        if (name === 'password') {
+            const limitedValue = value.substring(0, 12);
+            setFormData((prev) => ({ ...prev, [name]: limitedValue }));
         }
-         else {
-            setFormData((prev) => ({ ...prev, [name]: value }));
+        if (name === 'email') {
+            const limitedValue = value.substring(0, 50);
+            setFormData((prev) => ({ ...prev, [name]: limitedValue }));
+        }
+        else {
+            const limitedValue = value.substring(0, 20);
+            setFormData((prev) => ({ ...prev, [name]: limitedValue }));
         }
     };
 
     function handleSubmit() {
-        const { firstName, middleName, email, cpf } = formData;
+        const { name, lastName, email, cpf } = formData;
 
         // const validateCPF = cpfValidator(cpf);
-        if (!firstName || !email || !cpf || !middleName) {
+        if (!name || !email || !cpf || !lastName ) {
             setShowNotification({
                 color: "bg-red-500",
                 message: "Por favor, preencha todos os campos.",
@@ -72,17 +82,17 @@ export default function PersonalInfoPage() {
 
                 <input
                     type="text"
-                    name="firstName"
+                    name="name"
                     placeholder="Nome"
-                    value={formData.firstName}
+                    value={formData.name}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
                 <input
                     type="text"
-                    name="middleName"
+                    name="lastName"
                     placeholder="Sobrenome"
-                    value={formData.middleName}
+                    value={formData.lastName}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
@@ -96,9 +106,9 @@ export default function PersonalInfoPage() {
                 />
                 <input
                     type="text"
-                    name="number"
+                    name="phone"
                     placeholder="Celular (62984689961)"
-                    value={formData.number}
+                    value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
@@ -110,6 +120,23 @@ export default function PersonalInfoPage() {
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
+                {/* <div className="relative w-full mb-4">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Senha"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    >
+                        {showPassword ? "Esconder" : "Mostrar"}
+                    </button>
+                </div> */}
 
                 <button
                     onClick={handleSubmit}

@@ -2,7 +2,6 @@ import { CategoryInterface } from "@/interfaces/CategoryInterface";
 import Image from "next/image";
 
 //Repostory while we're testing.
-// import { categoriesRepository } from "@/repository/categories";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
