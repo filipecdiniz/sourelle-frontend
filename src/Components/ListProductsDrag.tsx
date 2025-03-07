@@ -6,22 +6,15 @@ import { useEffect, useRef, useState, } from "react";
 import Link from "next/link";
 import AddSoonButton from "./AddSoonButton";
 import { getBackProducts } from "@/utils/getBackProducts";
+import { ProductInterface } from "@/interfaces/Product.interface";
 
 interface categoryProps {
     categoryId: number
 }
 
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    url: string;
-    quantity: number;
-}
-
 export default function ListProducts({ categoryId }: categoryProps) {
     const carouselRef = useRef<HTMLDivElement | null>(null);
-    const [productsBack, setProductsBack] = useState<Product[]>([])
+    const [productsBack, setProductsBack] = useState<ProductInterface[]>([])
     const startX = useRef(0);
     const isDragging = useRef(false);
 
@@ -97,7 +90,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
             >
-                {productsBack.map((product: Product) => (
+                {productsBack.map((product: ProductInterface) => (
                     <div
                         className="flex flex-col items-center w-[150px] h-[220px] flex-shrink-0"
                         key={product.id}

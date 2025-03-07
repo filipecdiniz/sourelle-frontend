@@ -1,7 +1,7 @@
 "use client"
 
 import ShowProduct from "@/Components/Product/ShowProduct"
-import { CategoryInterface } from "@/interfaces/CategoryInterface"
+import { CategoryInterface } from "@/interfaces/Category.interface"
 import { ProductInterface } from "@/interfaces/Product.interface"
 import { getBackProducts } from "@/utils/getBackProducts"
 import { useParams } from "next/navigation"
@@ -17,6 +17,7 @@ export default function CategoryPage() {
     useEffect(() => {
         const fetchProducts = async () => {
             const products = await awaitGetProducts(Number(categoryId));
+            console.log(categoryId);
             // console.log(products);
             setProducts(products);
         };
@@ -46,8 +47,8 @@ export default function CategoryPage() {
                         <ShowProduct
                             id={item.id}
                             name={item.name}
-                            src={item.src}
-                            value={item.value}
+                            url={item.url}
+                            price={item.price}
                             key={item.id}
                             quantity={item.quantity}
                         />

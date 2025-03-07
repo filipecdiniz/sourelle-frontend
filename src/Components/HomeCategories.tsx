@@ -1,4 +1,4 @@
-import { CategoryInterface } from "@/interfaces/CategoryInterface";
+import { CategoryInterface } from "@/interfaces/Category.interface";
 import Image from "next/image";
 
 //Repostory while we're testing.
