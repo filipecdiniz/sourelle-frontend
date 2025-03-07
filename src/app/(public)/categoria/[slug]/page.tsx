@@ -4,6 +4,7 @@ import ShowProduct from "@/Components/Product/ShowProduct"
 import { CategoryInterface } from "@/interfaces/Category.interface"
 import { ProductInterface } from "@/interfaces/Product.interface"
 import { getBackProducts } from "@/utils/getBackProducts"
+import { getCategoriesInfos } from "@/utils/getCategoriesInfos"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -32,6 +33,15 @@ export default function CategoryPage() {
         }
         return;
     }
+
+    // async function awaitGetCategory(categoryId: number) {
+    //     if (categoryId) {
+    //         const products = await getCategoriesInfos(categoryId)
+    //         console.log(products)
+    //         return products
+    //     }
+    //     return;
+    // }
 
     return (
         <div className="flex flex-col p-4 gap-4">
