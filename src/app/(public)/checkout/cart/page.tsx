@@ -57,8 +57,6 @@ export default function CartPage() {
     }
 
     async function handleApplyCupom() {
-        console.log(cupom);
-        console.log(cupomPercentage);
         try {
             const response = await fetch(`${ConsumeCupomAPI}/try`, {
                 method: 'POST',
@@ -70,10 +68,11 @@ export default function CartPage() {
                 }),
             });
             const responseJson = await response.json();
+            // console.log(responseJson);
             if (response.ok) {
                 setCupomPercentage(responseJson.percentage);
-                console.log(responseJson)
-                Cookies.set('cupom', JSON.stringify({ cupom: cupom, percentage: responseJson.percentage }));
+                // console.log(responseJson)
+                Cookies.set('cupom', JSON.stringify({ cupom: cupom, percentage: responseJson.percentage, shippingDiscount: responseJson.shipping }));
                 setShowNotification({
                     color: 'bg-green-500',
                     message: 'Cupom aplicado com sucesso!',

@@ -11,6 +11,7 @@ export default function AddressPage() {
     // const router = useRouter();
     const [addressInfoOpen, setAddressInfoOpen] = useState(false);
     const [shipmentVaue, setShipmentValue] = useState(0);
+
     const [addressData, setAddressData] = useState({
         cep: "",
         rua: "",
@@ -44,6 +45,15 @@ export default function AddressPage() {
     }
 
     async function FetchShippingPrice() {
+        const cupomCookies = Cookies.get("cupom");
+        if (cupomCookies) {
+            const cupom = JSON.parse(cupomCookies);
+            if (cupom.shippingDiscount === true) {
+                setShipmentValue(0);
+                setAddressInfoOpen(true);
+                return;
+            }
+        }
         const response = await fetch(`${ConsumeDeliveryAPI}/calculate-frete/${addressData.cep}`, {
             method: "POST",
             headers: {
@@ -134,13 +144,15 @@ export default function AddressPage() {
                             <span className="text-sourelle_main_color">Valor do frete: R$ {shipmentVaue.toFixed(2)}</span>
                         </div>
                         <div className="infoAddress mt-2">
-                        <select
+                            <select
                                 name="estado"
                                 value={addressData.estado}
                                 onChange={handleStateChange}
-                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 appearance-none bg-white"
                             >
-                                <option value="">Selecione o estado</option>
+                                <option value="" disabled className="text-gray-400">
+                                    Selecione o estado
+                                </option>
                                 {stateRepository.map((state) => (
                                     <option key={state.id} value={state.name}>
                                         {state.name}
@@ -152,9 +164,10 @@ export default function AddressPage() {
                                 value={addressData.cidade}
                                 onChange={handleInputChange}
                                 disabled={!addressData.estado}
-                                className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                                className={`w-full border rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 appearance-none ${addressData.estado ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 text-gray-400"
+                                    }`}
                             >
-                                <option value="">
+                                <option value="" disabled>
                                     {addressData.estado
                                         ? "Selecione a cidade"
                                         : "Selecione um estado primeiro"}
@@ -165,6 +178,7 @@ export default function AddressPage() {
                                     </option>
                                 ))}
                             </select>
+
                             <input
                                 type="text"
                                 name="rua"
@@ -181,7 +195,7 @@ export default function AddressPage() {
                                 value={addressData.bairro}
                                 className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                             />
-                            
+
                             <input
                                 type="text"
                                 name="numero"
@@ -193,7 +207,7 @@ export default function AddressPage() {
                             <input
                                 type="text"
                                 name="complemento"
-                                placeholder="Complemento e referência (opcional)"
+                                placeholder="Complemento e referência"
                                 value={addressData.complemento}
                                 onChange={handleInputChange}
                                 className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"

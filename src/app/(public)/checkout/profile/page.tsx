@@ -25,20 +25,16 @@ export default function PersonalInfoPage() {
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
 
-        // Se for o campo CPF, filtra para permitir apenas números.
         if (name === "cpf" || name === "phone") {
             const onlyDigits = value.replace(/\D/g, '').substring(0, 11);
             setFormData((prev) => ({ ...prev, [name]: onlyDigits }));
-        } 
-        if (name === 'password') {
+        } else if (name === 'password') {
             const limitedValue = value.substring(0, 12);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
-        }
-        if (name === 'email') {
+        } else if (name === 'email') {
             const limitedValue = value.substring(0, 50);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
-        }
-        else {
+        } else {
             const limitedValue = value.substring(0, 20);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
         }
