@@ -49,19 +49,22 @@ export default function Menu() {
 
     const menuItems = [
         { label: "Início", href: "/" },
-        { label: "Anéis", href: "/categoria/Anéis" },
-        { label: "Pulseiras", href: "/categoria/Pulseiras" },
-        { label: "Brincos", href: "/categoria/Brincos" },
+        { label: "Anéis", href: "/categoria/1" },
+        { label: "Brincos", href: "/categoria/2" },
+        { label: "Argolas", href: "/categoria/3" },
+        { label: "Pulseiras", href: "/categoria/4" },
+        { label: "Colares", href: "/categoria/5" },
+        { label: "Conjuntos", href: "/categoria/6" },
         ...(authToken
             ? [
                 { label: "Perfil", href: "/perfil" },
                 { label: "Pedidos", href: "/pedidos" },
-                ...(userType === 2 ? [{ label: "Admin", href: "/admin" }] : []), // Se for admin, adicionar a opção Admin
+                ...(userType === 2 ? [{ label: "Admin", href: "/admin" }] : []),
                 { label: "Sair", href: "/login", onClick: handleLogout },
             ]
             : [
                 { label: "Fazer Login", href: "/login", highlight: true },
-                { label: "Criar Conta", href: "/register", highlight: true },
+                // { label: "Criar Conta", href: "/register", highlight: true },
             ]),
     ];
 
