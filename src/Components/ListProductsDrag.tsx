@@ -20,16 +20,12 @@ export default function ListProducts({ categoryId }: categoryProps) {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const products = await awaitGetBack(categoryId);
+            const products :ProductInterface[] = await getBackProducts(categoryId);
             setProductsBack(products);
+            // console.log(products);
         };
         fetchProducts();
     }, [categoryId])
-
-    async function awaitGetBack(categoryId: number) {
-        const products = await getBackProducts(categoryId)
-        return products
-    }
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {

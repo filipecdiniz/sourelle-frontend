@@ -28,7 +28,7 @@ export default function ShowProduct({ id, name, price, url, quantity }: ProductI
                                 </div>
                                 <div className="flex flex-col gap-1 mt-1">
                                     <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">{name}</div>
-                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${price.toFixed(2).replace('.', ',')}</div>
+                                    <div className="justify-center text-start overflow-hidden text-ellipsis whitespace-nowrap w-[150px]">R${price.toFixed(2).replace(',', '.')}</div>
                                     <AddSoonButton/>
                                     {/* <div className="justify-center text-start overflow-hidden text-ellipsis w-[150px] ">Esgotado no momento.</div> */}
                                 </div>
