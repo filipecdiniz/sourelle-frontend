@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [], // Adicione o domínio do seu VPS
     unoptimized: true
   },
+  serverRuntimeConfig: {
+    host: '0.0.0.0',
+    port: 8080
+  },
   /* config options here */
 };
 

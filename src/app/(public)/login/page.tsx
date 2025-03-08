@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Notification from "@/Components/Notification";
 import { useAppContext } from "@/context/AppContext";
-import Link from "next/link";
 
 interface UserDTO {
   email: string;
@@ -152,14 +151,14 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-4 text-center">
+        {/* <div className="mt-4 text-center">
           <p className="text-gray-600">
             Não possui conta?{" "}
             <Link href="/register" className="text-blue-600 hover:text-blue-800">
               Criar conta
             </Link>
           </p>
-        </div>
+        </div> */}
       </div>
 
       <Notification

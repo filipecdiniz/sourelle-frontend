@@ -4,7 +4,6 @@ import ShowProduct from "@/Components/Product/ShowProduct"
 import { CategoryInterface } from "@/interfaces/Category.interface"
 import { ProductInterface } from "@/interfaces/Product.interface"
 import { getBackProducts } from "@/utils/getBackProducts"
-import { getCategoriesInfos } from "@/utils/getCategoriesInfos"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 

@@ -15,7 +15,7 @@ export default function HomeCategories() {
     }, [])
 
     async function getCategories() {
-        const response = await fetch('http://localhost:3000/category');
+        const response = await fetch('http://82.25.70.233:3000/category');
         const data = await response.json();
         return data;
     }
@@ -33,7 +33,7 @@ export default function HomeCategories() {
                             href={`categoria/${category.id}`}
                         >
                             <Image
-                                src={`http://localhost:3000${category.url}`}
+                                src={`http://82.25.70.233:3000${category.url}`}
                                 alt={category.name}
                                 layout="fill"
                                 objectFit="cover"
