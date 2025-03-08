@@ -15,7 +15,7 @@ export default function CartPage() {
     const { syncCart } = useAppContext();
     const router = useRouter();
     const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
-    const [cupom, setCupom] = useState<string>("");
+    const [cupom, setCupom] = useState("");
     const [cupomPercentage, setCupomPercentage] = useState(0);
     const [showNotification, setShowNotification] = useState({
         color: "",
@@ -68,10 +68,11 @@ export default function CartPage() {
                 }),
             });
             const responseJson = await response.json();
-            if (response.ok && responseJson.percentage > 0) {
-                // console.log(responseJson.percentage);
+            // console.log(responseJson);
+            if (response.ok) {
                 setCupomPercentage(responseJson.percentage);
-                Cookies.set('cupom', JSON.stringify({ cupom: cupom, percentage: responseJson.percentage }));
+                // console.log(responseJson)
+                Cookies.set('cupom', JSON.stringify({ cupom: cupom, percentage: responseJson.percentage, shippingDiscount: responseJson.shipping }));
                 setShowNotification({
                     color: 'bg-green-500',
                     message: 'Cupom aplicado com sucesso!',
@@ -80,8 +81,7 @@ export default function CartPage() {
                 return;
             }
             setCupomPercentage(0);
-            setCupom("");
-            Cookies.set('cupom', JSON.stringify({ cupom: "", percentage: 0 }));
+            Cookies.set('cupom', cupomPercentage.toString());
             setShowNotification({
                 color: 'bg-red-500',
                 message: 'Cupom inválido ou expirado!',
