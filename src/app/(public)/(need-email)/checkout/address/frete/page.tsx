@@ -35,7 +35,7 @@ export default function AddressPage() {
         if (name === "cep") {
             const onlyDigits = value.replace(/\D/g, '').substring(0, 8);
             setAddressData((prev) => ({ ...prev, [name]: onlyDigits }));
-        } if (name === "numero") {
+        } else if (name === "numero") {
             const onlyDigits = value.replace(/\D/g, '').substring(0, 4);
             setAddressData((prev) => ({ ...prev, [name]: onlyDigits }));
         }
