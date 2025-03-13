@@ -3,14 +3,18 @@
 import { useState } from "react";
 import { stateRepository } from "@/repository/stateRepository";
 import { CityEntity, getCitiesByState } from "@/repository/cityRepository";
-import { ConsumeDeliveryAPI, ConsumeUsersAPI } from "@/backEndRoutes";
+import { ConsumeClientOrderAPI, ConsumeDeliveryAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import Cookies from "js-cookie";
+// import useMercadoPago from "@/app/hooks/useMercadoPago";
+import { useRouter } from "next/navigation";
 
 export default function AddressPage() {
     // const router = useRouter();
+    // const { createMercadoPagoCheckout } = useMercadoPago();
     const [addressInfoOpen, setAddressInfoOpen] = useState(false);
-    const [shipmentVaue, setShipmentValue] = useState(0);
+    const [shipmentValue, setShipmentValue] = useState(0);
+    const router = useRouter();
 
     const [addressData, setAddressData] = useState({
         cep: "",
@@ -82,29 +86,53 @@ export default function AddressPage() {
                 message: "Preencha todos os campos para continuar.",
                 show: true,
             });
-            // return;
+            return;
         }
+
         Cookies.set('addressData', JSON.stringify(addressData));
         await createOrder();
-        // router.push("/checkout/info");
-
-        // router.push("/checkout/payment");
     }
 
     async function createOrder() {
-        // const cart = JSON.parse(Cookies.get("cart") || "[]");
+        const cart = JSON.parse(Cookies.get("cart") || "[]");
         const user = JSON.parse(Cookies.get("user") || "{}");
-        // const address = JSON.parse(Cookies.get("addressData") || "{}");
-        console.log(user)
+        const cupomCookies = JSON.parse(Cookies.get("cupom") || "{}");
         try {
-            const response = await fetch(`${ConsumeUsersAPI}`, {
+            const response = await fetch(`${ConsumeClientOrderAPI}/create-order`, {
                 method: "POST",
-                headers: {},
-                body: JSON.stringify({ user })
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    createClientDTO: user,
+                    createAddressDTO: {
+                        cep: addressData.cep,
+                        street: addressData.rua,
+                        district: addressData.bairro,
+                        city: addressData.cidade,
+                        state: addressData.estado,
+                        number: addressData.numero,
+                        complement: addressData.complemento,
+                        delivered: false
+                    },
+                    createOrderProductDTO: cart,
+                    cupom: cupomCookies,
+                    shipmentPrice: shipmentValue
+                }),
             });
-            const data = await response.json();
-            console.log(data);
-            return;
+            if (response.status === 201) {
+                const data = await response.json();
+                // console.log(data);
+                setShowNotification({
+                    color: "bg-green-500",
+                    message: "Pedido criado com sucesso.",
+                    show: true,
+                });
+                window.location.href = data.initPoint;
+                // router.push(data.init_point);
+                return;
+            }
+
         } catch (error) {
             console.log(error)
             return;
@@ -141,7 +169,7 @@ export default function AddressPage() {
                 {addressInfoOpen ? (
                     <>
                         <div className="infoShipment mt-2">
-                            <span className="text-sourelle_main_color">Valor do frete: R$ {shipmentVaue.toFixed(2)}</span>
+                            <span className="text-sourelle_main_color">Valor do frete: R$ {shipmentValue.toFixed(2)}</span>
                         </div>
                         <div className="infoAddress mt-2">
                             <select

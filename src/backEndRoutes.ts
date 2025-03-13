@@ -1,8 +1,9 @@
-const ConsumeUsersAPI = 'http://82.25.70.233:3000/user'
-const ConsumeCartAPI = 'http://82.25.70.233:3000/cart'
-const ConsumeLoginAPI = 'http://82.25.70.233:3000/auth/login'
-const ConsumeProductAPI = 'http://82.25.70.233:3000/product'
-const ConsumeCupomAPI = 'http://82.25.70.233:3000/cupom'
-const ConsumeDeliveryAPI = 'http://82.25.70.233:3000/delivery'
+const ConsumeUsersAPI = 'http://localhost:3000/user'
+const ConsumeCartAPI = 'http://localhost:3000/cart'
+const ConsumeLoginAPI = 'http://localhost:3000/auth/login'
+const ConsumeProductAPI = 'http://localhost:3000/product'
+const ConsumeCupomAPI = 'http://localhost:3000/cupom'
+const ConsumeDeliveryAPI = 'http://localhost:3000/delivery'
+const ConsumeClientOrderAPI = 'http://localhost:3000/client-order'
 
-export { ConsumeUsersAPI, ConsumeLoginAPI, ConsumeCartAPI, ConsumeProductAPI, ConsumeCupomAPI, ConsumeDeliveryAPI }
+export { ConsumeUsersAPI, ConsumeLoginAPI, ConsumeCartAPI, ConsumeProductAPI, ConsumeCupomAPI, ConsumeDeliveryAPI, ConsumeClientOrderAPI }

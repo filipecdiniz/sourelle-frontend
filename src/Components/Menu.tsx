@@ -57,8 +57,8 @@ export default function Menu() {
         { label: "Conjuntos", href: "/categoria/6" },
         ...(authToken
             ? [
-                { label: "Perfil", href: "/perfil" },
-                { label: "Pedidos", href: "/pedidos" },
+                // { label: "Perfil", href: "/perfil" },
+                // { label: "Pedidos", href: "/pedidos" },
                 ...(userType === 2 ? [{ label: "Admin", href: "/admin" }] : []),
                 { label: "Sair", href: "/login", onClick: handleLogout },
             ]

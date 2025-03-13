@@ -6,10 +6,10 @@ import { useAppContext } from "@/context/AppContext";
 import { CartProduct } from "@/interfaces/CartProduct";
 import { ProductInCart } from "@/interfaces/ProductInCart";
 import { productsRepository } from "@/repository/products";
-import Cookies from "js-cookie";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import Image from "next/image";
 
 export default function CartPage() {
     const { syncCart } = useAppContext();
@@ -47,18 +47,20 @@ export default function CartPage() {
                 }
             });
             setProductsCart(cartProducts);
-            if (cupomCookies) {
-                const cupom = JSON.parse(cupomCookies);
-                setCupom(cupom.cupom);
-                setCupomPercentage(parseInt(cupom.percentage));
+            if (cupomCookies !== 'NaN') {
+                // console.log(cupomCookies);
+                const cupomData = JSON.parse(cupomCookies || "{}");
+                setCupom(cupomData.cupom || "");
+                setCupomPercentage(parseInt(cupomData.percentage));
             }
         }
 
     }
 
     async function handleApplyCupom() {
+        // console.log(cupom);
         try {
-            const response = await fetch(`${ConsumeCupomAPI}/try`, {
+            const response = await fetch(`${ConsumeCupomAPI}/try/${cupom}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -67,9 +69,9 @@ export default function CartPage() {
                     cupom: cupom,
                 }),
             });
+            console.log(response.status);
             const responseJson = await response.json();
-            // console.log(responseJson);
-            if (response.ok) {
+            if (response.status === 201) {
                 setCupomPercentage(responseJson.percentage);
                 // console.log(responseJson)
                 Cookies.set('cupom', JSON.stringify({ cupom: cupom, percentage: responseJson.percentage, shippingDiscount: responseJson.shipping }));
@@ -81,7 +83,8 @@ export default function CartPage() {
                 return;
             }
             setCupomPercentage(0);
-            Cookies.set('cupom', cupomPercentage.toString());
+            // console.log(1)
+            Cookies.set('cupom', "");
             setShowNotification({
                 color: 'bg-red-500',
                 message: 'Cupom inválido ou expirado!',
@@ -90,7 +93,12 @@ export default function CartPage() {
             return;
 
         } catch (error) {
-            console.log(error);
+            console.log(`error:`);
+            if (error instanceof Error) {
+                console.log(error.message);
+            } else {
+                console.log(error);
+            }
             setShowNotification({
                 color: 'bg-red-500',
                 message: `${error}`,
