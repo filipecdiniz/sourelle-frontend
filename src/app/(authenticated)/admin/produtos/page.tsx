@@ -45,7 +45,7 @@ export default function ProductPage() {
         } catch (error) {
             console.error(error);
         }
-    };
+    }
 
     async function fetchCategories() {
         try {
@@ -64,11 +64,20 @@ export default function ProductPage() {
                 color: "bg-red-500",
                 message: "Erro ao buscar categorias.",
                 show: true,
-            })
+            });
         }
-    };
+    }
 
     const handleCreateProduct = async () => {
+        if (!newProduct.categoryId) {
+            setShowNotification({
+                color: "bg-yellow-500",
+                message: "Por favor, selecione uma categoria.",
+                show: true,
+            });
+            return;
+        }
+
         const formData = new FormData();
         const categoryName = categories.find(category => category.id === parseInt(newProduct.categoryId))?.name;
         formData.append('categoryName', categoryName!);
@@ -87,18 +96,8 @@ export default function ProductPage() {
                 method: "POST",
                 headers: {
                     authorization: "Bearer " + authCookies,
-                    // "Content-Type": "application/json",
                 },
                 body: formData
-                // body: JSON.stringify({
-                //     categoryId: newProduct.categoryId,
-                //     name: newProduct.name,
-                //     price: newProduct.price.toString(),
-                //     url: `/products/anel/${newProduct.name}.jpg`,
-                //     quantity: newProduct.quantity,
-                //     description: newProduct.description,
-                //     file: formData.get("file")
-                // })
             });
 
             if (response.status === 201) {
@@ -129,27 +128,35 @@ export default function ProductPage() {
         }
     };
 
+    function handleCancelEdit() {
+        setEditingProduct(null);
+
+    }
+
     const handleEditProduct = async () => {
         if (!editingProduct) return;
 
-        const formData = new FormData();
-        formData.append("name", editingProduct.name);
-        formData.append("price", editingProduct.price.toString());
-        formData.append("description", editingProduct.description);
-        // if (editingProduct.image) formData.append("image", editingProduct.image);
+        // const formData = new FormData();
+        // formData.append("name", editingProduct.name);
+        // formData.append("price", editingProduct.price.toString());
+        // formData.append("description", editingProduct.description);
+        // formData.append("categoryId", editingProduct.categoryId);
+        // formData.append("quantity", editingProduct.quantity.toString());
 
         try {
             const response = await fetch(`${ConsumeProductAPI}/${editingProduct.id}`, {
                 method: "PUT",
                 headers: {
                     authorization: "Bearer " + authCookies,
+                    'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    categoryId: formData.get("categoryId"),
-                    name: formData.get("name"),
-                    price: formData.get("price"),
-                    description: formData.get("description"),
-                }),
+                    name: editingProduct.name,
+                    price: editingProduct.price,
+                    description: editingProduct.description,
+                    categoryId: editingProduct.categoryId,
+                    quantity: editingProduct.quantity
+                })
             });
 
             if (response.ok) {
@@ -235,9 +242,12 @@ export default function ProductPage() {
                         />
                         <select
                             onChange={(e) => setNewProduct({ ...newProduct, categoryId: e.target.value })}
+                            value={newProduct.categoryId}
                             name="category"
                             id="categorySelect"
-                            className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">Selecione uma categoria</option>
                             {categories.map((category: CategoryInterface) => (
                                 <option key={category.id} value={category.id}>{category.name}</option>
                             ))}
@@ -254,7 +264,6 @@ export default function ProductPage() {
                                 className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-
                         <div className="">
                             <label>Quantidade: </label>
                             <input
@@ -267,7 +276,6 @@ export default function ProductPage() {
                                 className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-
                         <textarea
                             placeholder="Descrição do produto"
                             value={newProduct.description}
@@ -312,6 +320,18 @@ export default function ProductPage() {
                             }
                             className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                        <select
+                            onChange={(e) => setEditingProduct({ ...editingProduct, categoryId: e.target.value })}
+                            value={editingProduct.categoryId}
+                            name="category"
+                            id="editCategorySelect"
+                            className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">Selecione uma categoria</option>
+                            {categories.map((category: CategoryInterface) => (
+                                <option key={category.id} value={category.id}>{category.name}</option>
+                            ))}
+                        </select>
                         <input
                             type="number"
                             placeholder="Preço do produto"
@@ -338,58 +358,54 @@ export default function ProductPage() {
                             }
                             className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <div
-                            {...getRootProps({
-                                className:
-                                    "border border-dashed border-gray-400 p-4 text-center cursor-pointer rounded-md",
-                            })}
-                        >
-                            <input {...getInputProps()} />
-                            {/* {editingProduct.image ? (
-                                <p>{(editingProduct.image as any).name}</p>
-                            ) : (
-                                <p>Arraste e solte uma imagem ou clique para selecionar</p>
-                            )} */}
-                        </div>
                         <button
                             onClick={handleEditProduct}
                             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
                         >
                             Atualizar Produto
                         </button>
+                        <button
+                            onClick={handleCancelEdit}
+                            className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
+                        >
+                            Cancelar
+                        </button>
                     </div>
                 </div>
             )}
 
-            {products.map((product: ProductInterface) => (
-                <div
-                    key={product.id}
-                    className="bg-white border border-gray-300 rounded-lg p-4 shadow-md flex flex-col gap-2"
-                >
-                    <img
-                        src={product.url}
-                        alt={product.name}
-                        className="w-full h-48 object-cover rounded-md"
-                    />
-                    <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
-                    <p className="text-sm text-gray-600">R$ {product.price.toFixed(2)}</p>
-                    <p className="text-sm text-gray-600">{product.description ? product.description : "Sem descrição"}</p>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setEditingProduct(product)}
-                            className="bg-yellow-500 hover:bg-yellow-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
-                        >
-                            Editar
-                        </button>
-                        <button
-                            onClick={() => handleDeleteProduct(product.id)}
-                            className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
-                        >
-                            Excluir
-                        </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {products.map((product: ProductInterface) => (
+                    <div
+                        key={product.id}
+                        className="bg-white border border-gray-300 rounded-lg p-4 shadow-md flex flex-col gap-2"
+                    >
+                        <img
+                            src={product.url}
+                            alt={product.name}
+                            className="w-full h-32 object-cover rounded-md"
+                        />
+                        <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+                        <p className="text-sm text-gray-600">R$ {product.price.toFixed(2)}</p>
+                        <p className="text-sm text-gray-600">Quantidade: {product.quantity}</p>
+                        <p className="text-sm text-gray-600">{product.description ? product.description : "Sem descrição"}</p>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setEditingProduct(product)}
+                                className="bg-yellow-500 hover:bg-yellow-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
+                            >
+                                Editar
+                            </button>
+                            <button
+                                onClick={() => handleDeleteProduct(product.id)}
+                                className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
+                            >
+                                Excluir
+                            </button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
 
             <Notification
                 show={showNotification.show}

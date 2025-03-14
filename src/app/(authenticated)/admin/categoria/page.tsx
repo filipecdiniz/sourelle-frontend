@@ -1,4 +1,4 @@
-import { ConsumeCupomAPI } from "@/backEndRoutes";
+import { ConsumeCategoryAPI, ConsumeCupomAPI } from "@/backEndRoutes";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import CupomInterface from "@/interfaces/Cupom.interface";
@@ -131,7 +131,7 @@ export default function CategoryAdminPage() {
 
     async function fetchAPI() {
         try {
-            const response = await fetch(`${ConsumeCupomAPI}`, {
+            const response = await fetch(`${ConsumeCategoryAPI}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
