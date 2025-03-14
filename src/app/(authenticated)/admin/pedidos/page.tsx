@@ -16,9 +16,18 @@ export default function AdminOrderPage() {
         getOrders(filterStatus, filterDelivered);
     }, [filterStatus, filterDelivered]);
 
+    function formatPhone(phone: string): string {
+        // Remove any non-digit characters
+        phone = phone.replace(/\D/g, '');
+        if (phone.length === 11) {
+            return `(${phone.slice(0, 2)}) ${phone.slice(2, 7)}-${phone.slice(7)}`;
+        }
+        return phone;
+    }
+
     async function handleDelivery(orderId: number) {
         const confirmDelivery = confirm('Deseja realmente marcar como entregue?');
-        if(!confirmDelivery) return;
+        if (!confirmDelivery) return;
         await fetch(`${ConsumeClientOrderAPI}/upload-delivered-status/${orderId}`, {
             method: 'PUT',
             headers: {
@@ -128,6 +137,12 @@ export default function AdminOrderPage() {
                                     ? "Cancelado"
                                     : "Pendente"}
                         </p>
+                        <p className="text-gray-800">
+                            Número: {formatPhone(order.client.phone)}
+                        </p>
+                        <p className="text-gray-800">
+                            Email: {order.client.email}
+                        </p>
                     </div>
 
                     {/* Endereço */}
@@ -140,6 +155,9 @@ export default function AdminOrderPage() {
                         <p className="text-gray-800">
                             Rua: {order.address.street}, {order.address.number} -{" "}
                             {order.address.complement}
+                        </p>
+                        <p className="text-gray-800">
+                            Complemento: {order.address.complement}
                         </p>
                     </div>
 

@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import CupomPage from "./cupom/page";
 import AdminOrderPage from "./pedidos/page";
+import ProductPage from "./produtos/page";
+import CategoryAdminPage from "./categoria/page";
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -57,17 +59,17 @@ export default function AdminPage() {
                         }`}
                     onClick={() => setActiveTab("coupons")}
                 >
-                    Cadastrar Cupons
+                    Cupons
                 </Link>
                 <Link
                     href="/admin"
-                    className={`py-4 px-12 w-3/4 text-center rounded-lg font-medium transition duration-200 text-lg ${activeTab === "products"
+                    className={`py-4 px-12 w-3/4 text-center rounded-lg font-medium transition duration-200 text-lg ${activeTab === "produtos"
                         ? "bg-sourelle_main_color text-white"
                         : "bg-gray-200 hover:bg-gray-300 text-gray-700"
                         }`}
-                    onClick={() => setActiveTab("products")}
+                    onClick={() => setActiveTab("produtos")}
                 >
-                    Cadastrar Produtos
+                    Produtos
                 </Link>
                 <Link
                     href="/admin"
@@ -77,7 +79,7 @@ export default function AdminPage() {
                         }`}
                     onClick={() => setActiveTab("categories")}
                 >
-                    Cadastrar Categorias
+                    Categorias
                 </Link>
             </nav>
 
@@ -105,10 +107,11 @@ export default function AdminPage() {
                     </div>
                 )}
 
-                {activeTab === "products" && (
+                {activeTab === "produtos" && (
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-800 mb-4">Cadastrar Produtos</h2>
                         <p className="text-gray-600">Aqui você pode cadastrar novos produtos.</p>
+                        <ProductPage />
                     </div>
                 )}
 
@@ -116,6 +119,7 @@ export default function AdminPage() {
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-800 mb-4">Cadastrar Categorias</h2>
                         <p className="text-gray-600">Aqui você pode cadastrar novas categorias de produtos.</p>
+                        <CategoryAdminPage></CategoryAdminPage>
                     </div>
                 )}
             </div>

@@ -79,8 +79,9 @@ export default function CupomPage() {
                     shipping: newCupomData.shipping,
                 }),
             });
-            const data = await response.json();
+
             if (response.status === 201) {
+                // console.log(response.status);
                 const createdCupom = await response.json();
                 setCupons((prev) => [...prev, createdCupom]);
                 setNewCupom({ cupom: "", percentage: 0, expires: "", shipping: false });
@@ -93,6 +94,7 @@ export default function CupomPage() {
                 // fetchAPI();
             } else {
                 // console.error(error);
+                const data = await response.json();
                 setShowNotification({
                     color: "bg-red-500",
                     message: `Erro ao criar o cupom: ${data.message}`,
@@ -137,7 +139,7 @@ export default function CupomPage() {
                 },
             });
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             setCupons(data);
         } catch (error) {
             console.log(error);
@@ -146,8 +148,8 @@ export default function CupomPage() {
     }
 
     return (
-        <div className="flex flex-col gap-6">
-            <h1 className="text-2xl font-bold text-gray-900">Cupons</h1>
+        <div className="flex flex-col gap-6 mt-4">
+            {/* <h1 className="text-2xl font-bold text-gray-900">Cupons</h1> */}
             <button
                 onClick={() => setCreatingCupom(!creatingCupom)}
                 className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition"
