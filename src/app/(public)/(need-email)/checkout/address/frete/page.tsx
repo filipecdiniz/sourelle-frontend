@@ -6,15 +6,12 @@ import { CityEntity, getCitiesByState } from "@/repository/cityRepository";
 import { ConsumeClientOrderAPI, ConsumeDeliveryAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import Cookies from "js-cookie";
-// import useMercadoPago from "@/app/hooks/useMercadoPago";
-import { useRouter } from "next/navigation";
 
 export default function AddressPage() {
     // const router = useRouter();
     // const { createMercadoPagoCheckout } = useMercadoPago();
     const [addressInfoOpen, setAddressInfoOpen] = useState(false);
     const [shipmentValue, setShipmentValue] = useState(0);
-    const router = useRouter();
 
     const [addressData, setAddressData] = useState({
         cep: "",

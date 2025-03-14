@@ -1,3 +1,5 @@
+"use client"
+
 import { ConsumeCupomAPI } from "@/backEndRoutes";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -6,7 +8,7 @@ import Notification from "@/Components/Notification";
 
 export default function CupomPage() {
     const [cupons, setCupons] = useState<CupomInterface[]>([]);
-    const [editingId, setEditingId] = useState(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
     const [editedCupom, setEditedCupom] = useState<CupomInterface>({
         id: 0,
         cupom: "",
@@ -35,14 +37,14 @@ export default function CupomPage() {
     });
     const authCookies = Cookies.get("authToken");
 
-    const handleEdit = (cupom: any) => {
+    const handleEdit = (cupom: CupomInterface) => {
         setEditingId(cupom.id);
         setEditedCupom({ ...cupom });
     };
 
     const handleSave = () => {
-        setCupons((prev: any) =>
-            prev.map((cupom: any) => (cupom.id === editingId ? editedCupom : cupom))
+        setCupons((prev: CupomInterface[]) =>
+            prev.map((cupom: CupomInterface) => (cupom.id === editingId ? editedCupom : cupom))
         );
         setEditingId(null);
     };
@@ -111,7 +113,7 @@ export default function CupomPage() {
         }
     };
 
-    async function handleDelete(id: any) {
+    async function handleDelete(id: number) {
         try {
             const response = await fetch(`${ConsumeCupomAPI}/${id}`, {
                 method: "DELETE",

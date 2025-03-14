@@ -6,7 +6,6 @@ import Image from "next/image";
 import CupomPage from "./cupom/page";
 import AdminOrderPage from "./pedidos/page";
 import ProductPage from "./produtos/page";
-import CategoryAdminPage from "./categoria/page";
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -119,7 +118,7 @@ export default function AdminPage() {
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-gray-800 mb-4">Cadastrar Categorias</h2>
                         <p className="text-gray-600">Aqui você pode cadastrar novas categorias de produtos.</p>
-                        <CategoryAdminPage></CategoryAdminPage>
+                        {/* <CategoryAdminPage></CategoryAdminPage> */}
                     </div>
                 )}
             </div>

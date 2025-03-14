@@ -3,25 +3,25 @@
 import { ConsumeClientOrderAPI } from "@/backEndRoutes";
 import clearCookies from "@/utils/clearCookies";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function PaymentSuccess() {
+function PaymentSuccessContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const client_id = searchParams.get("client_id");
     const collection_id = searchParams.get("collection_id");
-    const collection_status = searchParams.get('collection_status');
-    const payment_id = searchParams.get('payment_id');
-    const status = searchParams.get('status');
-    const external_reference = searchParams.get('external_reference');
-    const payment_type = searchParams.get('payment_type');
-    const merchant_order_id = searchParams.get('merchant_order_id');
-    const preference_id = searchParams.get('preference_id');
+    const collection_status = searchParams.get("collection_status");
+    const payment_id = searchParams.get("payment_id");
+    const status = searchParams.get("status");
+    const external_reference = searchParams.get("external_reference");
+    const payment_type = searchParams.get("payment_type");
+    const merchant_order_id = searchParams.get("merchant_order_id");
+    const preference_id = searchParams.get("preference_id");
 
     useEffect(() => {
         updateOrderStatus();
         clearCookies();
-    }, [client_id, collection_id, collection_status, payment_id, status, external_reference, payment_type, merchant_order_id, preference_id])
+    }, [client_id, collection_id, collection_status, payment_id, status, external_reference, payment_type, merchant_order_id, preference_id]);
 
     async function updateOrderStatus() {
         await fetch(`${ConsumeClientOrderAPI}/update-order-status?${searchParams}`, {
@@ -76,6 +76,12 @@ export default function PaymentSuccess() {
             </div>
         </div>
     );
+}
 
-
+export default function PaymentSuccessPage() {
+    return (
+        <Suspense fallback={<div>Carregando...</div>}>
+            <PaymentSuccessContent />
+        </Suspense>
+    );
 }

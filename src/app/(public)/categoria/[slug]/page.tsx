@@ -60,6 +60,8 @@ export default function CategoryPage() {
                             price={item.price}
                             key={item.id}
                             quantity={item.quantity}
+                            categoryId={item.categoryId}
+                            description={item.description}
                         />
                     ))}
                 </div>

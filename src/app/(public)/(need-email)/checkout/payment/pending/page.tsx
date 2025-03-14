@@ -1,10 +1,10 @@
 "use client";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function PaymentSuccess() {
+function PaymentPendingContent() {
     const searchParams = useSearchParams();
     const collection_id = searchParams.get("collection_id");
-    const status = searchParams.get("collection_status");
 
     return (
         <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 p-4 pt-16">
@@ -30,4 +30,12 @@ export default function PaymentSuccess() {
         </div>
     );
 
+}
+
+export default function PaymentFailurePage() {
+    return (
+        <Suspense fallback={<div>Carregando...</div>}>
+            <PaymentPendingContent />
+        </Suspense>
+    );
 }

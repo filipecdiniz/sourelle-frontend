@@ -1,24 +1,34 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { useDropzone } from "react-dropzone";
+import { FileWithPath, useDropzone } from "react-dropzone";
 import Notification from "@/Components/Notification";
 import { ConsumeCategoryAPI, ConsumeProductAPI } from "@/backEndRoutes";
 import { ProductInterface } from "@/interfaces/Product.interface";
 import { CategoryInterface } from "@/interfaces/Category.interface";
+import Image from "next/image";
 
 export default function ProductPage() {
     const [products, setProducts] = useState<ProductInterface[]>([]);
     const [creatingProduct, setCreatingProduct] = useState(false);
     const [editingProduct, setEditingProduct] = useState<ProductInterface | null>(null);
     const [categories, setCategories] = useState<CategoryInterface[]>([]);
-    const [newProduct, setNewProduct] = useState({
-        name: "",
-        price: 0,
-        description: "",
-        image: null,
-        quantity: 0,
-        categoryId: ""
-    });
+    const [newProduct, setNewProduct] = useState<{
+            name: string;
+            price: number;
+            description: string;
+            image: FileWithPath | null;
+            quantity: number;
+            categoryId: string;
+        }>({
+            name: "",
+            price: 0,
+            description: "",
+            image: null,
+            quantity: 0,
+            categoryId: ""
+        });
     const [showNotification, setShowNotification] = useState({
         color: "",
         message: "",
@@ -209,7 +219,7 @@ export default function ProductPage() {
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: { "image/*": [] },
-        onDrop: (acceptedFiles: any) => {
+        onDrop: (acceptedFiles: FileWithPath[]) => {
             if (editingProduct) {
                 setEditingProduct((prev) => ({ ...prev!, image: acceptedFiles[0] }));
             } else {
@@ -292,7 +302,7 @@ export default function ProductPage() {
                         >
                             <input {...getInputProps()} />
                             {newProduct.image ? (
-                                <p>{(newProduct.image as any).name}</p>
+                                <p>{(newProduct.image as FileWithPath).name}</p>
                             ) : (
                                 <p>Arraste e solte uma imagem ou clique para selecionar</p>
                             )}
@@ -380,7 +390,7 @@ export default function ProductPage() {
                         key={product.id}
                         className="bg-white border border-gray-300 rounded-lg p-4 shadow-md flex flex-col gap-2"
                     >
-                        <img
+                        <Image
                             src={product.url}
                             alt={product.name}
                             className="w-full h-32 object-cover rounded-md"

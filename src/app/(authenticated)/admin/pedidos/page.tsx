@@ -1,6 +1,10 @@
+"use client"
+
 import { ConsumeClientOrderAPI } from "@/backEndRoutes";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import OrderInterface from "@/interfaces/Order/Order.interface";
+import { ProductInterface } from "@/interfaces/Product.interface";
 
 export default function AdminOrderPage() {
     const authCookies = Cookies.get('authToken');
@@ -8,16 +12,13 @@ export default function AdminOrderPage() {
     // Define um estado para o filtro com valor padrão "pending"
     const [filterStatus, setFilterStatus] = useState("approved");
     const [filterDelivered, setFilterDelivered] = useState('false');
-    const [orders, setOrders] = useState([]);
-    const [editingId, setEditingId] = useState(null);
-    const [editedOrder, setEditedOrder] = useState({});
+    const [orders, setOrders] = useState<OrderInterface[]>([]);
 
     useEffect(() => {
         getOrders(filterStatus, filterDelivered);
     }, [filterStatus, filterDelivered]);
 
     function formatPhone(phone: string): string {
-        // Remove any non-digit characters
         phone = phone.replace(/\D/g, '');
         if (phone.length === 11) {
             return `(${phone.slice(0, 2)}) ${phone.slice(2, 7)}-${phone.slice(7)}`;
@@ -107,7 +108,7 @@ export default function AdminOrderPage() {
                 </div>
             </div>
 
-            {orders.map((order: any) => (
+            {orders.map((order: OrderInterface) => (
                 <div
                     key={order.id}
                     className="bg-white border border-gray-300 rounded-lg p-6 shadow-md flex flex-col gap-6"
@@ -164,19 +165,19 @@ export default function AdminOrderPage() {
                     {/* Produtos */}
                     <div className="border border-purple-400 rounded-lg p-4 bg-purple-50">
                         <h2 className="text-lg font-bold text-purple-700">Produtos</h2>
-                        {order.products.map((product: any) => (
+                        {order.products.map((product: ProductInterface) => (
                             <div
                                 key={product.id}
                                 className="flex flex-col justify-between items-center border-b border-purple-200 py-2"
                             >
                                 <p className="text-gray-800">
-                                    Nome: {product.product.name}
+                                    Nome: {product.name}
                                 </p>
                                 <p className="text-gray-800">
-                                    Quantidade: {product.amount}
+                                    Quantidade: {product.quantity}
                                 </p>
                                 <p className="text-gray-800">
-                                    Preço: R$ {product.product.price.toFixed(2)}
+                                    Preço: R$ {product.price.toFixed(2)}
                                 </p>
                             </div>
                         ))}
