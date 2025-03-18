@@ -103,7 +103,7 @@ export default function PersonalInfoPage() {
                 <input
                     type="text"
                     name="phone"
-                    placeholder="Celular (62984689961)"
+                    placeholder="Celular (62)9 8468-9961"
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
@@ -116,23 +116,6 @@ export default function PersonalInfoPage() {
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
                 />
-                {/* <div className="relative w-full mb-4">
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        placeholder="Senha"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                    >
-                        {showPassword ? "Esconder" : "Mostrar"}
-                    </button>
-                </div> */}
 
                 <button
                     onClick={handleSubmit}

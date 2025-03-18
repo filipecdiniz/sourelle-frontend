@@ -64,9 +64,9 @@ export default function CartOpen() {
         }
     }
 
-    function handeCheckout() {
-        router.push('/checkout/profile')
-    }
+    // function handeCheckout() {
+    //     router.push('/checkout/profile')
+    // }
 
     function handeCart() {
         router.push('/checkout/cart')
@@ -134,9 +134,9 @@ export default function CartOpen() {
                         </div>
                         <p className="text-gray-500 text-sm mt-2 mb-4">Taxas de entrega calculadas no final.</p>
 
-                        <div className="flex justify-between text-sm">
-                            <button className="rounded-md py-3 px-4 ring-1 ring-gray-300" onClick={handeCart}>Ver Carrinho</button>
-                            <button className="rounded-md py-3 px-4 bg-black text-white" onClick={handeCheckout}>Fechar Pedido</button>
+                        <div className="flex justify-end text-sm gap-4">
+                            {/* <button className="rounded-md py-3 px-4 ring-1 ring-gray-300" onClick={handeCart}>Ver Carrinho</button> */}
+                            <button className="rounded-md py-3 px-4 bg-black text-white" onClick={handeCart}>Fechar Pedido</button>
                         </div>
                     </div>
                 </>
