@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { cpfValidator } from "@/utils/cpf-validator";
+import InputMask from "react-input-mask";
 
 export default function PersonalInfoPage() {
     const [formData, setFormData] = useState({
@@ -25,16 +26,58 @@ export default function PersonalInfoPage() {
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
 
-        if (name === "cpf" || name === "phone") {
-            const onlyDigits = value.replace(/\D/g, '').substring(0, 11);
-            setFormData((prev) => ({ ...prev, [name]: onlyDigits }));
+        if (name === "cpf") {
+            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+
+            if (value.length > 11) value = value.substring(0, 11); // Limita a 11 dígitos
+
+            // Detecta se o usuário está apagando um caractere antes de "." ou "-"
+            if (formData.cpf.length > value.length) {
+                if (formData.cpf.endsWith(".") || formData.cpf.endsWith("-") || formData.cpf.endsWith(" ")) {
+                    value = value.slice(0, -1); // Remove o último número para apagar os separadores
+                }
+            }
+
+            // Aplica a máscara dinamicamente
+            if (value.length >= 10) {
+                value = `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6, 9)}-${value.substring(9)}`;
+            } else if (value.length >= 7) {
+                value = `${value.substring(0, 3)}.${value.substring(3, 6)}.${value.substring(6)}`;
+            } else if (value.length >= 4) {
+                value = `${value.substring(0, 3)}.${value.substring(3)}`;
+            }
+
+            setFormData((prev) => ({ ...prev, cpf: value }));
         } else if (name === 'password') {
             const limitedValue = value.substring(0, 12);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
         } else if (name === 'email') {
             const limitedValue = value.substring(0, 50);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
-        } else {
+        } else if (name === "phone") {
+            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+
+            if (value.length > 11) value = value.substring(0, 11); // Limita a 11 dígitos
+
+            // Detecta se o usuário está apagando um caractere antes do "-"
+            if (formData.phone.length > value.length) {
+                if (formData.phone.endsWith("-") || formData.phone.endsWith(" ")) {
+                    value = value.slice(0, -1); // Remove o último número para apagar o "-"
+                }
+            }
+
+            // Aplica a máscara dinamicamente
+            if (value.length >= 7) {
+                value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+            } else if (value.length >= 3) {
+                value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+            } else if (value.length > 0) {
+                value = `(${value}`;
+            }
+
+            setFormData((prev) => ({ ...prev, phone: value }));
+        }
+        else {
             const limitedValue = value.substring(0, 20);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
         }
@@ -44,7 +87,7 @@ export default function PersonalInfoPage() {
         const { name, lastName, email, cpf } = formData;
 
         // const validateCPF = cpfValidator(cpf);
-        if (!name || !email || !cpf || !lastName ) {
+        if (!name || !email || !cpf || !lastName) {
             setShowNotification({
                 color: "bg-red-500",
                 message: "Por favor, preencha todos os campos.",
