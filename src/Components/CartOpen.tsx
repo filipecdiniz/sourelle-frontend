@@ -6,13 +6,15 @@ import ProductInCartOpen from "./Product/ProductInCartOpen";
 import { useRouter } from "next/navigation";
 import Notification from "./Notification";
 import { useAppContext } from "@/context/AppContext";
-import { productsRepository } from "@/repository/products";
 import { ProductInCart } from "@/interfaces/ProductInCart";
 import { CartProduct } from "@/interfaces/CartProduct";
+import { getBackProducts } from "@/utils/getBackProducts";
+import { ProductInterface } from "@/interfaces/Product.interface";
 
 export default function CartOpen() {
     const { syncCart } = useAppContext();
     const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
+    const [productsBack, setProductsBack] = useState<ProductInterface[]>([]);
     const [visibleItems, setVisibleItems] = useState<number>(4);
     const [showNotification, setShowNotification] = useState({
         color: "",
@@ -25,15 +27,29 @@ export default function CartOpen() {
     // const authToken = Cookies.get("authToken");
 
     useEffect(() => {
-        updateCartItems();
+        async function loadProducts() {
+            await awaitGetProducts();
+        }
+        loadProducts();
     }, [cartCookies]);
+
+    useEffect(() => {
+        if (cartCookies && productsBack.length) {
+            updateCartItems();
+        }
+    }, [cartCookies, productsBack]);
+
+    async function awaitGetProducts() {
+        const products: ProductInterface[] = await getBackProducts()
+        setProductsBack(products);
+    }
 
     function updateCartItems() {
         if (cartCookies) {
             const cartItems: CartProduct[] = JSON.parse(cartCookies);
             const cartProducts: ProductInCart[] = [];
             cartItems.forEach((item) => {
-                const product = productsRepository.find((product) => product.id === item.productId);
+                const product = productsBack.find((product) => product.id === item.productId);
                 if (product) {
                     cartProducts.push({
                         id: product.id,
@@ -56,43 +72,6 @@ export default function CartOpen() {
         router.push('/checkout/cart')
     }
 
-    // async function handleRemoveQuantity(productId: number, amount: number) {
-    //     try {
-    //         const response = await fetch(ConsumeCartAPI, {
-    //             method: 'PATCH',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 // Authorization: `Bearer ${authToken}`,
-    //             },
-    //             body: JSON.stringify({
-    //                 productId: productId,
-    //                 amount: amount - 1,
-    //             }),
-    //         });
-    //         if (response.ok) {
-    //             const updatedCart = await response.json();
-
-    //             // console.log(updatedCart);
-    //             setProductsCart(updatedCart.cartProduct);
-    //             await syncCart()
-    //             Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
-    //         } else {
-    //             console.log('Erro no servidor ao atualizar o carrinho.');
-    //             setShowNotification({
-    //                 color: 'bg-red-500',
-    //                 message: 'Erro no servidor ao atualizar o carrinho.',
-    //                 show: true,
-    //             });
-    //         }
-    //     } catch (error) {
-    //         setShowNotification({
-    //             color: 'bg-red-500',
-    //             message: `${error}`,
-    //             show: true,
-    //         });
-    //     }
-    // }
-
     async function handleRemoveQuantityCookies(productId: number) {
         const newCart = productsCart.map((product: ProductInCart) => {
             if (product.id === productId) {
@@ -108,7 +87,6 @@ export default function CartOpen() {
             return product;
         }).filter((product) => product.amount > 0);
 
-        console.log(newProductsCart)
         setProductsCart(newProductsCart);
         Cookies.set("cart", JSON.stringify(newCart));
         await syncCart();

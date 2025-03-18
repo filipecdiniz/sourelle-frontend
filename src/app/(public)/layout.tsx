@@ -7,6 +7,9 @@ import { AppProvider } from "@/context/AppContext";
 export const metadata: Metadata = {
   title: "Sourelle",
   description: "Sourelle Ecommerce",
+  icons: {
+    icon: '/logo/image-logo.png'
+  }
 };
 
 export default function RootLayout({

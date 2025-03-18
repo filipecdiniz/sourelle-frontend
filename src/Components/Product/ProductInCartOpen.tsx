@@ -1,3 +1,4 @@
+import { ConsumeImageAPI } from "@/backEndRoutes";
 import Image from "next/image";
 
 interface ProductProps {
@@ -19,7 +20,7 @@ export default function ProductInCartOpen({ name, value, amount, src, onRemove }
     return (
         <div className="flex gap-4">
             <Image
-                src={`${src}`}
+                src={`${ConsumeImageAPI}${src}`}
                 alt=""
                 width={72}
                 height={96}

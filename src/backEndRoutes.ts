@@ -1,10 +1,11 @@
-const ConsumeUsersAPI = 'http://localhost:3000/user'
-const ConsumeCartAPI = 'http://localhost:3000/cart'
-const ConsumeLoginAPI = 'http://localhost:3000/auth/login'
-const ConsumeProductAPI = 'http://localhost:3000/product'
-const ConsumeCupomAPI = 'http://localhost:3000/cupom'
-const ConsumeDeliveryAPI = 'http://localhost:3000/delivery'
-const ConsumeClientOrderAPI = 'http://localhost:3000/client-order'
-const ConsumeCategoryAPI = 'http://localhost:3000/category'
+const ConsumeUsersAPI = 'https://api.sourelle.site/user'
+const ConsumeCartAPI = 'https://api.sourelle.site/cart'
+const ConsumeLoginAPI = 'https://api.sourelle.site/auth/login'
+const ConsumeProductAPI = 'https://api.sourelle.site/product'
+const ConsumeCupomAPI = 'https://api.sourelle.site/cupom'
+const ConsumeDeliveryAPI = 'https://api.sourelle.site/delivery'
+const ConsumeClientOrderAPI = 'https://api.sourelle.site/client-order'
+const ConsumeCategoryAPI = 'https://api.sourelle.site/category'
+const ConsumeImageAPI = 'https://api.sourelle.site'
 
-export { ConsumeUsersAPI, ConsumeLoginAPI, ConsumeCartAPI, ConsumeProductAPI, ConsumeCupomAPI, ConsumeDeliveryAPI, ConsumeClientOrderAPI, ConsumeCategoryAPI }
+export { ConsumeUsersAPI, ConsumeLoginAPI, ConsumeCartAPI, ConsumeProductAPI, ConsumeCupomAPI, ConsumeDeliveryAPI, ConsumeClientOrderAPI, ConsumeCategoryAPI, ConsumeImageAPI }

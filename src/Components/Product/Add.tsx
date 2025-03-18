@@ -44,13 +44,13 @@ export default function Add({ stockNumber, productId }: addProductProps) {
                             +
                         </button>
                     </div>
-                    {stockNumber < 1 ? (
+                    {/* {stockNumber < 1 ? (
                         <div className="text-xs">Produto sem estoque</div>
                     ) : (
                         <div className="text-xs"> Restam apenas <span className="text-orange-500">{stockNumber} itens</span>{" "} em estoque
                             <br /> {"Não "} perca!
                         </div>
-                    )}
+                    )} */}
                 </div>
                 <AddCartButton
                     productId={productId}

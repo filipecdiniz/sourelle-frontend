@@ -5,39 +5,8 @@ import ListProductsDrag from "@/Components/ListProductsDrag";
 
 export default function Home() {
 
-  // const authToken = Cookies.get("authToken");
-
-  // useEffect(() => {
-  //   getUserInformations(authToken);
-  // }, [authToken]);
-
-  // async function getUserInformations(authToken: string | undefined) {
-  //   if (!authToken) {
-  //     return;
-  //   }
-  //   if (authToken) {
-  //     const response = await fetch(`${ConsumeUsersAPI}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${authToken}`,
-  //       },
-  //     });
-
-  //     if (response.ok) {
-  //       const user = await response.json();
-  //       setUserName(user.name.split(" ")[0]);
-  //       return;
-  //     } else {
-  //       Cookies.remove("authToken");
-  //       return;
-  //     }
-  //     syncCart();
-  //   }
-  // }
-
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* SEARCH RESULTS */}
-      {/* <SearchResults/> */}
       {/* WELCOME SECTION */}
       <div className="bg-gray-100 p-6 rounded-lg shadow-md text-center">
         <p className="text-xl font-serif text-gray-800">
@@ -63,7 +32,7 @@ export default function Home() {
       <div className="mt-6">
         <HomeCategories />
       </div>
-
+            
       {/* MOST SOLD PRODUCTS MIDDLE */}
       <div className="justify-center items-center text-center mt-6">
         <h2 className="font-serif text-2xl font-semibold text-gray-900">Anéis</h2>

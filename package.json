@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "next dev -p 3030",
     "build": "next build",
     "build:css": "npx tailwindcss -i ./src/app/globals.css -o ./dist/styles.css --minify",
     "start": "next start -p 8080 > /dev/null 2>&1 &",

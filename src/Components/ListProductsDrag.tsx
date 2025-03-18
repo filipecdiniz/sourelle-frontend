@@ -7,6 +7,7 @@ import Link from "next/link";
 import AddSoonButton from "./AddSoonButton";
 import { getBackProducts } from "@/utils/getBackProducts";
 import { ProductInterface } from "@/interfaces/Product.interface";
+import { ConsumeImageAPI } from "@/backEndRoutes";
 
 interface categoryProps {
     categoryId: number
@@ -20,12 +21,19 @@ export default function ListProducts({ categoryId }: categoryProps) {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const products :ProductInterface[] = await getBackProducts(categoryId);
-            setProductsBack(products);
-            // console.log(products);
+            const products: ProductInterface[] = (await getBackProducts(categoryId)) || [];
+            setProductsBack(prevProducts => {
+                if (
+                    prevProducts.length === products.length &&
+                    prevProducts.every((prod, idx) => prod.id === products[idx].id)
+                ) {
+                    return prevProducts;
+                }
+                return products;
+            });
         };
         fetchProducts();
-    }, [categoryId])
+    }, []);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (carouselRef.current) {
@@ -95,7 +103,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                             <>
                                 <div className="relative w-[150px] h-[124px]">
                                     <Image
-                                        src={product.url}
+                                        src={`${ConsumeImageAPI}${product.url}`}
                                         alt={product.name}
                                         layout="fill"
                                         objectFit="cover"
@@ -117,7 +125,7 @@ export default function ListProducts({ categoryId }: categoryProps) {
                                 <div className="relative w-[150px] h-[124px]">
                                     <Link href={`/produto/${product.id}`}>
                                         <Image
-                                            src={product.url}
+                                            src={`${ConsumeImageAPI}${product.url}`}
                                             alt={product.name}
                                             layout="fill"
                                             objectFit="cover"

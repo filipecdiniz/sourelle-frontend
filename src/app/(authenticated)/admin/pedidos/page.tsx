@@ -80,10 +80,8 @@ export default function AdminOrderPage() {
                         <label className="text-sm font-medium text-gray-600">Pagamento:</label>
                         <select
                             value={filterStatus}
-                            className="border border-blue-300 rounded-md p-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                                setFilterStatus(e.target.value)
-                            }
+                            className="w-full border border-blue-300 rounded-md p-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
                         >
                             <option value="pending">Pendente</option>
                             <option value="approved">Aprovado</option>
@@ -96,10 +94,8 @@ export default function AdminOrderPage() {
                         <label className="text-sm font-medium text-gray-600">Situação:</label>
                         <select
                             value={filterDelivered}
-                            className="border border-green-300 rounded-md p-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                                setFilterDelivered(e.target.value)
-                            }
+                            className="w-full border border-green-300 rounded-md p-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterDelivered(e.target.value)}
                         >
                             <option value="false">Não entregue</option>
                             <option value="true">Entregue</option>
@@ -107,6 +103,7 @@ export default function AdminOrderPage() {
                     </div>
                 </div>
             </div>
+
 
             {orders.map((order: OrderInterface) => (
                 <div

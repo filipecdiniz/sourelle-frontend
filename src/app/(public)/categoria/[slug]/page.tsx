@@ -17,30 +17,22 @@ export default function CategoryPage() {
     useEffect(() => {
         const fetchProducts = async () => {
             const products = await awaitGetProducts(Number(categoryId));
-            console.log(categoryId);
-            // console.log(products);
+            // console.log(categoryId);
+            console.log(products);
             setProducts(products);
         };
         fetchProducts();
-    }, [categoryId])
+    }, [])
 
     async function awaitGetProducts(categoryId: number) {
         if (categoryId) {
             const products = await getBackProducts(categoryId)
-            console.log(products)
+            // console.log(products)
             return products
         }
         return;
     }
 
-    // async function awaitGetCategory(categoryId: number) {
-    //     if (categoryId) {
-    //         const products = await getCategoriesInfos(categoryId)
-    //         console.log(products)
-    //         return products
-    //     }
-    //     return;
-    // }
 
     return (
         <div className="flex flex-col p-4 gap-4">

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppContext } from "@/context/AppContext";
-import { productsRepository } from "@/repository/products";
 import Cookies from "js-cookie";
 import Notification from "./Notification";
+import { getBackOneProduct } from "@/utils/getBackOneProduct";
+import { ProductInterface } from "@/interfaces/Product.interface";
 
 interface AddProductToCart {
     productId: number;
@@ -10,67 +11,73 @@ interface AddProductToCart {
 }
 
 export default function AddCartButton({ productId, amount }: AddProductToCart) {
-    const { setItemsInCart } = useAppContext()
+    const [product, setProduct] = useState<ProductInterface>();
+    const { setItemsInCart } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
     const [showNotification, setShowNotification] = useState({
         color: '',
         message: '',
-        show: false
+        show: false,
     });
-    const product = productsRepository.find((product) => product.id === productId);
-    if (!product) {
-        setShowNotification({
-            color: "bg-red-500",
-            message: "Produto não encontrado.",
-            show: true
-        })
-        return;
-    }
+    const [notFound, setNotFound] = useState(false);
+
+    // const product = productsRepository.find((product) => product.id === productId);
+
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const product = await getBackOneProduct(productId);
+            if (!product) {
+                setNotFound(true);
+            }
+            setProduct(product);
+        };
+        fetchProduct();
+    }, []);
 
     async function addItemCart(productId: number, amount: number) {
         setIsLoading(true);
-
-        const currentCart = Cookies.get('cart')
+        const currentCart = Cookies.get("cart");
 
         if (!currentCart) {
-            Cookies.set('cart', JSON.stringify([{ productId, amount }]))
-            setItemsInCart(1)
+            Cookies.set("cart", JSON.stringify([{ productId, amount }]));
+            setItemsInCart(1);
             setShowNotification({
                 color: "bg-green-500",
                 message: "Produto adicionado ao carrinho.",
-                show: true
-            })
-        }
-        if (currentCart) {
+                show: true,
+            });
+        } else {
             const cart = JSON.parse(currentCart);
-            const product: AddProductToCart | undefined = cart.find((product: AddProductToCart) => product.productId === productId)
-            if (product) {
-                product.amount += amount
-                setItemsInCart(cart.length)
-                Cookies.set('cart', JSON.stringify(cart))
-                console.log(`here1`)
+            const cartProduct = cart.find((prod: AddProductToCart) => prod.productId === productId);
+            if (cartProduct) {
+                cartProduct.amount += amount;
+                setItemsInCart(cart.length);
+                Cookies.set("cart", JSON.stringify(cart));
                 setShowNotification({
                     color: "bg-green-500",
                     message: "Produto adicionado ao carrinho.",
-                    show: true
-                })
-            }
-            if (!product) {
-                cart.push({ productId, amount })
-                setItemsInCart(cart.length)
-                Cookies.set('cart', JSON.stringify(cart))
-                console.log(`here2`)
+                    show: true,
+                });
+            } else {
+                cart.push({ productId, amount });
+                setItemsInCart(cart.length);
+                Cookies.set("cart", JSON.stringify(cart));
                 setShowNotification({
                     color: "bg-green-500",
                     message: "Produto adicionado ao carrinho.",
-                    show: true
-                })
+                    show: true,
+                });
             }
         }
 
         setTimeout(() => {
             setIsLoading(false);
         }, 1000);
+    }
+
+    if (notFound || !product) {
+        return <div className="text-xs">Produto não encontrado.</div>;
     }
 
     return (
@@ -82,8 +89,8 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
                     <button
                         onClick={() => addItemCart(productId, amount)}
                         className={`w-36 text-sm rounded-3xl ring-1 py-2 px-4 transition-all ${isLoading
-                            ? "bg-light_red text-white cursor-not-allowed"
-                            : "ring-light_red text-light_red hover:bg-light_red hover:text-white"
+                                ? "bg-light_red text-white cursor-not-allowed"
+                                : "ring-light_red text-light_red hover:bg-light_red hover:text-white"
                             }`}
                         disabled={isLoading}
                     >
@@ -103,68 +110,7 @@ export default function AddCartButton({ productId, amount }: AddProductToCart) {
                         onClose={() => setShowNotification((prev) => ({ ...prev, show: false }))}
                     />
                 </>
-            )
-            }
+            )}
         </>
     );
 }
-
-
-
-// async function addItemCart(productId: number, amount: number) {
-
-//     if (!authToken) {
-//         setShowNotification({
-//             color: "bg-blue-500",
-//             message: "Faça login para adicionar o produto ao carrinho.",
-//             show: true
-//         })
-//         setTimeout(() => {
-//             router.push('/login')
-//         }, 2000);
-//     }
-
-//     setIsLoading(true);
-
-//     if (authToken) {
-//         try {
-//             const response = await fetch(`${ConsumeCartAPI}`, {
-//                 method: "POST",
-//                 headers: {
-//                     Authorization: `Bearer ${Cookies.get("authToken")}`,
-//                     "Content-Type": "application/json",
-//                 },
-//                 body: JSON.stringify({
-//                     productId,
-//                     amount,
-//                 }),
-//             });
-
-//             if (!response.ok) {
-//                 console.error("Erro ao adicionar produto ao carrinho.");
-//                 setIsLoading(false);
-//                 return;
-//             }
-
-//             const cart = await response.json();
-//             // To change the value above the cart
-//             setItemsInCart(cart.cartProduct.length)
-//             Cookies.set("cart", JSON.stringify(cart.cartProduct));
-
-//             setShowNotification({
-//                 color: "bg-green-500",
-//                 message: "Item adicionado ao carrinho.",
-//                 show: true
-//             });
-//         } catch (error) {
-//             setShowNotification({
-//                 color: "bg-blue-500",
-//                 message: `${error}`,
-//                 show: true
-//             });
-//         } finally {
-//             setIsLoading(false);
-//         }
-//     }
-//     setIsLoading(false);
-// }

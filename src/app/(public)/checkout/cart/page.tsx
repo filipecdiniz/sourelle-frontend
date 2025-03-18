@@ -1,20 +1,22 @@
 "use client";
 
-import { ConsumeCupomAPI } from "@/backEndRoutes";
+import { ConsumeCupomAPI, ConsumeImageAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import { useAppContext } from "@/context/AppContext";
 import { CartProduct } from "@/interfaces/CartProduct";
 import { ProductInCart } from "@/interfaces/ProductInCart";
-import { productsRepository } from "@/repository/products";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import { ProductInterface } from "@/interfaces/Product.interface";
+import { getBackProducts } from "@/utils/getBackProducts";
 
 export default function CartPage() {
     const { syncCart } = useAppContext();
     const router = useRouter();
     const [productsCart, setProductsCart] = useState<ProductInCart[]>([]);
+    const [productsBack, setProductsBack] = useState<ProductInterface[]>([]);
     const [cupom, setCupom] = useState("");
     const [cupomPercentage, setCupomPercentage] = useState(0);
     const [showNotification, setShowNotification] = useState({
@@ -27,15 +29,32 @@ export default function CartPage() {
     const cupomCookies = Cookies.get('cupom');
 
     useEffect(() => {
-        updateCartItems();
-    }, [cartCookies, cupomCookies]);
+        async function loadProducts() {
+            await awaitGetProducts();
+        }
+        loadProducts();
+    }, [cartCookies]);
+
+    useEffect(() => {
+        if (cartCookies && productsBack.length) {
+            updateCartItems();
+        }
+    }, [cartCookies, productsBack]);
+
+    async function awaitGetProducts() {
+        const products: ProductInterface[] = await getBackProducts()
+        setProductsBack(products);
+    }
+
+
 
     function updateCartItems() {
         if (cartCookies) {
             const cartItems: CartProduct[] = JSON.parse(cartCookies);
             const cartProducts: ProductInCart[] = [];
             cartItems.forEach((item) => {
-                const product = productsRepository.find((product) => product.id === item.productId);
+                const product = productsBack.find((product) => product.id === item.productId);
+                console.log(product)
                 if (product) {
                     cartProducts.push({
                         id: product.id,
@@ -133,43 +152,6 @@ export default function CartPage() {
         await syncCart();
     }
 
-    // async function handleRemoveQuantity(productId: number, amount: number) {
-    //     try {
-    //         const response = await fetch(ConsumeCartAPI, {
-    //             method: 'PATCH',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${authToken}`,
-    //             },
-    //             body: JSON.stringify({
-    //                 productId: productId,
-    //                 amount: amount - 1,
-    //             }),
-    //         });
-    //         if (response.ok) {
-    //             const updatedCart = await response.json();
-
-    //             console.log(updatedCart);
-    //             setProductsCart(updatedCart.cartProduct);
-    //             await syncCart()
-    //             Cookies.set("cart", JSON.stringify(updatedCart.cartProduct));
-    //         } else {
-    //             console.log('Erro no servidor ao atualizar o carrinho.');
-    //             setShowNotification({
-    //                 color: 'bg-red-500',
-    //                 message: 'Erro no servidor ao atualizar o carrinho.',
-    //                 show: true,
-    //             });
-    //         }
-    //     } catch (error) {
-    //         setShowNotification({
-    //             color: 'bg-red-500',
-    //             message: `${error}`,
-    //             show: true,
-    //         });
-    //     }
-    // }
-
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md mt-5">
             {!productsCart.length ? (
@@ -187,7 +169,7 @@ export default function CartPage() {
                             >
                                 <div className="flex items-center gap-4">
                                     <Image
-                                        src={product.url}
+                                        src={`${ConsumeImageAPI}${product.url}`}
                                         alt={product.name}
                                         width={64}
                                         height={64}

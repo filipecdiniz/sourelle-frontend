@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import Notification from "@/Components/Notification";
-import { ConsumeCategoryAPI, ConsumeProductAPI } from "@/backEndRoutes";
+import { ConsumeCategoryAPI, ConsumeImageAPI, ConsumeProductAPI } from "@/backEndRoutes";
 import { ProductInterface } from "@/interfaces/Product.interface";
 import { CategoryInterface } from "@/interfaces/Category.interface";
 import Image from "next/image";
@@ -15,20 +15,20 @@ export default function ProductPage() {
     const [editingProduct, setEditingProduct] = useState<ProductInterface | null>(null);
     const [categories, setCategories] = useState<CategoryInterface[]>([]);
     const [newProduct, setNewProduct] = useState<{
-            name: string;
-            price: number;
-            description: string;
-            image: FileWithPath | null;
-            quantity: number;
-            categoryId: string;
-        }>({
-            name: "",
-            price: 0,
-            description: "",
-            image: null,
-            quantity: 0,
-            categoryId: ""
-        });
+        name: string;
+        price: number;
+        description: string;
+        image: File | null;
+        quantity: number;
+        categoryId: string;
+    }>({
+        name: "",
+        price: 0,
+        description: "",
+        image: null,
+        quantity: 0,
+        categoryId: ""
+    });
     const [showNotification, setShowNotification] = useState({
         color: "",
         message: "",
@@ -109,7 +109,6 @@ export default function ProductPage() {
                 },
                 body: formData
             });
-
             if (response.status === 201) {
                 const createdProduct = await response.json();
                 setProducts((prev) => [...prev, createdProduct]);
@@ -132,7 +131,7 @@ export default function ProductPage() {
             console.error(error);
             setShowNotification({
                 color: "bg-red-500",
-                message: "Erro ao criar o produto.",
+                message: `Erro ao criar o produto. ${error}`,
                 show: true,
             });
         }
@@ -218,8 +217,8 @@ export default function ProductPage() {
     }
 
     const { getRootProps, getInputProps } = useDropzone({
-        accept: { "image/*": [] },
         onDrop: (acceptedFiles: FileWithPath[]) => {
+            console.log('Arquivo recebido:', acceptedFiles);
             if (editingProduct) {
                 setEditingProduct((prev) => ({ ...prev!, image: acceptedFiles[0] }));
             } else {
@@ -227,6 +226,7 @@ export default function ProductPage() {
             }
         },
     });
+
 
     return (
         <div className="flex flex-col gap-6 mt-4">
@@ -236,7 +236,6 @@ export default function ProductPage() {
             >
                 {creatingProduct ? "Cancelar" : "Criar Produto"}
             </button>
-
             {creatingProduct && (
                 <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-md">
                     <h2 className="text-lg font-semibold text-gray-800 mb-4">Novo Produto</h2>
@@ -255,7 +254,7 @@ export default function ProductPage() {
                             value={newProduct.categoryId}
                             name="category"
                             id="categorySelect"
-                            className="border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full h-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Selecione uma categoria</option>
                             {categories.map((category: CategoryInterface) => (
@@ -391,8 +390,10 @@ export default function ProductPage() {
                         className="bg-white border border-gray-300 rounded-lg p-4 shadow-md flex flex-col gap-2"
                     >
                         <Image
-                            src={product.url}
+                            src={`${ConsumeImageAPI}${product.url}`}
                             alt={product.name}
+                            width={200}
+                            height={200}
                             className="w-full h-32 object-cover rounded-md"
                         />
                         <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
