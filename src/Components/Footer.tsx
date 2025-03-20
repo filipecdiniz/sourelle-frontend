@@ -125,7 +125,7 @@ export default function Footer() {
             )}
             <div className="flex flex-col justify-center text-center">
                 <div className="text-sm text-gray-600">Copyright SOURELLE LTDA - 2025. Todos os direitos reservados.</div>
-                <div className="text-sm text-gray-600">Criado por DevShopBrasil</div>
+                {/* <div className="text-sm text-gray-600">Criado por DevShopBrasil</div> */}
             </div>
         </div>
     );

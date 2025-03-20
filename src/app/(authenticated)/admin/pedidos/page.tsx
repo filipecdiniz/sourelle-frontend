@@ -4,12 +4,11 @@ import { ConsumeClientOrderAPI } from "@/backEndRoutes";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import OrderInterface from "@/interfaces/Order/Order.interface";
-import { ProductInterface } from "@/interfaces/Product.interface";
+import { ProductOrderInterface } from "@/interfaces/Product.interface";
 
 export default function AdminOrderPage() {
     const authCookies = Cookies.get('authToken');
 
-    // Define um estado para o filtro com valor padrão "pending"
     const [filterStatus, setFilterStatus] = useState("approved");
     const [filterDelivered, setFilterDelivered] = useState('false');
     const [orders, setOrders] = useState<OrderInterface[]>([]);
@@ -162,19 +161,19 @@ export default function AdminOrderPage() {
                     {/* Produtos */}
                     <div className="border border-purple-400 rounded-lg p-4 bg-purple-50">
                         <h2 className="text-lg font-bold text-purple-700">Produtos</h2>
-                        {order.products.map((product: ProductInterface) => (
+                        {order.products.map((product: ProductOrderInterface) => (
                             <div
-                                key={product.id}
+                                key={product.product.id}
                                 className="flex flex-col justify-between items-center border-b border-purple-200 py-2"
                             >
                                 <p className="text-gray-800">
-                                    Nome: {product.name}
+                                    Nome: {product.product.name}
                                 </p>
                                 <p className="text-gray-800">
-                                    Quantidade: {product.quantity}
+                                    Quantidade: {product.amount}
                                 </p>
                                 <p className="text-gray-800">
-                                    Preço: R$ {product.price.toFixed(2)}
+                                    Preço: R$ {product.product.price !== undefined && product.product.price !== null ? product.product.price.toFixed(2) : "0.00"}
                                 </p>
                             </div>
                         ))}

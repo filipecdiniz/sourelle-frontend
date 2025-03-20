@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { cpfValidator } from "@/utils/cpf-validator";
-import InputMask from "react-input-mask";
+import { isEmailValid } from "@/utils/email-validator";
 
 export default function PersonalInfoPage() {
     const [formData, setFormData] = useState({
@@ -27,14 +27,13 @@ export default function PersonalInfoPage() {
         const { name, value } = e.target;
 
         if (name === "cpf") {
-            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+            let value = e.target.value.replace(/\D/g, "");
 
-            if (value.length > 11) value = value.substring(0, 11); // Limita a 11 dígitos
+            if (value.length > 11) value = value.substring(0, 11);
 
-            // Detecta se o usuário está apagando um caractere antes de "." ou "-"
             if (formData.cpf.length > value.length) {
                 if (formData.cpf.endsWith(".") || formData.cpf.endsWith("-") || formData.cpf.endsWith(" ")) {
-                    value = value.slice(0, -1); // Remove o último número para apagar os separadores
+                    value = value.slice(0, -1);
                 }
             }
 
@@ -55,26 +54,22 @@ export default function PersonalInfoPage() {
             const limitedValue = value.substring(0, 50);
             setFormData((prev) => ({ ...prev, [name]: limitedValue }));
         } else if (name === "phone") {
-            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
 
-            if (value.length > 11) value = value.substring(0, 11); // Limita a 11 dígitos
-
-            // Detecta se o usuário está apagando um caractere antes do "-"
-            if (formData.phone.length > value.length) {
-                if (formData.phone.endsWith("-") || formData.phone.endsWith(" ")) {
-                    value = value.slice(0, -1); // Remove o último número para apagar o "-"
-                }
-            }
+            // Limita o tamanho do número para 11 caracteres
+            if (value.length > 11) value = value.substring(0, 11);
 
             // Aplica a máscara dinamicamente
             if (value.length >= 7) {
-                value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7)}`;
+                // Aqui, aplicamos a máscara normalmente e permitimos que o usuário digite após o hífen
+                value = `(${value.substring(0, 2)}) ${value.substring(2, 7)}-${value.substring(7, 11)}`;
             } else if (value.length >= 3) {
                 value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
             } else if (value.length > 0) {
                 value = `(${value}`;
             }
 
+            // Atualiza o estado com o valor formatado
             setFormData((prev) => ({ ...prev, phone: value }));
         }
         else {
@@ -91,6 +86,15 @@ export default function PersonalInfoPage() {
             setShowNotification({
                 color: "bg-red-500",
                 message: "Por favor, preencha todos os campos.",
+                show: true,
+            });
+            return;
+        }
+
+        if (isEmailValid(email) === false) {
+            setShowNotification({
+                color: "bg-red-500",
+                message: "Por favor, insira um email válido.",
                 show: true,
             });
             return;
@@ -146,7 +150,7 @@ export default function PersonalInfoPage() {
                 <input
                     type="text"
                     name="phone"
-                    placeholder="Celular (62)9 8468-9961"
+                    placeholder="Celular (99) 99999-9999"
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"

@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { stateRepository } from "@/repository/stateRepository";
 import { CityEntity, getCitiesByState } from "@/repository/cityRepository";
-import { ConsumeClientOrderAPI, ConsumeDeliveryAPI } from "@/backEndRoutes";
+import { ConsumeDeliveryAPI } from "@/backEndRoutes";
 import Notification from "@/Components/Notification";
 import Cookies from "js-cookie";
+import useMercadoPago from "@/hooks/useMercadoPago";
 
 export default function AddressPage() {
     // const router = useRouter();
-    // const { createMercadoPagoCheckout } = useMercadoPago();
+    const { createMercadoPagoCheckout } = useMercadoPago();
     const [addressInfoOpen, setAddressInfoOpen] = useState(false);
     const [shipmentValue, setShipmentValue] = useState(0);
 
@@ -87,53 +88,10 @@ export default function AddressPage() {
         }
 
         Cookies.set('addressData', JSON.stringify(addressData));
-        await createOrder();
-    }
-
-    async function createOrder() {
         const cart = JSON.parse(Cookies.get("cart") || "[]");
         const user = JSON.parse(Cookies.get("user") || "{}");
         const cupomCookies = JSON.parse(Cookies.get("cupom") || "{}");
-        try {
-            const response = await fetch(`${ConsumeClientOrderAPI}/create-order`, {
-                method: "POST",
-                headers: {
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify({
-                    createClientDTO: user,
-                    createAddressDTO: {
-                        cep: addressData.cep,
-                        street: addressData.rua,
-                        district: addressData.bairro,
-                        city: addressData.cidade,
-                        state: addressData.estado,
-                        number: addressData.numero,
-                        complement: addressData.complemento,
-                        delivered: false
-                    },
-                    createOrderProductDTO: cart,
-                    cupom: cupomCookies,
-                    shipmentPrice: shipmentValue
-                }),
-            });
-            if (response.status === 201) {
-                const data = await response.json();
-                // console.log(data);
-                setShowNotification({
-                    color: "bg-green-500",
-                    message: "Pedido criado com sucesso.",
-                    show: true,
-                });
-                window.location.href = data.initPoint;
-                // router.push(data.init_point);
-                return;
-            }
-
-        } catch (error) {
-            console.log(error)
-            return;
-        }
+        await createMercadoPagoCheckout(addressData, user, cart, cupomCookies, shipmentValue);
     }
 
     return (

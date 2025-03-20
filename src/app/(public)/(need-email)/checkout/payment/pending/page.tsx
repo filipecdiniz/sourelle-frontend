@@ -1,10 +1,15 @@
 "use client";
+import clearCookies from "@/utils/clearCookies";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 function PaymentPendingContent() {
     const searchParams = useSearchParams();
     const collection_id = searchParams.get("collection_id");
+
+    useEffect(() => {
+        clearCookies();
+    }, [collection_id]);
 
     return (
         <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 p-4 pt-16">

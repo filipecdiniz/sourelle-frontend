@@ -33,7 +33,7 @@ function PaymentFailureContent() {
                         preference_id,
                         collection_id,
                         collection_status,
-                        status,
+                        status: 'failed',
                         external_reference,
                         payment_type,
                         merchant_order_id,

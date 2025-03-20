@@ -1,4 +1,4 @@
-import { ProductInterface } from "../Product.interface";
+import { ProductOrderInterface } from "../Product.interface";
 import ClientInterface from "./Client.interface";
 import ClientAddressInterface from "./ClientAddress.interface";
 
@@ -8,7 +8,7 @@ export default interface OrderInterface {
     orderDate: Date;
     address: ClientAddressInterface;
     client: ClientInterface;
-    products: ProductInterface[];
+    products: ProductOrderInterface[];
     delivered: boolean;
     // product: 
 }

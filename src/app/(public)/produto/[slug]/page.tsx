@@ -17,6 +17,7 @@ export default function ProductPage() {
     useEffect(() => {
         async function loadProducts() {
             const products: ProductInterface[] = await getBackProducts();
+            console.log(products);
             if (products) {
                 setProductsBack(products);
             }
@@ -26,6 +27,8 @@ export default function ProductPage() {
     }, [productId]);
 
     const product = productsBack.find((item) => item.id === productId);
+    // console.log(product)
+    // console.log(productsBack)
 
     if (loading) {
         return <div>Carregando...</div>;
@@ -59,7 +62,7 @@ export default function ProductPage() {
                     <div className="mt-2">
                         <Add
                             productId={product.id}
-                            stockNumber={4}
+                            stockNumber={1}
                             key={product.id}
                         />
                     </div>
